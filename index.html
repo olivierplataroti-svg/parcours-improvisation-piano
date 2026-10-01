@@ -4455,6 +4455,9 @@ function Home() {
         });
     }, [baseSessions, data.sessions]);
     const completedSessions = allSessions.filter((session) => session.completed).length;
+    const totalPracticeMinutes = allSessions
+        .filter((session) => session.completed)
+        .reduce((total, session) => total + Number(session.duration || 0), 0);
     const currentSessions = allSessions.filter((session) => session.unitId === current.id);
     const currentCompleted = currentSessions.filter((session) => !session.custom && session.completed).length;
     const currentProgress = Math.round((currentCompleted / SESSION_LETTERS.length) * 100);
@@ -4765,7 +4768,10 @@ function Home() {
                                     currentCompleted,
                                     "/",
                                     SESSION_LETTERS.length),
-                                React.createElement("span", null, "sur le bloc actuel"))))),
+                                React.createElement("span", null, "sur le bloc actuel")),
+                            React.createElement("div", null,
+                                React.createElement("strong", null, totalPracticeMinutes),
+                                React.createElement("span", null, "minutes de pratique"))))),
                 React.createElement("section", { className: "section-grid" },
                     React.createElement("article", { className: "content-card current-card" },
                         React.createElement("div", { className: "card-heading" },
