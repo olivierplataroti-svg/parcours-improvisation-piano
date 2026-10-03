@@ -5232,7 +5232,7 @@ function Home() {
                                 }) })),
                         React.createElement("label", null,
                             React.createElement("span", null, "Dur\u00E9e (min)"),
-                            React.createElement("input", { type: "number", min: "5", max: "180", value: editingSession.duration, onChange: (event) => setEditingSession({
+                            React.createElement("input", { type: "number", min: "5", max: "180", required: true, value: editingSession.duration || "", onChange: (event) => setEditingSession({
                                     ...editingSession,
                                     duration: Number(event.target.value),
                                 }) })),
