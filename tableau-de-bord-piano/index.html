@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#142b51">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="description" content="Tableau de bord personnel de pratique pianistique : Blues, Jazz et Bases de l'improvisation.">
+  <title>Mon piano — Tableau de bord</title>
+  <style>
+    :root{color-scheme:light;--ink:#16243c;--muted:#66768e;--border:#e2e8f0;--bg:#f6f8fc;--surface:#ffffff;--blues:#4267db;--jazz:#11a994;--bases:#f1a649;--deep:#17335d;--radius:17px}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;font-size:15px;line-height:1.52;-webkit-font-smoothing:antialiased}
+    button,input,select{font:inherit}button{cursor:pointer}button:focus-visible,select:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:3px solid #90acf8;outline-offset:3px}
+    button:disabled{opacity:.45;cursor:not-allowed}
+    .layout{max-width:1260px;padding:0 30px 80px;margin:0 auto}
+    .mast{background:#fff;border-bottom:1px solid var(--border)}
+    .mast-inner{max-width:1260px;margin:auto;padding:16px 30px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .brand{display:flex;align-items:center;gap:10px;color:#153058;text-decoration:none;font-size:15px;font-weight:850;letter-spacing:-.035em}
+    .brand-mark{display:grid;place-items:center;width:37px;height:37px;background:#17335d;color:#fff;border-radius:12px;font-size:23px;font-weight:400}
+    .tag{background:#edf5f8;border:1px solid #d9e7ed;border-radius:999px;color:#426074;font-size:12px;font-weight:700;padding:6px 10px;white-space:nowrap}
+    .hero{overflow:hidden;position:relative;margin:27px 0 20px;padding:31px 35px 27px;border-radius:23px;background:linear-gradient(120deg,#182d52 0%,#254675 70%,#28628a 100%);color:white;box-shadow:0 12px 30px rgba(28,48,80,.09)}
+    .hero:before,.hero:after{position:absolute;content:"";width:315px;height:315px;border:1px solid rgba(255,255,255,.12);border-radius:50%;right:-100px;top:-200px;pointer-events:none}
+    .hero:after{width:245px;height:245px;right:70px;top:95px;border-width:45px;border-color:rgba(255,255,255,.035)}
+    .eyebrow{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:850;text-transform:uppercase;letter-spacing:.16em;color:#a4d7e6}
+    .hero h1{position:relative;font-size:clamp(29px,3.8vw,43px);line-height:1.12;letter-spacing:-.055em;margin:10px 0 11px;font-weight:780}
+    .hero p{position:relative;max-width:740px;margin:0;font-size:14px;color:#d4e2f7}
+    .hero-actions{position:relative;display:flex;flex-wrap:wrap;gap:8px;margin-top:22px;align-items:center}
+    .hero-pill{border:1px solid #7a9bb56b;background:#ffffff14;color:#e5f0ff;padding:6px 12px;border-radius:100px;font-size:12px;font-weight:670}
+    .hero .lead-action{margin-left:auto;background:white;color:#193961;border:1px solid #fff}
+    .nav{display:flex;gap:5px;align-items:center;overflow-x:auto;border-bottom:1px solid var(--border);margin:16px 0 19px;scrollbar-width:none}
+    .nav::-webkit-scrollbar{display:none}
+    .nav button{border:0;background:transparent;border-bottom:3px solid transparent;padding:11px 17px 12px;white-space:nowrap;color:#6e7e95;font-weight:690}
+    .nav button[aria-selected="true"]{color:#1c3a67;border-color:#3866bc}
+    .head-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:5px 0 15px}
+    h2{margin:0;font-size:20px;letter-spacing:-.038em;line-height:1.3}
+    h3{font-size:15px;margin:0;letter-spacing:-.018em}
+    .sub{font-size:12px;color:var(--muted);margin:5px 0 0}
+    .controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    .select,.date{background:#fff;border:1px solid #dbe3ee;color:#233753;border-radius:9px;padding:10px 12px;font-weight:650;font-size:12px;max-width:215px}
+    .date{width:147px}
+    .btn{background:#1e416e;color:#fff;border:1px solid #1e416e;border-radius:10px;padding:10px 15px;font-weight:750;font-size:12px;display:inline-flex;align-items:center;justify-content:center;gap:7px;text-decoration:none;min-height:40px}
+    .btn.secondary{background:#fff;color:#233a58;border-color:#d8e2ee}
+    .btn.ghost{background:#f2f6fd;color:#254d84;border-color:#e4edf9}
+    .btn.warm{background:#f8ac44;border-color:#f8ac44;color:#1b2a42}
+    .btn svg{width:15px;height:15px}
+    .panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:0 3px 14px rgba(35,55,90,.025)}
+    .padded{padding:21px 23px}
+    .notice{padding:13px 16px;background:#fff9eb;border:1px solid #f1dab0;border-radius:12px;font-size:13px;color:#755324;margin-bottom:16px}
+    .notice.success{background:#edf9f5;border-color:#c8e9df;color:#176b59}
+    .notice.error{background:#fff2f1;border-color:#f4c7c4;color:#9c3530}
+    .kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin:17px 0}
+    .kpi{padding:19px 19px 15px;min-height:133px;position:relative;overflow:hidden}
+    .kpi:after{position:absolute;content:"";width:70px;height:70px;right:-38px;top:-38px;border-radius:50%;border:12px solid #f3f6fa}
+    .kpi .label{font-size:12px;font-weight:730;color:#62728a}
+    .kpi .value{font-size:clamp(25px,2.6vw,33px);font-weight:810;letter-spacing:-.05em;line-height:1.2;margin:15px 0 3px;font-variant-numeric:tabular-nums}
+    .kpi .hint{font-size:11px;color:#8a97a8}
+    .kpi.strong .value{color:#224bb6}
+    .grid-2{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(300px,1fr);gap:16px;margin:17px 0}
+    .grid-2.equal{grid-template-columns:1fr 1fr}
+    .panel-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:16px}
+    .legend{display:flex;align-items:center;flex-wrap:wrap;gap:12px;color:#61728b;font-size:11px;font-weight:680;margin-top:13px}
+    .dot{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:5px}
+    .chart-area{height:242px;display:flex;gap:0;position:relative;border-bottom:1px solid #cdd8e5; margin-top:21px; margin-bottom:29px;}
+    .chart-grid{position:absolute;inset:0 0 0 0;pointer-events:none;display:flex;flex-direction:column;justify-content:space-between}
+    .grid-line{border-top:1px dashed #e1e8f0;height:1px;position:relative}
+    .grid-line span{position:absolute;top:-10px;right:0;background:#fff;color:#a1aebb;font-size:10px;padding-left:5px}
+    .bar-plot{position:absolute;inset:17px 6px 0 6px;display:flex;gap:clamp(7px,2%,16px);align-items:end;justify-content:space-around}
+    .bar-col{flex:1;max-width:72px;min-width:30px;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;position:relative}
+    .bar{width:100%;max-width:55px;border-radius:7px 7px 0 0;overflow:hidden;display:flex;flex-direction:column-reverse;min-height:1px;transition:filter .2s}
+    .bar:hover{filter:brightness(.92)}
+    .segment{width:100%;display:block}
+    .bar-value{font-size:11px;font-weight:800;color:#3d4c64;margin-bottom:6px;white-space:nowrap}
+    .bar-label{position:absolute;bottom:-28px;white-space:nowrap;font-size:11px;font-weight:670;color:#8190a3}
+    .empty-chart{margin:72px auto;text-align:center;color:#9aaaad;font-size:13px}
+    .tiny-option{border:1px solid #e1e7f0;border-radius:8px;padding:6px 7px;background:white;color:#49627c;font-size:11px;font-weight:750}
+    .track-list{display:flex;flex-direction:column;gap:19px;padding-top:4px}
+    .track-row{display:flex;flex-direction:column;gap:6px}
+    .track-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:13px}
+    .track-head strong{font-weight:780}
+    .track-head span{color:#677792;font-weight:680;font-size:12px;white-space:nowrap}
+    .progress{width:100%;height:10px;border-radius:100px;background:#eff3f9;overflow:hidden}
+    .progress>div{height:100%;border-radius:100px;transition:width .25s}
+    .track-meta{font-size:11px;color:#8999ac}
+    .summary-strip{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid #edf0f5;margin-top:19px;padding-top:17px;gap:9px}
+    .summary-strip .n{font-size:19px;font-weight:820;color:#233b5f;font-variant-numeric:tabular-nums}
+    .summary-strip .t{font-size:11px;color:#8291a5}
+    .table-wrap{overflow-x:auto}
+    table{width:100%;border-collapse:collapse;text-align:left;font-size:12px}
+    th{color:#8090a6;text-transform:uppercase;letter-spacing:.07em;font-size:10px;font-weight:850;background:#f8fafc}
+    th,td{padding:12px 11px;border-bottom:1px solid #edf1f5;white-space:nowrap}
+    tbody tr:last-child td{border-bottom:0}
+    td{color:#3e506a}
+    td b{color:#22364e}
+    .table-foot{padding:12px 16px;font-size:11px;color:#8495a7}
+    .privacy{display:flex;align-items:flex-start;gap:13px;background:#f0f7f5;border:1px solid #d4eae3;color:#275c51;border-radius:12px;padding:14px 16px;font-size:12px;line-height:1.6}
+    .privacy-symbol{font-size:19px;line-height:1.1}
+    .dropzone{border:2px dashed #bed1e4;border-radius:16px;background:#f8fbff;padding:32px 25px;text-align:center;transition:background .2s,border-color .2s}
+    .dropzone.dragover{background:#eaf3ff;border-color:#4373c7}
+    .dropicon{width:52px;height:52px;display:grid;place-items:center;border-radius:15px;background:#e8f1fd;color:#3562a1;font-size:26px;margin:0 auto 14px}
+    .dropzone h3{font-size:18px;font-weight:790}
+    .dropzone p{font-size:12px;color:#71849d;max-width:510px;margin:6px auto 17px}
+    .source-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin:19px 0}
+    .source{padding:19px;min-width:0}
+    .source-top{display:flex;align-items:center;justify-content:space-between;gap:6px}
+    .source h3{display:flex;align-items:center;gap:8px}
+    .pill{font-size:10px;border-radius:100px;padding:4px 9px;font-weight:780;background:#edf9f4;color:#21806b;white-space:nowrap}
+    .pill.off{background:#f2f4f7;color:#708099}
+    .source-stats{font-size:12px;color:#5d718a;line-height:1.9;margin-top:15px}
+    .source-stats strong{color:#233e60}
+    .filename{font-size:10px;color:#8a9aaa;word-break:break-word;line-height:1.5;margin-top:10px;min-height:15px}
+    .instructions{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+    .instructions p{font-size:13px;color:#63758b;margin:10px 0 0}
+    .instructions h3{font-size:16px}
+    .instructions ol{margin:12px 0 0;padding-left:18px;color:#425975;font-size:13px}
+    .instructions li{padding-bottom:8px}
+    .actions{display:flex;flex-wrap:wrap;gap:9px;margin:14px 0}
+    .toggle-row{display:flex;align-items:flex-start;gap:12px;line-height:1.45;padding:15px 0;border-top:1px solid #edf1f5}
+    .toggle-row input{accent-color:#365eb6;transform:scale(1.2);margin:4px 0 0}
+    .toggle-row small{display:block;color:#77889f;margin-top:4px}
+    .record-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .record-box{background:#f7f9fc;padding:16px;border-radius:13px}
+    .record-box .big{font-size:23px;font-weight:820;letter-spacing:-.05em}
+    .record-box .small{color:#8090a6;font-size:11px}
+    .source-empty{color:#8fa0b3;font-size:12px;margin-top:19px;line-height:1.7}
+    .footnote{margin:23px 0;color:#7d8b9e;font-size:11px;line-height:1.6}
+    .muted{color:#8897a9}
+    .hidden{display:none!important}
+    #toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%) translateY(12px);background:#1d365b;color:#fff;padding:12px 17px;border-radius:11px;box-shadow:0 13px 30px #18335655;font-size:12px;font-weight:700;opacity:0;pointer-events:none;transition:.25s;z-index:10;max-width:min(600px,calc(100vw - 25px));text-align:center}
+    #toast.visible{opacity:1;transform:translateX(-50%) translateY(0)}
+    @media(max-width:1020px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.grid-2{grid-template-columns:1fr}.source-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+    @media(max-width:720px){.layout{padding:0 15px 70px}.mast-inner{padding:13px 15px}.hero{margin-top:16px;padding:25px 19px 23px;border-radius:18px}.hero-actions{gap:7px}.hero .lead-action{margin-left:0;flex-basis:100%}.head-row{align-items:flex-start}.kpis{gap:9px}.kpi{padding:16px 14px;min-height:116px}.kpi .value{font-size:25px}.grid-2{gap:12px}.padded{padding:18px 15px}.source-grid,.instructions{grid-template-columns:1fr}.chart-area{height:214px}.bar-label{font-size:10px}.nav button{padding:10px 13px}.record-cols{grid-template-columns:repeat(2,1fr)}.controls{width:100%}.select{max-width:unset;flex:1}.date{width:100%;max-width:160px}.tag{font-size:10px}}
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+    @media print{.mast,.nav,.controls,.dropzone,.actions,.hero .lead-action{display:none!important}.layout{max-width:100%;padding:0}.hero{background:#f2f6fb;color:#1b3358;box-shadow:none;border:1px solid #ddd}.hero p,.eyebrow{color:#42607a}.panel{box-shadow:none;break-inside:avoid}}
+  </style>
+</head>
+<body>
+  <header class="mast"><div class="mast-inner"><a class="brand" href="#haut" aria-label="Retour en haut"><span class="brand-mark" aria-hidden="true">♫</span> MON PIANO <span style="color:#9aa9b8;font-weight:500">/ Statistiques</span></a><span class="tag" id="header-sync">Données personnelles · locales</span></div></header>
+  <main class="layout" id="haut">
+    <section class="hero" aria-label="Présentation">
+      <div class="eyebrow"><span>●</span> Carnet d'entraînement · Blues / Jazz / Improvisation</div>
+      <h1>Chaque séance fait<br>progresser ton jeu.</h1>
+      <p>Observe ton temps de pratique, ta régularité et la répartition entre tes trois parcours. Compare-les à partir de leur date de démarrage commune, sans survaloriser le premier programme commencé.</p>
+      <div class="hero-actions"><span class="hero-pill" id="hero-period">Période commune : —</span><span class="hero-pill" id="hero-update">Dernière séance : —</span><button class="btn lead-action" id="hero-import" type="button">+ Actualiser mes données</button></div>
+    </section>
+    <nav class="nav" aria-label="Sections du tableau de bord">
+      <button type="button" data-tab="overview" aria-selected="true">Vue d'ensemble</button>
+      <button type="button" data-tab="rhythm" aria-selected="false">Rythme &amp; régularité</button>
+      <button type="button" data-tab="tracks" aria-selected="false">Parcours</button>
+      <button type="button" data-tab="data" aria-selected="false">Mes données</button>
+    </nav>
+    <div class="notice hidden" id="notice" role="status"></div>
+    <section id="view-overview" class="view">
+      <div class="head-row"><div><h2>Vue d'ensemble</h2><p class="sub" id="period-explainer">Comparaison sur une période commune aux trois parcours.</p></div><div class="controls"><select class="select" id="period-select" aria-label="Période d'analyse"><option value="common">Depuis les trois parcours</option><option value="30">30 derniers jours enregistrés</option><option value="90">90 derniers jours enregistrés</option><option value="all">Tout l'historique</option><option value="custom">Dates personnalisées</option></select><button class="btn secondary" type="button" id="show-data">Importer</button></div></div>
+      <div class="controls hidden" id="custom-dates" style="margin-bottom:16px"><label style="font-size:12px;color:#64758d">Du <input type="date" class="date" id="date-from"></label><label style="font-size:12px;color:#64758d">au <input type="date" class="date" id="date-to"></label><button class="btn ghost" id="apply-dates" type="button">Appliquer</button></div>
+      <div class="kpis" id="overview-kpis"></div>
+      <div class="grid-2"><div class="panel padded"><div class="panel-header"><div><h3>Ton rythme semaine après semaine</h3><p class="sub">Durée enregistrée, semaines civiles</p></div><select id="chart-measure" class="tiny-option" aria-label="Mesure des barres"><option value="minutes">Heures</option><option value="sessions">Séances</option></select></div><div id="weekly-chart"></div><div class="legend"><span><i class="dot" style="background:var(--blues)"></i>Blues</span><span><i class="dot" style="background:var(--jazz)"></i>Jazz</span><span><i class="dot" style="background:var(--bases)"></i>Bases</span></div></div>
+      <div class="panel padded"><div class="panel-header"><div><h3>Équilibre de tes trois parcours</h3><p class="sub">Volume de travail sur la période choisie</p></div></div><div class="track-list" id="track-share"></div><div class="summary-strip" id="mini-summary"></div></div></div>
+      <div class="grid-2 equal"><div class="panel padded"><div class="panel-header"><div><h3>Historique hebdomadaire</h3><p class="sub">Semaines civiles (les semaines aux bornes peuvent être partielles)</p></div></div><div class="table-wrap" id="weekly-table"></div></div><div class="panel padded"><div class="panel-header"><div><h3>Pratique par mois</h3><p class="sub">La durée réellement enregistrée</p></div></div><div class="table-wrap" id="monthly-table"></div></div></div>
+    </section>
+    <section id="view-rhythm" class="view hidden"><div class="head-row"><div><h2>Rythme &amp; régularité</h2><p class="sub">Comprendre comment la pratique s'installe dans la durée.</p></div></div><div class="kpis" id="rhythm-kpis"></div><div class="grid-2 equal"><div class="panel padded"><div class="panel-header"><div><h3>Jours de la semaine</h3><p class="sub">Durée cumulée du lundi au dimanche</p></div></div><div id="dow-chart"></div></div><div class="panel padded"><div class="panel-header"><div><h3>Tes repères de régularité</h3><p class="sub">Quelques indicateurs complémentaires</p></div></div><div id="rhythm-details"></div></div></div></section>
+    <section id="view-tracks" class="view hidden"><div class="head-row"><div><h2>Les trois parcours</h2><p class="sub">Comparer les efforts, pas uniquement le nombre de séances.</p></div></div><div class="source-grid" id="track-detail"></div><div class="panel padded"><h3>Comment lire ces chiffres ?</h3><p class="sub" style="font-size:13px;line-height:1.7;margin-top:12px">Une séance compte uniquement lorsqu'elle est marquée comme terminée. Les durées affichées sont celles inscrites dans tes trois applications (durée des séances Blues/Jazz et durée réelle renseignée dans Bases). Les moyennes représentent du temps enregistré, pas un suivi automatique du clavier ou de la concentration.</p></div></section>
+    <section id="view-data" class="view hidden"><div class="head-row"><div><h2>Mes données &amp; sauvegardes</h2><p class="sub">Trois fichiers JSON pour une vue unifiée, sans envoyer tes données sur un serveur.</p></div></div>
+      <div class="panel padded"><div class="dropzone" id="dropzone"><div class="dropicon" aria-hidden="true">⇧</div><h3>Importer tes sauvegardes</h3><p>Sélectionne jusqu'à trois fichiers JSON en une seule fois, depuis ton iPad, iCloud Drive, Google Drive (dans l'app Fichiers) ou ton ordinateur. Tu peux ensuite remplacer une sauvegarde à la fois.</p><button class="btn" id="pick-files" type="button">Choisir les fichiers JSON</button><input id="file-input" type="file" accept=".json,application/json" multiple hidden><p style="margin:10px auto 0">Ou glisse les fichiers ici depuis un ordinateur.</p></div><div class="source-grid" id="sources-status"></div>
+        <div class="privacy"><span class="privacy-symbol" aria-hidden="true">◎</span><div><strong>Confidentialité par défaut.</strong> Les fichiers sont analysés directement dans ton navigateur. Ils ne sont ni envoyés à GitHub ni publiés dans les dépôts des trois applications. Une copie est conservée localement sur cet appareil pour retrouver tes statistiques à la prochaine visite.</div></div>
+      </div>
+      <div class="instructions"><div class="panel padded"><h3>Actualisation sur ton iPad</h3><ol><li>Depuis chaque parcours, exporte sa sauvegarde JSON dans <strong>Fichiers</strong> (sur iPad, iCloud Drive ou Google Drive).</li><li>Dans ce tableau de bord, touche <strong>Choisir les fichiers JSON</strong> et sélectionne les trois fichiers. Tu peux aussi n'importer que celui qui a changé.</li><li>Les statistiques sont recalculées immédiatement. Une fois importées, elles restent disponibles dans ce navigateur.</li></ol><p>Si tu stockes les fichiers dans un dossier Google Drive, l'application <strong>Fichiers</strong> peut les présenter comme des documents locaux. Le choix du fichier reste une action manuelle.</p></div><div class="panel padded"><h3>Lecture automatique des sites GitHub</h3><p>Si cette page et tes applications Blues/Jazz sont ouvertes dans Safari sous le <strong>même domaine github.io</strong>, le tableau de bord peut lire leurs sauvegardes directement dans le stockage local, sans fichier à sélectionner.</p><label class="toggle-row"><input type="checkbox" id="auto-sync" checked><span><strong>Activer la lecture automatique locale</strong><small>Vérification à l'ouverture, au retour sur l'onglet et périodiquement si la page est visible. Fonctionne uniquement à origine web et profil de navigateur identiques.</small></span></label><button class="btn secondary" type="button" id="rescan">Vérifier les données locales</button><p>Le parcours Bases est actuellement déployé via Cloudflare : Safari isole ses données de celles des pages GitHub. Son import manuel reste nécessaire, sauf si tu utilises ultérieurement une version hébergée sur le même domaine.</p></div></div>
+      <div class="panel padded" style="margin-top:16px"><h3>Exporter et conserver ton historique</h3><p class="sub">Un export global permet de préserver les trois sauvegardes et tes réglages du tableau de bord. Le CSV est un relevé de statistiques, sans notes de séance.</p><div class="actions"><button class="btn secondary" id="export-bundle" type="button">Exporter mon archive JSON</button><button class="btn secondary" id="export-csv" type="button">Exporter le bilan CSV</button><button class="btn ghost" id="print" type="button">Imprimer / PDF</button></div><p class="sub">Attention : le stockage local de Safari peut être vidé si tu effaces les données du site. Continue de sauvegarder régulièrement tes parcours.</p></div>
+    </section>
+    <p class="footnote" id="footer-detail">Tableau de bord de pratique pianistique · Calculs fondés sur les séances terminées et leurs dates · Fichiers stockés sur ton appareil.</p>
+  </main>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script>
+  (() => {
+    'use strict';
+    const KEY = 'piano-tableau-de-bord-v1';
+    const TRACKS = {blues:{name:'Blues',color:'#4267db',abbr:'Blues',keys:['parcours-improvisation-olivier-v2']},jazz:{name:'Jazz',color:'#11a994',abbr:'Jazz',keys:['parcours-improvisation-jazz-olivier-v4']},bases:{name:"Bases de l'improvisation",color:'#f1a649',abbr:'Bases',keys:['bases_improvisation_132_olivier_v1','bases_improvisation_208_olivier_v4']}};
+    const NAMES = Object.keys(TRACKS);
+    const DAY = 86400000;
+    const $ = id => document.getElementById(id);
+    const TODAY = new Date().toLocaleDateString('sv-SE');
+    let tab='overview', measure='minutes', toastTimer=null;
+    let state={sources:{},period:'common',customStart:'',customEnd:'',autoSync:true};
+    let stats=null;
+
+    function escapeHTML(str){return String(str??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+    function parseISO(s){if(!/^\d{4}-\d{2}-\d{2}$/.test(s||''))return NaN;const v=Date.parse(s+'T12:00:00Z');return Number.isFinite(v)&&new Date(v).toISOString().slice(0,10)===s?v:NaN;}
+    function iso(t){return new Date(t).toISOString().slice(0,10);}
+    function addDays(s,n){return iso(parseISO(s)+n*DAY);}
+    function shortDate(s){if(!s)return '—';const v=parseISO(s);return Number.isFinite(v)?new Date(v).toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'}):'—';}
+    function shortWeek(s){if(!s)return '—';const v=parseISO(s);return Number.isFinite(v)?new Date(v).toLocaleDateString('fr-FR',{day:'numeric',month:'short',timeZone:'UTC'}):'—';}
+    function hours(n){if(!Number.isFinite(n))return '—';const m=Math.round(n);return m<60?m+' min':Math.floor(m/60)+' h'+(m%60?' '+String(m%60).padStart(2,'0'):'');}
+    function hoursShort(n){if(!Number.isFinite(n))return '—';return n<60?Math.round(n)+' min':(n/60).toLocaleString('fr-FR',{maximumFractionDigits:1})+' h';}
+    function decimal(n,d=1){return Number.isFinite(n)?n.toLocaleString('fr-FR',{minimumFractionDigits:0,maximumFractionDigits:d}):'—';}
+    function monday(date){const d=new Date(parseISO(date));let wd=d.getUTCDay();return addDays(date,-((wd+6)%7));}
+    function validMinutes(n){if(n===null||n===undefined||n==='')return null;let x=Number(n);return Number.isFinite(x)&&x>=0&&x<=1440?x:null;}
+    function signature(raw){const str=JSON.stringify(raw);let h=2166136261;for(let i=0;i<str.length;i+=Math.max(1,Math.floor(str.length/2000))){h=Math.imul(h^str.charCodeAt(i),16777619)}return str.length+':'+(h>>>0);}
+    function detect(raw,filename=''){
+      if(!raw||typeof raw!=='object'||Array.isArray(raw))throw new Error('Ce fichier ne contient pas de sauvegarde compatible.');
+      if(raw.kind==='piano-dashboard-bundle'&&raw.sources&&typeof raw.sources==='object')return 'bundle';
+      if(raw.sessionRecords&&typeof raw.sessionRecords==='object'&&!Array.isArray(raw.sessionRecords))return 'bases';
+      if(raw.sessions&&typeof raw.sessions==='object'&&!Array.isArray(raw.sessions)){
+        const ids=Object.keys(raw.sessions);const sample=ids.find(x=>x)||'';
+        if(/^P\d+[-_]/i.test(sample)||/^CJ\d+[-_]/i.test(sample)||raw.startDate)return 'blues';
+        if(/^S\d+[-_]/i.test(sample))return 'jazz';
+        const f=filename.toLowerCase();if(f.includes('jazz'))return 'jazz';if(f.includes('blues')||f.includes('parcours'))return 'blues';
+      }
+      throw new Error('Format non reconnu : exporte une sauvegarde JSON depuis Blues, Jazz ou Bases.');
+    }
+    function records(kind,raw){
+      const key=kind==='bases'?'sessionRecords':'sessions'; const entry=raw?.[key];
+      if(!entry||typeof entry!=='object'||Array.isArray(entry))throw new Error('Sauvegarde '+kind+' sans journal de séances.');
+      const arr=[];let invalidDates=0,undated=0,unmeasured=0;
+      for(const [id,s] of Object.entries(entry)){
+        if(!s||typeof s!=='object')continue;
+        if(kind==='bases'?s.done!==true:s.completed!==true)continue;
+        if(!s.date){undated++;continue;}
+        if(!Number.isFinite(parseISO(s.date))){invalidDates++;continue;}
+        const mins=validMinutes(kind==='bases'?s.actualMinutes:s.duration);
+        if(mins===null)unmeasured++;
+        arr.push({id:kind+':'+id,track:kind,date:s.date,minutes:mins});
+      }
+      return {rows:arr,invalidDates,undated,unmeasured};
+    }
+    function srcMeta(kind,raw){const rec=records(kind,raw);const dates=rec.rows.map(v=>v.date).sort();return {count:rec.rows.length,first:dates[0]||'',last:dates[dates.length-1]||'',missing:rec.unmeasured+rec.invalidDates+rec.undated};}
+    function persist(){try{localStorage.setItem(KEY,JSON.stringify(state));return true}catch(e){notify('Stockage indisponible dans ce navigateur : conserve les JSON originaux.');return false}}
+    function load(){try{const saved=JSON.parse(localStorage.getItem(KEY)||'null');if(saved&&typeof saved==='object'){
+      state={sources:saved.sources&&typeof saved.sources==='object'?saved.sources:{},period:['common','30','90','all','custom'].includes(saved.period)?saved.period:'common',customStart:saved.customStart||'',customEnd:saved.customEnd||'',autoSync:saved.autoSync!==false};
+    }}catch(e){console.warn('Données du tableau de bord illisibles',e);}}
+    function notify(message){const el=$('toast');el.textContent=message;el.classList.add('visible');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('visible'),3800);}
+    function banner(message,tone){const el=$('notice');el.textContent=message;el.className='notice'+(tone?' '+tone:'');}
+    function clearBanner(){const el=$('notice');el.className='notice hidden';el.textContent='';}
+    function addSource(kind,raw,{origin='file',filename='',save=true}={}){
+      if(!NAMES.includes(kind))throw new Error('Parcours inconnu');
+      const d=detect(raw,filename);if(d!==kind)throw new Error('Ce fichier ne correspond pas au parcours '+TRACKS[kind].name);
+      const meta=srcMeta(kind,raw);if(meta.count===0)throw new Error('Aucune séance terminée trouvée dans le fichier '+(filename||kind));
+      state.sources[kind]={raw,filename:filename||('Données '+TRACKS[kind].name),origin,importedAt:new Date().toISOString(),sig:signature(raw)};
+      if(save)persist();return meta;
+    }
+    function scanLocal(show=false){
+      if(!state.autoSync&&!show)return;
+      let found=0,changed=0;
+      for(const track of NAMES){
+        let best=null,bestMeta=null,bestKey='';
+        for(const key of TRACKS[track].keys){
+          let candidate;try{const t=localStorage.getItem(key);if(!t)continue;candidate=JSON.parse(t);if(detect(candidate,key)!==track)continue;}
+          catch(e){continue;}
+          let meta;try{meta=srcMeta(track,candidate);}catch(e){continue;}
+          if(!meta.count)continue;
+          if(!best||meta.last>bestMeta.last||(meta.last===bestMeta.last&&meta.count>bestMeta.count)){
+            best=candidate;bestMeta=meta;bestKey=key;
+          }
+        }
+        if(!best)continue;
+        found++;
+        const prev=state.sources[track];const nextSig=signature(best);
+        let replace=!prev;
+        if(prev){
+          const previousMeta=srcMeta(track,prev.raw);
+          const noRegression=bestMeta.count>=previousMeta.count&&bestMeta.last>=previousMeta.last;
+          replace=prev.sig!==nextSig && (prev.origin==='local' || noRegression);
+        }
+        if(replace){addSource(track,best,{origin:'local',filename:'Lecture locale · '+bestKey,save:false});changed++;}
+      }
+      if(changed){persist();render();if(show)notify(changed+' parcours actualisé(s) automatiquement.');}
+      else if(show)notify(found?found+' parcours accessibles, sans nouveauté à importer.':'Aucun journal local accessible sur ce domaine.');
+      return {found,changed};
+    }
+    async function handleFiles(files){
+      const picks=Array.from(files||[]).filter(f=>f.name.toLowerCase().endsWith('.json')||f.type.includes('json'));
+      if(!picks.length){notify('Sélectionne un ou plusieurs fichiers .json.');return}
+      const succeeded=[],failed=[];
+      for(const file of picks){
+        try{
+          if(file.size>15*1024*1024)throw new Error('Fichier trop volumineux (limite 15 Mo).');
+          const content=JSON.parse(await file.text());const kind=detect(content,file.name);
+          if(kind==='bundle'){
+            for(const [k,v] of Object.entries(content.sources)){
+              if(!NAMES.includes(k)||!v)continue;
+              try{addSource(k,v.raw||v,{filename:v.filename||file.name,origin:'file',save:false});succeeded.push(TRACKS[k].name)}catch(err){failed.push(k+': '+err.message)}
+            }
+          }else{addSource(kind,content,{filename:file.name,origin:'file',save:false});succeeded.push(TRACKS[kind].name)}
+        }catch(e){failed.push(file.name+' : '+e.message)}
+      }
+      if(succeeded.length){persist();clearBanner();state.period='common';render();selectTab('overview');notify('Données importées : '+[...new Set(succeeded)].join(', '));}
+      if(failed.length)banner('Import incomplet : '+failed.join(' | '),'error');
+      $('file-input').value='';
+    }
+    function calculate(){
+      const per={};const missing=NAMES.filter(x=>!state.sources[x]);let all=[];
+      for(const kind of NAMES){
+        const src=state.sources[kind];per[kind]=src?records(kind,src.raw):{rows:[],invalidDates:0,undated:0,unmeasured:0};
+        all=all.concat(per[kind].rows);
+      }
+      const allDates=all.map(x=>x.date).sort();
+      if(!allDates.length)return {empty:true,missing,per,tracks:{}};
+      const first=allDates[0],last=allDates[allDates.length-1];
+      const starts=NAMES.map(k=>per[k].rows.map(x=>x.date).sort()[0]).filter(Boolean);
+      const common=starts.reduce((a,b)=>a>b?a:b,starts[0]);
+      let from=common,to=last;
+      if(state.period==='all')from=first;
+      if(state.period==='30'||state.period==='90')from=addDays(last,-(Number(state.period)-1));
+      if(state.period==='custom'){
+        if(Number.isFinite(parseISO(state.customStart)))from=state.customStart;
+        if(Number.isFinite(parseISO(state.customEnd)))to=state.customEnd;
+      }
+      if(from>to){[from,to]=[to,from]}
+      const rows=all.filter(s=>s.date>=from&&s.date<=to);
+      const tracks={},weeks=new Map(),months=new Map(),dow=Array(7).fill(0),dates=new Set();
+      for(const k of NAMES)tracks[k]={minutes:0,sessions:0,withDuration:0,days:new Set(),unmeasured:0};
+      let minutes=0,withDuration=0;
+      for(const r of rows){
+        const {track,date}=r,mins=r.minutes??0;dates.add(date);dow[(new Date(parseISO(date)).getUTCDay()+6)%7]+=mins;
+        tracks[track].minutes+=mins;tracks[track].sessions++;tracks[track].days.add(date);
+        if(r.minutes!==null){withDuration++;tracks[track].withDuration++}else{tracks[track].unmeasured++}
+        minutes+=mins;
+        const wk=monday(date),mo=date.slice(0,7);
+        if(!weeks.has(wk))weeks.set(wk,{date:wk,blues:{minutes:0,sessions:0},jazz:{minutes:0,sessions:0},bases:{minutes:0,sessions:0},days:new Set(),minutes:0,sessions:0});
+        const w=weeks.get(wk);w[track].minutes+=mins;w[track].sessions++;w.minutes+=mins;w.sessions++;w.days.add(date);
+        if(!months.has(mo))months.set(mo,{date:mo,blues:0,jazz:0,bases:0,minutes:0,sessions:0,days:new Set()});
+        const m=months.get(mo);m[track]+=mins;m.minutes+=mins;m.sessions++;m.days.add(date);
+      }
+      if(Number.isFinite(parseISO(from))&&Number.isFinite(parseISO(to))){
+        let week=monday(from),maxWeeks=0;
+        while(week<=to&&maxWeeks<1100){if(!weeks.has(week))weeks.set(week,{date:week,blues:{minutes:0,sessions:0},jazz:{minutes:0,sessions:0},bases:{minutes:0,sessions:0},days:new Set(),minutes:0,sessions:0});week=addDays(week,7);maxWeeks++}
+      }
+      const weeksArr=[...weeks.values()].sort((a,b)=>a.date.localeCompare(b.date)),monthArr=[...months.values()].sort((a,b)=>a.date.localeCompare(b.date));
+      const periodDays=Math.round((parseISO(to)-parseISO(from))/DAY)+1;
+      const sortedDays=[...dates].sort();let longest=0,streak=0,prior='';
+      for(const day of sortedDays){streak=prior&&addDays(prior,1)===day?streak+1:1;longest=Math.max(longest,streak);prior=day}
+      let bestDay='',bestDayMinutes=0;const dayTotals={};
+      for(const row of rows)dayTotals[row.date]=(dayTotals[row.date]||0)+(row.minutes??0);
+      for(const [day,v] of Object.entries(dayTotals))if(v>bestDayMinutes){bestDayMinutes=v;bestDay=day}
+      return {empty:false,first,last,common,from,to,missing,per,rows,tracks,dates,minutes,withDuration,sessions:rows.length,activeDays:dates.size,periodDays,longest,weekAvgMinutes:minutes*7/periodDays,weekAvgSessions:rows.length*7/periodDays,activeDaysPerWeek:dates.size*7/periodDays,avgSession:withDuration?minutes/withDuration:0,avgDay:dates.size?minutes/dates.size:0,weekly:weeksArr,monthly:monthArr,dow,bestDay,bestDayMinutes};
+    }
+    function kpi(label,value,hint,strong=false){return `<article class="kpi panel${strong?' strong':''}"><div class="label">${label}</div><div class="value">${escapeHTML(value)}</div><div class="hint">${hint}</div></article>`;}
+    function renderChart(where,data,mode='minutes',daysOfWeek=false){
+      const max=Math.max(1,...data.map(w=>daysOfWeek?w.value:w[mode]));
+      const top=Math.max(1,Math.ceil(max/(mode==='minutes'?60:1))*(mode==='minutes'?60:1));
+      const labels=data.length>16?data.slice(-16):data;
+      const first=labels.length>0?labels[0]:null;
+      if(!first){$(where).innerHTML='<div class="empty-chart">Aucune séance sur cette période.</div>';return}
+      let html='<div class="chart-area"><div class="chart-grid">';
+      for(let i=4;i>=0;i--)html+=`<div class="grid-line"><span>${mode==='minutes'?decimal(top/60*i/4):decimal(top*i/4)}</span></div>`;
+      html+='</div><div class="bar-plot">';
+      for(const w of labels){
+        const total=daysOfWeek?w.value:w[mode],height=total?Math.max(3,100*total/top):0;
+        const weekLabel=daysOfWeek?w.label:shortWeek(w.date);
+        const segments=daysOfWeek?`<div class="segment" style="height:100%;background:#5476b8"></div>`:NAMES.map(kind=>{
+          const val=w[kind][mode],pct=total?100*val/total:0;return `<div class="segment" style="height:${pct}%;background:${TRACKS[kind].color}"></div>`;
+        }).join('');
+        const desc=daysOfWeek?`${w.label} : ${hours(w.value)}`:`Semaine du ${shortDate(w.date)} : ${w.sessions} séances, ${hours(w.minutes)}`;
+        html+=`<div class="bar-col" title="${escapeHTML(desc)}"><div class="bar-value">${mode==='minutes'?hoursShort(total):total||'–'}</div><div class="bar" aria-label="${escapeHTML(desc)}" style="height:${height}%">${segments}</div><div class="bar-label">${escapeHTML(weekLabel)}</div></div>`;
+      }
+      html+='</div></div>';
+      $(where).innerHTML=html;
+    }
+    function renderTrackShare(){
+      const s=stats;
+      $('track-share').innerHTML=NAMES.map(k=>{
+        const t=s.tracks[k],pct=s.minutes?t.minutes*100/s.minutes:0;
+        return `<div class="track-row"><div class="track-head"><strong><i class="dot" style="background:${TRACKS[k].color}"></i>${TRACKS[k].name}</strong><span>${hours(t.minutes)} · ${decimal(pct)} %</span></div><div class="progress"><div style="width:${pct}%;background:${TRACKS[k].color}"></div></div><div class="track-meta">${t.sessions} séance${t.sessions>1?'s':''} · ${t.sessions?hours(t.minutes/Math.max(1,t.withDuration)):'—'} par séance renseignée</div></div>`;
+      }).join('');
+      $('mini-summary').innerHTML=`<div><div class="n">${s.activeDays}</div><div class="t">jours de pratique</div></div><div><div class="n">${decimal(s.activeDaysPerWeek)}</div><div class="t">jours / semaine</div></div><div><div class="n">${hours(s.avgDay)}</div><div class="t">par jour pratiqué</div></div>`;
+    }
+    function renderTable(where,heads,rows,empty){
+      $(where).innerHTML=rows.length?`<table><thead><tr>${heads.map(h=>'<th>'+h+'</th>').join('')}</tr></thead><tbody>${rows.join('')}</tbody></table>`:`<div class="source-empty">${escapeHTML(empty||'Aucune donnée pour cette période.')}</div>`;
+    }
+    function renderOverview(){
+      const s=stats;
+      if(s.empty){
+        $('overview-kpis').innerHTML=kpi('Heures de pratique','—','Importe les sauvegardes')+kpi('Séances terminées','—','Sur les trois parcours')+kpi('Séances par semaine','—','Période commune')+kpi('Temps par séance','—','Durée moyenne');
+        $('weekly-chart').innerHTML='<div class="empty-chart">Tes graphiques apparaîtront après import.</div>';
+        $('track-share').innerHTML='<div class="source-empty">Charge tes fichiers JSON pour comparer les trois parcours.</div>';
+        $('mini-summary').innerHTML='';$('weekly-table').innerHTML='';$('monthly-table').innerHTML='';$('period-explainer').textContent='Importe les trois sauvegardes pour calculer la période commune.';return;
+      }
+      $('period-explainer').textContent=`Du ${shortDate(s.from)} au ${shortDate(s.to)} · ${s.periodDays} jours${s.missing.length?' · résultat partiel : '+s.missing.length+' parcours absent(s)':''}`;
+      $('overview-kpis').innerHTML=kpi('Temps de pratique',hours(s.minutes), 'Durée cumulée enregistrée',true)+kpi('Séances terminées',decimal(s.sessions,0),'Sur la période sélectionnée')+kpi('Séances par semaine',decimal(s.weekAvgSessions),'Moyenne sur les jours calendaires')+kpi('Durée moyenne par séance',hours(s.avgSession),s.withDuration+' séances avec durée');
+      renderChart('weekly-chart',s.weekly.slice(-12),measure);renderTrackShare();
+      const weeklyRows=[...s.weekly].reverse().map(w=>`<tr><td><b>${shortDate(w.date)}</b></td><td>${w.sessions}</td><td>${w.days.size}</td><td><b>${hours(w.minutes)}</b></td></tr>`);
+      renderTable('weekly-table',['Semaine du','Séances','Jours','Durée'],weeklyRows);
+      const monthRows=[...s.monthly].reverse().map(m=>`<tr><td><b>${new Date(m.date+'-01T12:00:00Z').toLocaleDateString('fr-FR',{month:'long',year:'numeric',timeZone:'UTC'})}</b></td><td>${m.sessions}</td><td>${m.days.size}</td><td><b>${hours(m.minutes)}</b></td></tr>`);
+      renderTable('monthly-table',['Mois','Séances','Jours','Durée'],monthRows);
+    }
+    function renderRhythm(){const s=stats;
+      if(s.empty){$('rhythm-kpis').innerHTML='';$('dow-chart').innerHTML='';$('rhythm-details').innerHTML='';return}
+      $('rhythm-kpis').innerHTML=kpi('Temps par semaine',hours(s.weekAvgMinutes),'Moyenne calendaire',true)+kpi('Jours actifs par semaine',decimal(s.activeDaysPerWeek),'Sur 7 jours calendaires')+kpi('Temps par journée pratiquée',hours(s.avgDay),'Moyenne des jours actifs')+kpi('Série maximale',s.longest+' jours','Jours de pratique consécutifs');
+      const labels=['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];const values=labels.map((label,i)=>({label,value:s.dow[i]}));
+      renderChart('dow-chart',values,'minutes',true);
+      $('rhythm-details').innerHTML=`<div class="record-cols"><div class="record-box"><div class="big">${s.activeDays} / ${s.periodDays}</div><div class="small">Jours actifs / jours couverts</div></div><div class="record-box"><div class="big">${decimal(s.sessions/Math.max(1,s.activeDays))}</div><div class="small">Séances par journée active</div></div><div class="record-box"><div class="big">${Math.round(s.activeDays/s.periodDays*100)} %</div><div class="small">Jours avec pratique</div></div></div><div style="margin-top:22px;padding-top:17px;border-top:1px solid #edf0f5"><h3>Journée la plus longue</h3><p class="sub" style="font-size:13px;margin-top:8px">${s.bestDay?shortDate(s.bestDay)+' · '+hours(s.bestDayMinutes):'Aucune durée renseignée'}</p></div><div style="margin-top:16px"><h3>Interprétation</h3><p class="sub" style="font-size:13px;line-height:1.7;margin-top:8px">Les moyennes hebdomadaires divisent le volume total par le nombre de jours couverts puis multiplient par 7. Les semaines incomplètes sont donc correctement pondérées. Une journée avec plusieurs séances ne compte que pour un jour de pratique.</p></div>`;
+    }
+    function renderTracks(){const s=stats;
+      $('track-detail').innerHTML=NAMES.map(k=>{
+        const t=s.tracks?.[k]||{minutes:0,sessions:0,days:new Set(),withDuration:0};
+        const file=s.per?.[k]?.rows||[];
+        const first=file.length?file.map(v=>v.date).sort()[0]:'';
+        const last=file.length?file.map(v=>v.date).sort().at(-1):'';
+        const pct=s.empty||!s.minutes?0:Math.round(t.minutes*100/s.minutes);
+        return `<article class="source panel"><div class="source-top"><h3><i class="dot" style="background:${TRACKS[k].color};width:12px;height:12px"></i>${TRACKS[k].name}</h3><span class="pill${!state.sources[k]?' off':''}">${state.sources[k]?'Chargé':'Non chargé'}</span></div><div style="font-size:31px;font-weight:820;letter-spacing:-.055em;margin-top:18px;color:${TRACKS[k].color}">${hours(t.minutes)}</div><p class="sub">${pct} % de ton temps sur la période</p><div class="progress" style="margin:15px 0"><div style="width:${pct}%;background:${TRACKS[k].color}"></div></div><div class="source-stats"><div><strong>${t.sessions}</strong> séances terminées</div><div><strong>${hours(t.withDuration?t.minutes/t.withDuration:0)}</strong> en moyenne par séance</div><div><strong>${t.days.size}</strong> journées avec pratique</div><div>Historique disponible : <strong>${first?shortDate(first)+' → '+shortDate(last):'—'}</strong></div></div></article>`;
+      }).join('');
+    }
+    function renderSources(){
+      $('sources-status').innerHTML=NAMES.map(k=>{
+        const src=state.sources[k];let m={count:0,first:'',last:'',missing:0};try{if(src)m=srcMeta(k,src.raw)}catch(e){};
+        return `<article class="source panel"><div class="source-top"><h3><i class="dot" style="background:${TRACKS[k].color};width:12px;height:12px"></i>${TRACKS[k].name}</h3><span class="pill${src?'':' off'}">${src?'Importé':'À importer'}</span></div>${src?`<div class="source-stats"><strong>${m.count}</strong> séances terminées<br>Première : <strong>${shortDate(m.first)}</strong><br>Dernière : <strong>${shortDate(m.last)}</strong><br>Origine : <strong>${src.origin==='local'?'Lecture automatique':'Import JSON'}</strong></div><div class="filename">${escapeHTML(src.filename||'')}<br>Actualisé le ${escapeHTML(new Date(src.importedAt).toLocaleString('fr-FR'))}</div><button type="button" class="btn secondary" data-replace="${k}" style="margin-top:10px;padding:7px 11px;min-height:34px">Remplacer</button>`:`<p class="source-empty">Aucune sauvegarde chargée. Importe les séances de ce parcours.</p><button type="button" class="btn ghost" data-replace="${k}" style="margin-top:12px;padding:7px 11px;min-height:34px">Importer</button>`}</article>`;
+      }).join('');
+    }
+    function render(){
+      stats=calculate();const s=stats;
+      $('header-sync').textContent=NAMES.filter(k=>!!state.sources[k]).length+' / 3 parcours chargés';
+      $('hero-period').textContent=s.empty?'Période commune : à calculer':'Depuis le '+shortDate(s.common)+' · période commune';
+      $('hero-update').textContent=s.empty?'Dernière séance : —':'Dernière séance : '+shortDate(s.last);
+      $('period-select').value=state.period;
+      $('custom-dates').classList.toggle('hidden',state.period!=='custom');
+      $('date-from').value=state.customStart||(!s.empty?s.from:'');$('date-to').value=state.customEnd||(!s.empty?s.to:'');
+      $('auto-sync').checked=state.autoSync;
+      const missing=s.missing;
+      if(missing.length&&NAMES.some(k=>!!state.sources[k])) banner('Comparaison provisoire : il manque '+missing.map(k=>TRACKS[k].name).join(', ')+'. Importe les autres sauvegardes pour une période commune fiable.');
+      else if(!missing.length&&$('notice').classList.contains('notice')&&!$('notice').classList.contains('error'))clearBanner();
+      renderOverview();renderRhythm();renderTracks();renderSources();
+      $('footer-detail').textContent=s.empty?'Tableau de bord de pratique pianistique · Toutes les analyses sont calculées dans ton navigateur.':`Statistiques calculées sur ${s.sessions} séances du ${shortDate(s.from)} au ${shortDate(s.to)} · Source : sauvegardes personnelles · Aucune donnée transmise en ligne.`;
+    }
+    function selectTab(which){tab=which;
+      for(const el of document.querySelectorAll('[data-tab]'))el.setAttribute('aria-selected',String(el.dataset.tab===which));
+      for(const view of document.querySelectorAll('.view'))view.classList.toggle('hidden',view.id!=='view-'+which);
+      if(which==='data')renderSources();
+      window.scrollTo({top:0,behavior:'smooth'});
+    }
+    function download(name,contents,mime){const blob=new Blob([contents],{type:mime}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),15000);}
+    function exportBundle(){
+      if(!NAMES.some(k=>state.sources[k]))return notify('Aucune donnée à exporter.');
+      const bundle={kind:'piano-dashboard-bundle',version:1,createdAt:new Date().toISOString(),sources:Object.fromEntries(NAMES.filter(k=>state.sources[k]).map(k=>[k,{raw:state.sources[k].raw,filename:state.sources[k].filename}]))};
+      download('mes-trois-parcours-piano-'+TODAY+'.json',JSON.stringify(bundle,null,2),'application/json;charset=utf-8');notify('Archive personnelle créée.');
+    }
+    function exportCSV(){if(stats.empty)return notify('Aucune statistique à exporter.');
+      const rows=[['Date','Parcours','Identifiant seance','Minutes','Heures'],...stats.rows.sort((a,b)=>a.date.localeCompare(b.date)).map(r=>[r.date,TRACKS[r.track].name,r.id,r.minutes===null?'':r.minutes,r.minutes===null?'':(r.minutes/60).toFixed(2).replace('.',',')])];
+      const csv='\ufeff'+rows.map(row=>row.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(';')).join('\r\n');
+      download('statistiques-piano-'+TODAY+'.csv',csv,'text/csv;charset=utf-8');notify('Fichier CSV créé.');
+    }
+    function wire(){
+      document.querySelectorAll('[data-tab]').forEach(el=>el.addEventListener('click',()=>selectTab(el.dataset.tab)));
+      $('hero-import').addEventListener('click',()=>selectTab('data'));
+      $('show-data').addEventListener('click',()=>selectTab('data'));
+      $('pick-files').addEventListener('click',()=>$('file-input').click());
+      $('file-input').addEventListener('change',e=>handleFiles(e.target.files));
+      $('period-select').addEventListener('change',e=>{state.period=e.target.value;persist();render()});
+      $('apply-dates').addEventListener('click',()=>{const from=$('date-from').value,to=$('date-to').value;if(!Number.isFinite(parseISO(from))||!Number.isFinite(parseISO(to))||from>to){notify('Saisis une date de début antérieure à la date de fin.');return}state.customStart=from;state.customEnd=to;persist();render()});
+      $('chart-measure').addEventListener('change',e=>{measure=e.target.value;renderOverview()});
+      $('auto-sync').addEventListener('change',e=>{state.autoSync=e.target.checked;persist();if(state.autoSync)scanLocal(true);render()});
+      $('rescan').addEventListener('click',()=>scanLocal(true));
+      $('export-bundle').addEventListener('click',exportBundle);
+      $('export-csv').addEventListener('click',exportCSV);
+      $('print').addEventListener('click',()=>window.print());
+      $('sources-status').addEventListener('click',e=>{const el=e.target.closest('[data-replace]');if(el){$('file-input').click()}});
+      for(const event of ['dragenter','dragover'])$('dropzone').addEventListener(event,e=>{e.preventDefault();$('dropzone').classList.add('dragover')});
+      for(const event of ['dragleave','drop'])$('dropzone').addEventListener(event,e=>{e.preventDefault();$('dropzone').classList.remove('dragover')});
+      $('dropzone').addEventListener('drop',e=>handleFiles(e.dataTransfer.files));
+      window.addEventListener('focus',()=>{if(state.autoSync)scanLocal(false)});
+      window.addEventListener('storage',e=>{if(e.key!==KEY&&state.autoSync)scanLocal(false)});
+      document.addEventListener('visibilitychange',()=>{if(!document.hidden&&state.autoSync)scanLocal(false)});
+      setInterval(()=>{if(!document.hidden&&state.autoSync)scanLocal(false)},15000);
+    }
+    load();wire();if(state.autoSync)scanLocal(false);render();
+    // Exposed only for local verification of the calculations; does not upload anything.
+    window.PianoDashboard={getStatistics:()=>calculate(),getLoadedSources:()=>Object.keys(state.sources),importFile:async(file)=>handleFiles([file])};
+  })();
+  </script>
+</body>
+</html>
