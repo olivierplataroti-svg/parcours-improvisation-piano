@@ -361,7 +361,7 @@
       const s=stats;
       $('track-share').innerHTML=NAMES.map(k=>{
         const t=s.tracks[k],pct=s.minutes?t.minutes*100/s.minutes:0;
-        return `<div class="track-row"><div class="track-head"><strong><i class="dot" style="background:${TRACKS[k].color}"></i>${TRACKS[k].name}</strong><span>${hours(t.minutes)} · ${decimal(pct)} %</span></div><div class="progress"><div style="width:${pct}%;background:${TRACKS[k].color}"></div></div><div class="track-meta">${t.sessions} séance${t.sessions>1?'s':''} · ${t.sessions?hours(t.minutes/Math.max(1,t.withDuration)):'—'} par séance renseignée</div></div>`;
+        return `<div class="track-row"><div class="track-head"><strong><i class="dot" style="background:${TRACKS[k].color}"></i>${TRACKS[k].name}</strong><span>${hours(t.minutes)} · ${decimal(pct)} %</span></div><div class="progress"><div style="width:${pct}%;background:${TRACKS[k].color}"></div></div><div class="track-meta">${t.sessions} séance${t.sessions>1?'s':''} · ${t.withDuration?decimal(t.minutes/t.withDuration)+' min':'—'} par séance renseignée</div></div>`;
       }).join('');
       $('mini-summary').innerHTML=`<div><div class="n">${s.activeDays}</div><div class="t">jours de pratique</div></div><div><div class="n">${decimal(s.activeDaysPerWeek)}</div><div class="t">jours / semaine</div></div><div><div class="n">${hours(s.avgDay)}</div><div class="t">par jour pratiqué</div></div>`;
     }
@@ -377,7 +377,7 @@
         $('mini-summary').innerHTML='';$('weekly-table').innerHTML='';$('monthly-table').innerHTML='';$('period-explainer').textContent='Importe les trois sauvegardes pour calculer la période commune.';return;
       }
       $('period-explainer').textContent=`Du ${shortDate(s.from)} au ${shortDate(s.to)} · ${s.periodDays} jours${s.missing.length?' · résultat partiel : '+s.missing.length+' parcours absent(s)':''}`;
-      $('overview-kpis').innerHTML=kpi('Temps de pratique',hours(s.minutes), 'Durée cumulée enregistrée',true)+kpi('Séances terminées',decimal(s.sessions,0),'Sur la période sélectionnée')+kpi('Séances par semaine',decimal(s.weekAvgSessions),'Moyenne sur les jours calendaires')+kpi('Durée moyenne par séance',hours(s.avgSession),s.withDuration+' séances avec durée');
+      $('overview-kpis').innerHTML=kpi('Temps de pratique',hours(s.minutes), 'Durée cumulée enregistrée',true)+kpi('Séances terminées',decimal(s.sessions,0),'Sur la période sélectionnée')+kpi('Séances par semaine',decimal(s.weekAvgSessions),'Moyenne sur les jours calendaires')+kpi('Durée moyenne par séance',decimal(s.avgSession)+' min',s.withDuration+' séances avec durée');
       renderChart('weekly-chart',s.weekly.slice(-12),measure);renderTrackShare();
       const weeklyRows=[...s.weekly].reverse().map(w=>`<tr><td><b>${shortDate(w.date)}</b></td><td>${w.sessions}</td><td>${w.days.size}</td><td><b>${hours(w.minutes)}</b></td></tr>`);
       renderTable('weekly-table',['Semaine du','Séances','Jours','Durée'],weeklyRows);
@@ -398,7 +398,7 @@
         const first=file.length?file.map(v=>v.date).sort()[0]:'';
         const last=file.length?file.map(v=>v.date).sort().at(-1):'';
         const pct=s.empty||!s.minutes?0:Math.round(t.minutes*100/s.minutes);
-        return `<article class="source panel"><div class="source-top"><h3><i class="dot" style="background:${TRACKS[k].color};width:12px;height:12px"></i>${TRACKS[k].name}</h3><span class="pill${!state.sources[k]?' off':''}">${state.sources[k]?'Chargé':'Non chargé'}</span></div><div style="font-size:31px;font-weight:820;letter-spacing:-.055em;margin-top:18px;color:${TRACKS[k].color}">${hours(t.minutes)}</div><p class="sub">${pct} % de ton temps sur la période</p><div class="progress" style="margin:15px 0"><div style="width:${pct}%;background:${TRACKS[k].color}"></div></div><div class="source-stats"><div><strong>${t.sessions}</strong> séances terminées</div><div><strong>${hours(t.withDuration?t.minutes/t.withDuration:0)}</strong> en moyenne par séance</div><div><strong>${t.days.size}</strong> journées avec pratique</div><div>Historique disponible : <strong>${first?shortDate(first)+' → '+shortDate(last):'—'}</strong></div></div></article>`;
+        return `<article class="source panel"><div class="source-top"><h3><i class="dot" style="background:${TRACKS[k].color};width:12px;height:12px"></i>${TRACKS[k].name}</h3><span class="pill${!state.sources[k]?' off':''}">${state.sources[k]?'Chargé':'Non chargé'}</span></div><div style="font-size:31px;font-weight:820;letter-spacing:-.055em;margin-top:18px;color:${TRACKS[k].color}">${hours(t.minutes)}</div><p class="sub">${pct} % de ton temps sur la période</p><div class="progress" style="margin:15px 0"><div style="width:${pct}%;background:${TRACKS[k].color}"></div></div><div class="source-stats"><div><strong>${t.sessions}</strong> séances terminées</div><div><strong>${t.withDuration?decimal(t.minutes/t.withDuration)+' min':'—'}</strong> en moyenne par séance</div><div><strong>${t.days.size}</strong> journées avec pratique</div><div>Historique disponible : <strong>${first?shortDate(first)+' → '+shortDate(last):'—'}</strong></div></div></article>`;
       }).join('');
     }
     function renderSources(){
