@@ -536,7 +536,7 @@
 }
         function renderRepertoire(){const works=state.repertoire||[];$("repertoire-count").textContent=works.length+" œuvres";$("repertoire-list").textContent=["studied","current","planned"].map(status=>works.filter(w=>w.status===status).map(w=>w.composer+" : "+w.title+" ("+w.reference+")").join("\n")).join("\n\n");const select=$("rep-existing"),selected=select.value;select.length=1;for(const w of works)select.add(new Option(w.composer+" — "+w.title,w.id));select.value=works.some(w=>w.id===selected)?selected:"";}
         function editWork(id){ const w=state.repertoire.find(work=>work.id===id); if(!w)return; $('rep-id').value=w.id; $('rep-title').value=w.title; $('rep-composer').value=w.composer; $('rep-reference').value=w.reference; $('rep-status').value=w.status; $('rep-notes').value=w.notes; $('repertoire-form-title').textContent='Modifier une œuvre'; $('rep-save').textContent='Enregistrer les modifications'; $('rep-cancel').classList.remove('hidden'); }
-    function saveWork(){ }
+    function saveWork(){ const title=$('rep-title').value; }
     function render(){
       stats=calculate();const s=stats;
       $('header-sync').textContent=NAMES.filter(k=>!!state.sources[k]).length+' / 3 parcours chargés';
