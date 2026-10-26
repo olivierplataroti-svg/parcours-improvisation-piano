@@ -546,6 +546,7 @@
         return `<article class="source panel"><div class="source-top"><h3><i class="dot" style="background:${TRACKS[k].color};width:12px;height:12px"></i>${TRACKS[k].name}</h3><span class="pill${src?'':' off'}">${src?'Importé':'À importer'}</span></div>${src?`<div class="source-stats"><strong>${m.count}</strong> séances terminées<br>Première : <strong>${shortDate(m.first)}</strong><br>Dernière : <strong>${shortDate(m.last)}</strong><br>Origine : <strong>${src.origin==='local'?'Lecture automatique':'Import JSON'}</strong></div><div class="filename">${escapeHTML(src.filename||'')}<br>Actualisé le ${escapeHTML(new Date(src.importedAt).toLocaleString('fr-FR'))}</div><button type="button" class="btn secondary" data-replace="${k}" style="margin-top:10px;padding:7px 11px;min-height:34px">Remplacer</button>`:`<p class="source-empty">Aucune sauvegarde chargée. Importe les séances de ce parcours.</p><button type="button" class="btn ghost" data-replace="${k}" style="margin-top:12px;padding:7px 11px;min-height:34px">Importer</button>`}</article>`;
       }).join('');
     }
+    function renderClassicHistory(){const life=lifetimeStats(),v=hours(life.totalMinutes);$("classical-history").textContent="Classique historique : 380 h. Depuis septembre 2026 : "+life.addedDays+" h. Total piano : "+v;$("classical-kpis").textContent="Classique : 380 h, dont 50 h de cours. Cumul piano : "+v;$("classical-overlap").textContent=life.inHistoryDays+" journées classiques antérieures déjà comprises dans les 380 h.";$("classical-dates").textContent=life.start?shortDate(life.start):"Données à importer.";}
     function render(){
       stats=calculate();const s=stats;
       $('header-sync').textContent=NAMES.filter(k=>!!state.sources[k]).length+' / 3 parcours chargés';
@@ -558,7 +559,7 @@
       const missing=s.missing;
       if(missing.length&&NAMES.some(k=>!!state.sources[k])) banner('Comparaison provisoire : il manque '+missing.map(k=>TRACKS[k].name).join(', ')+'. Importe les autres sauvegardes pour une période commune fiable.');
       else if(!missing.length&&$('notice').classList.contains('notice')&&!$('notice').classList.contains('error'))clearBanner();
-      renderOverview();renderRhythm();renderTracks();renderSources();
+      renderOverview();renderRhythm();renderTracks();renderSources();renderClassicHistory();
       $('footer-detail').textContent=s.empty?'Tableau de bord de pratique pianistique · Toutes les analyses sont calculées dans ton navigateur.':`Statistiques calculées sur ${s.sessions} séances du ${shortDate(s.from)} au ${shortDate(s.to)} · Source : sauvegardes personnelles · Aucune donnée transmise en ligne.`;
     }
     function selectTab(which){tab=which;
