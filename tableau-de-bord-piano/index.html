@@ -565,10 +565,13 @@
       const bundle={kind:'piano-dashboard-bundle',version:2,createdAt:new Date().toISOString(),classical:{historicalHours:HISTORIC_HOURS,from:HISTORIC_FROM,to:HISTORIC_TO,minutesPerActiveDay:60,repertoire:state.repertoire},sources:Object.fromEntries(NAMES.filter(k=>state.sources[k]).map(k=>[k,{raw:state.sources[k].raw,filename:state.sources[k].filename}]))};
       download('mon-piano-tableau-de-bord-'+TODAY+'.json',JSON.stringify(bundle,null,2),'application/json;charset=utf-8');notify('Archive personnelle créée.');
     }
-    function exportCSV(){if(stats.empty)return notify('Aucune statistique à exporter.');
-      const rows=[['Date','Parcours','Identifiant seance','Minutes','Heures'],...stats.rows.sort((a,b)=>a.date.localeCompare(b.date)).map(r=>[r.date,TRACKS[r.track].name,r.id,r.minutes===null?'':r.minutes,r.minutes===null?'':(r.minutes/60).toFixed(2).replace('.',',')])];
-      const csv='\ufeff'+rows.map(row=>row.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(';')).join('\r\n');
-      download('statistiques-piano-'+TODAY+'.csv',csv,'text/csv;charset=utf-8');notify('Fichier CSV créé.');
+    function exportCSV(){
+      if(stats.empty)return notify('Aucune séance de parcours à exporter. Utilise l’archive JSON pour conserver ton répertoire.');
+      const activeClassical=(stats.classicDates||[]).map(date=>({date,track:'classical',id:'classical:'+date,minutes:60}));
+      const data=stats.rows.concat(activeClassical).sort((a,b)=>a.date.localeCompare(b.date));
+      const rows=[['Date','Parcours','Identifiant séance','Minutes','Heures','Nature'],...data.map(r=>[r.date,TRACK_META[r.track].name,r.id,r.minutes===null?'':r.minutes,r.minutes===null?'':(r.minutes/60).toFixed(2).replace('.',','),r.track==='classical'?'Estimé : 1 h par date active':'Séance enregistrée'])];
+      const csv='\\ufeff'+rows.map(row=>row.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(';')).join('\\r\\n');
+      download('statistiques-piano-'+TODAY+'.csv',csv,'text/csv;charset=utf-8');notify('Fichier CSV créé avec les heures classiques des journées actives.');
     }
     function wire(){
       document.querySelectorAll('[data-tab]').forEach(el=>el.addEventListener('click',()=>selectTab(el.dataset.tab)));
