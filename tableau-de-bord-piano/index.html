@@ -359,6 +359,7 @@
           if(file.size>15*1024*1024)throw new Error('Fichier trop volumineux (limite 15 Mo).');
           const content=JSON.parse(await file.text());const kind=detect(content,file.name);
           if(kind==='bundle'){
+            if(content.classical&&Array.isArray(content.classical.repertoire)){state.repertoire=content.classical.repertoire.map(cleanWork).filter(Boolean);succeeded.push('Répertoire classique');}
             for(const [k,v] of Object.entries(content.sources)){
               if(!NAMES.includes(k)||!v)continue;
               try{addSource(k,v.raw||v,{filename:v.filename||file.name,origin:'file',save:false});succeeded.push(TRACKS[k].name)}catch(err){failed.push(k+': '+err.message)}
