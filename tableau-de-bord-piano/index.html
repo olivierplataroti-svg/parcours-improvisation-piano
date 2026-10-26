@@ -213,6 +213,7 @@
   </main>
   <div id="toast" role="status" aria-live="polite"></div>
   <script src="classical-defaults.js"></script>
+  <script src="./classical-data.js"></script>
   <script>
   (() => {
     'use strict';
@@ -224,6 +225,7 @@
     const TRACK_META = {...TRACKS,classical:CLASSICAL};
     const HISTORIC_HOURS = 380;
     const HISTORIC_FROM = '2024-09-01', HISTORIC_TO = '2026-08-31';
+    const DEFAULT_WORKS = window.PIANO_CLASSICAL_DEFAULT_WORKS || [];
     const DAY = 86400000;
     const $ = id => document.getElementById(id);
     const TODAY = new Date().toLocaleDateString('sv-SE');
@@ -590,8 +592,9 @@
     }
     load();wire();if(state.autoSync)scanLocal(false);render();
     // Exposed only for local verification of the calculations; does not upload anything.
-    window.PianoDashboard={getStatistics:()=>calculate(),getLoadedSources:()=>Object.keys(state.sources),importFile:async(file)=>handleFiles([file])};
+    window.PianoDashboard={getStatistics:()=>calculate(),getLoadedSources:()=>Object.keys(state.sources),getClassicalLifetime:()=>lifetimeStats(),getRepertoire:()=>state.repertoire.map(w=>({...w})),setRepertoire:works=>{if(!Array.isArray(works))return;state.repertoire=works.map(cleanWork).filter(Boolean);persist();renderRepertoire();},importFile:async(file)=>handleFiles([file])};
   })();
   </script>
+  <script src="./classical-repertoire.js"></script>
 </body>
 </html>
