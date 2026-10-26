@@ -554,8 +554,29 @@
   $("classical-kpis").innerHTML=kpi("Classique historique","380 h","Septembre 2024 à août 2026",true)+kpi("Cours inclus","50 h","Déjà dans les 380 h")+kpi("Classique depuis septembre 2026",life.addedDays+" h","Une heure par journée active")+kpi("Total piano cumulé",total,ready?"Trois parcours chargés":"Sources incomplètes");
   $("classical-dates").textContent=life.start?"Début de la règle quotidienne : "+shortDate(life.start)+(state.sources.blues?" (première séance Blues chargée).":" (provisoire tant que la sauvegarde Blues manque)."):"Le calcul quotidien sera disponible dès l'import de tes sauvegardes.";
 }
-        function renderRepertoire(){const works=state.repertoire||[];$("repertoire-count").textContent=works.length+" œuvres";$("repertoire-list").textContent=works.map(w=>w.composer+" — "+w.title).join(" · ");}
-    function render(){
+        function renderRepertoire(){
+ const works=state.repertoire||[],root=$("repertoire-list");
+ $("repertoire-count").textContent=works.length+" œuvre"+(works.length!==1?"s":"");
+ root.replaceChildren();
+ for(const [status,label] of [["studied","Œuvres déjà étudiées"],["current","Œuvres en cours"],["planned","Œuvres à étudier"]]){
+  const group=document.createElement("section");group.className="works-group";
+  const heading=document.createElement("h3");heading.textContent=label+" · "+works.filter(w=>w.status===status).length;group.append(heading);
+  const cards=document.createElement("div");cards.className="works-list";
+  for(const w of works.filter(w=>w.status===status)){
+   const card=document.createElement("article");card.className="work-card";
+   const details=document.createElement("div");
+   for(const [tag,cls,value] of [["div","composer",w.composer],["strong","",w.title],["div","reference",w.reference],["div","notes",w.notes]]){
+    if(!value)continue;const node=document.createElement(tag);node.className=cls;node.textContent=value;details.append(node);
+   }
+   const actions=document.createElement("div");actions.className="work-actions";
+   const edit=document.createElement("button");edit.type="button";edit.textContent="Modifier";edit.addEventListener("click",()=>editWork(w.id));
+   const remove=document.createElement("button");remove.type="button";remove.className="danger";remove.textContent="Suppr.";remove.addEventListener("click",()=>deleteWork(w.id));
+   actions.append(edit,remove);card.append(details,actions);cards.append(card);
+  }
+  group.append(cards);root.append(group);
+ }
+}
+        function render(){
       stats=calculate();const s=stats;
       $('header-sync').textContent=NAMES.filter(k=>!!state.sources[k]).length+' / 3 parcours chargés';
       $('hero-period').textContent=s.empty?'Période commune : à calculer':'Depuis le '+shortDate(s.common)+' · période commune';
