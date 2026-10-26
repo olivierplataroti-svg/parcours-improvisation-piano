@@ -1,0 +1,24 @@
+    .classical-intro{font-size:13px;color:#64758d;line-height:1.7;margin:9px 0 16px}
+    .classical-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+    .classical-metric{padding:15px 17px;background:#f6f5fc;border:1px solid #e9e4f6;border-radius:12px}
+    .classical-metric .n{font-size:clamp(20px,2.5vw,29px);font-weight:820;color:#674a98;letter-spacing:-.04em}
+    .classical-metric .t{font-size:11px;line-height:1.4;color:#6d6982}
+    .classical-note{font-size:11px;color:#69768d;line-height:1.65;margin:12px 0 0}
+    .works-groups{display:grid;gap:22px;margin-top:18px}
+    .works-group h3{margin-bottom:10px}
+    .works-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+    .work-card{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;padding:13px 14px;border:1px solid #e5e9f2;background:#fff;border-radius:12px;min-width:0}
+    .work-card strong{display:block;font-size:13px;color:#283d61;line-height:1.4}
+    .work-card .composer{color:#795eab;font-size:11px;font-weight:780;margin-bottom:3px}
+    .work-card .reference,.work-card .notes{color:#73849a;font-size:11px;line-height:1.5;margin-top:4px;overflow-wrap:anywhere}
+    .work-actions{display:flex;gap:5px;flex-shrink:0}
+    .work-actions button{background:#f2f5fa;border:1px solid #e2e9f1;color:#31527d;border-radius:7px;padding:5px 8px;font-size:11px;font-weight:730}
+    .work-actions button.danger{color:#a4484a}
+    .work-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .work-field{display:flex;flex-direction:column;gap:5px;min-width:0}
+    .work-field label{font-size:11px;font-weight:770;color:#4e617e}
+    .work-field input,.work-field select,.work-field textarea{width:100%;min-width:0;border:1px solid #d7e1ed;border-radius:9px;padding:10px 11px;background:#fff;color:#233753;font:inherit;font-size:13px}
+    .work-field textarea{resize:vertical;min-height:66px}
+    .work-field.wide{grid-column:1/-1}
+    .works-header{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+    @media(max-width:720px){.classical-metrics,.works-list,.work-form-grid{grid-template-columns:1fr}.work-actions{flex-direction:column}}
