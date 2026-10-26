@@ -134,21 +134,47 @@
     @media(max-width:720px){.layout{padding:0 15px 70px}.mast-inner{padding:13px 15px}.hero{margin-top:16px;padding:25px 19px 23px;border-radius:18px}.hero-actions{gap:7px}.hero .lead-action{margin-left:0;flex-basis:100%}.head-row{align-items:flex-start}.kpis{gap:9px}.kpi{padding:16px 14px;min-height:116px}.kpi .value{font-size:25px}.grid-2{gap:12px}.padded{padding:18px 15px}.source-grid,.instructions{grid-template-columns:1fr}.chart-area{height:214px}.bar-label{font-size:10px}.nav button{padding:10px 13px}.record-cols{grid-template-columns:repeat(2,1fr)}.controls{width:100%}.select{max-width:unset;flex:1}.date{width:100%;max-width:160px}.tag{font-size:10px}}
     @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
     @media print{.mast,.nav,.controls,.dropzone,.actions,.hero .lead-action{display:none!important}.layout{max-width:100%;padding:0}.hero{background:#f2f6fb;color:#1b3358;box-shadow:none;border:1px solid #ddd}.hero p,.eyebrow{color:#42607a}.panel{box-shadow:none;break-inside:avoid}}
+
+    .classical-intro{font-size:13px;color:#64758d;line-height:1.7;margin:9px 0 16px}
+    .classical-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+    .classical-metric{padding:15px 17px;background:#f6f5fc;border:1px solid #e9e4f6;border-radius:12px}
+    .classical-metric .n{font-size:clamp(20px,2.5vw,29px);font-weight:820;color:#674a98;letter-spacing:-.04em}
+    .classical-metric .t{font-size:11px;line-height:1.4;color:#6d6982}
+    .classical-note{font-size:11px;color:#69768d;line-height:1.65;margin:12px 0 0}
+    .works-groups{display:grid;gap:22px;margin-top:18px}
+    .works-group h3{margin-bottom:10px}
+    .works-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+    .work-card{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;padding:13px 14px;border:1px solid #e5e9f2;background:#fff;border-radius:12px;min-width:0}
+    .work-card strong{display:block;font-size:13px;color:#283d61;line-height:1.4}
+    .work-card .composer{color:#795eab;font-size:11px;font-weight:780;margin-bottom:3px}
+    .work-card .reference,.work-card .notes{color:#73849a;font-size:11px;line-height:1.5;margin-top:4px;overflow-wrap:anywhere}
+    .work-actions{display:flex;gap:5px;flex-shrink:0}
+    .work-actions button{background:#f2f5fa;border:1px solid #e2e9f1;color:#31527d;border-radius:7px;padding:5px 8px;font-size:11px;font-weight:730}
+    .work-actions button.danger{color:#a4484a}
+    .work-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .work-field{display:flex;flex-direction:column;gap:5px;min-width:0}
+    .work-field label{font-size:11px;font-weight:770;color:#4e617e}
+    .work-field input,.work-field select,.work-field textarea{width:100%;min-width:0;border:1px solid #d7e1ed;border-radius:9px;padding:10px 11px;background:#fff;color:#233753;font:inherit;font-size:13px}
+    .work-field textarea{resize:vertical;min-height:66px}
+    .work-field.wide{grid-column:1/-1}
+    .works-header{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+    @media(max-width:720px){.classical-metrics,.works-list,.work-form-grid{grid-template-columns:1fr}.work-actions{flex-direction:column}}
   </style>
 </head>
 <body>
   <header class="mast"><div class="mast-inner"><a class="brand" href="#haut" aria-label="Retour en haut"><span class="brand-mark" aria-hidden="true">♫</span> MON PIANO <span style="color:#9aa9b8;font-weight:500">/ Statistiques</span></a><span class="tag" id="header-sync">Données personnelles · locales</span></div></header>
   <main class="layout" id="haut">
     <section class="hero" aria-label="Présentation">
-      <div class="eyebrow"><span>●</span> Carnet d'entraînement · Blues / Jazz / Improvisation</div>
+      <div class="eyebrow"><span>●</span> Carnet d'entraînement · Classique / Blues / Jazz / Improvisation</div>
       <h1>Chaque séance fait<br>progresser ton jeu.</h1>
-      <p>Observe ton temps de pratique, ta régularité et la répartition entre tes trois parcours. Compare-les à partir de leur date de démarrage commune, sans survaloriser le premier programme commencé.</p>
+      <p>Retrouve ton apprentissage classique depuis septembre 2024, ton répertoire et tes parcours Blues, Jazz et Improvisation. Une heure de classique est estimée pour chaque journée avec une séance terminée.</p>
       <div class="hero-actions"><span class="hero-pill" id="hero-period">Période commune : —</span><span class="hero-pill" id="hero-update">Dernière séance : —</span><button class="btn lead-action" id="hero-import" type="button">+ Actualiser mes données</button></div>
     </section>
     <nav class="nav" aria-label="Sections du tableau de bord">
       <button type="button" data-tab="overview" aria-selected="true">Vue d'ensemble</button>
       <button type="button" data-tab="rhythm" aria-selected="false">Rythme &amp; régularité</button>
       <button type="button" data-tab="tracks" aria-selected="false">Parcours</button>
+      <button type="button" data-tab="classical" aria-selected="false">Classique &amp; répertoire</button>
       <button type="button" data-tab="data" aria-selected="false">Mes données</button>
     </nav>
     <div class="notice hidden" id="notice" role="status"></div>
@@ -156,18 +182,54 @@
       <div class="head-row"><div><h2>Vue d'ensemble</h2><p class="sub" id="period-explainer">Comparaison sur une période commune aux trois parcours.</p></div><div class="controls"><select class="select" id="period-select" aria-label="Période d'analyse"><option value="common">Depuis les trois parcours</option><option value="30">30 derniers jours enregistrés</option><option value="90">90 derniers jours enregistrés</option><option value="all">Tout l'historique</option><option value="custom">Dates personnalisées</option></select><button class="btn secondary" type="button" id="show-data">Importer</button></div></div>
       <div class="controls hidden" id="custom-dates" style="margin-bottom:16px"><label style="font-size:12px;color:#64758d">Du <input type="date" class="date" id="date-from"></label><label style="font-size:12px;color:#64758d">au <input type="date" class="date" id="date-to"></label><button class="btn ghost" id="apply-dates" type="button">Appliquer</button></div>
       <div class="kpis" id="overview-kpis"></div>
-      <div class="grid-2"><div class="panel padded"><div class="panel-header"><div><h3>Ton rythme semaine après semaine</h3><p class="sub">Durée enregistrée, semaines civiles</p></div><select id="chart-measure" class="tiny-option" aria-label="Mesure des barres"><option value="minutes">Heures</option><option value="sessions">Séances</option></select></div><div id="weekly-chart"></div><div class="legend"><span><i class="dot" style="background:var(--blues)"></i>Blues</span><span><i class="dot" style="background:var(--jazz)"></i>Jazz</span><span><i class="dot" style="background:var(--bases)"></i>Bases</span></div></div>
+      <div class="panel padded" style="margin:16px 0 20px">
+        <div class="works-header"><h3>Ton apprentissage classique depuis 2024</h3><button type="button" class="btn secondary" id="open-repertoire">Voir mon répertoire</button></div>
+        <p class="classical-intro">Base historique : 380 h estimées de septembre 2024 à août 2026. Depuis septembre 2026, une heure de classique s'ajoute pour chaque journée active des parcours.</p>
+        <div id="classical-history" class="classical-metrics"></div>
+        <p class="classical-note" id="classical-overlap"></p>
+      </div>
+      <div class="grid-2"><div class="panel padded"><div class="panel-header"><div><h3>Ton rythme semaine après semaine</h3><p class="sub">Durée des parcours + classique estimé, semaines civiles</p></div><select id="chart-measure" class="tiny-option" aria-label="Mesure des barres"><option value="minutes">Heures</option><option value="sessions">Séances</option></select></div><div id="weekly-chart"></div><div class="legend"><span><i class="dot" style="background:var(--blues)"></i>Blues</span><span><i class="dot" style="background:var(--jazz)"></i>Jazz</span><span><i class="dot" style="background:var(--bases)"></i>Bases</span><span><i class="dot" style="background:#9770be"></i>Classique (1 h/jour actif)</span></div></div>
       <div class="panel padded"><div class="panel-header"><div><h3>Équilibre de tes trois parcours</h3><p class="sub">Volume de travail sur la période choisie</p></div></div><div class="track-list" id="track-share"></div><div class="summary-strip" id="mini-summary"></div></div></div>
-      <div class="grid-2 equal"><div class="panel padded"><div class="panel-header"><div><h3>Historique hebdomadaire</h3><p class="sub">Semaines civiles (les semaines aux bornes peuvent être partielles)</p></div></div><div class="table-wrap" id="weekly-table"></div></div><div class="panel padded"><div class="panel-header"><div><h3>Pratique par mois</h3><p class="sub">La durée réellement enregistrée</p></div></div><div class="table-wrap" id="monthly-table"></div></div></div>
+      <div class="grid-2 equal"><div class="panel padded"><div class="panel-header"><div><h3>Historique hebdomadaire</h3><p class="sub">Semaines civiles (les semaines aux bornes peuvent être partielles)</p></div></div><div class="table-wrap" id="weekly-table"></div></div><div class="panel padded"><div class="panel-header"><div><h3>Pratique par mois</h3><p class="sub">Parcours enregistrés + classique estimé</p></div></div><div class="table-wrap" id="monthly-table"></div></div></div>
     </section>
     <section id="view-rhythm" class="view hidden"><div class="head-row"><div><h2>Rythme &amp; régularité</h2><p class="sub">Comprendre comment la pratique s'installe dans la durée.</p></div></div><div class="kpis" id="rhythm-kpis"></div><div class="grid-2 equal"><div class="panel padded"><div class="panel-header"><div><h3>Jours de la semaine</h3><p class="sub">Durée cumulée du lundi au dimanche</p></div></div><div id="dow-chart"></div></div><div class="panel padded"><div class="panel-header"><div><h3>Tes repères de régularité</h3><p class="sub">Quelques indicateurs complémentaires</p></div></div><div id="rhythm-details"></div></div></div></section>
     <section id="view-tracks" class="view hidden"><div class="head-row"><div><h2>Les trois parcours</h2><p class="sub">Comparer les efforts, pas uniquement le nombre de séances.</p></div></div><div class="source-grid" id="track-detail"></div><div class="panel padded"><h3>Comment lire ces chiffres ?</h3><p class="sub" style="font-size:13px;line-height:1.7;margin-top:12px">Une séance compte uniquement lorsqu'elle est marquée comme terminée. Les durées affichées sont celles inscrites dans tes trois applications (durée des séances Blues/Jazz et durée réelle renseignée dans Bases). Les moyennes représentent du temps enregistré, pas un suivi automatique du clavier ou de la concentration.</p></div></section>
+
+    <section id="view-classical" class="view hidden">
+      <div class="head-row"><div><h2>Classique &amp; répertoire</h2><p class="sub">Tes deux premières années, les œuvres étudiées et les projets à venir.</p></div></div>
+      <div class="kpis" id="classical-kpis"></div>
+      <div class="panel padded">
+        <h3>Comment sont comptées les heures de classique ?</h3>
+        <p class="classical-intro">Du 1er septembre 2024 au 31 août 2026, l'estimation est de <strong>380 heures, dont 50 heures de cours</strong>. Depuis le début de ton parcours Blues, chaque date avec au moins une séance terminée en Blues, Jazz ou Bases de l'improvisation représente aussi <strong>une heure de classique</strong>, quel que soit le nombre de séances réalisées ce jour-là.</p>
+        <p class="classical-intro">Les heures classiques déduites des journées travaillées jusqu'en août 2026 sont <strong>déjà incluses dans les 380 heures historiques</strong>. Elles figurent dans les graphiques par jour et semaine, mais ne sont pas ajoutées une seconde fois au cumul depuis septembre 2024. À partir de septembre 2026, elles s'ajoutent au cumul.</p>
+        <p id="classical-dates" class="classical-note"></p>
+      </div>
+      <div class="panel padded" style="margin-top:17px">
+        <div class="works-header"><div><h3>Mon répertoire classique</h3><p class="sub">Œuvres déjà étudiées, en cours ou envisagées. Chaque fiche est modifiable.</p></div><span class="pill" id="repertoire-count">13 œuvres</span></div>
+        <div id="repertoire-list" class="works-groups"></div>
+      </div>
+      <div class="panel padded" style="margin-top:17px" id="repertoire-editor">
+        <h3 id="repertoire-form-title">Ajouter une œuvre</h3>
+        <p class="sub" style="margin-bottom:17px">Ajoute tes œuvres actuelles ou celles que tu envisages d'étudier.</p>
+        <form id="repertoire-form">
+          <input type="hidden" id="rep-id">
+          <div class="work-form-grid">
+            <div class="work-field"><label for="rep-composer">Compositeur *</label><input id="rep-composer" maxlength="120" required placeholder="Ex. Frédéric Chopin"></div>
+            <div class="work-field"><label for="rep-title">Titre de l'œuvre *</label><input id="rep-title" maxlength="240" required placeholder="Ex. Nocturne en mi bémol majeur"></div>
+            <div class="work-field"><label for="rep-reference">Catalogue, opus ou référence</label><input id="rep-reference" maxlength="200" placeholder="Ex. op. 9, n° 2"></div>
+            <div class="work-field"><label for="rep-status">Avancement</label><select id="rep-status"><option value="studied">Déjà étudiée</option><option value="current">En cours d'étude</option><option value="planned">À étudier</option></select></div>
+            <div class="work-field wide"><label for="rep-notes">Notes personnelles ou précisions</label><textarea id="rep-notes" maxlength="700" placeholder="Objectifs, interprétation, version retenue…"></textarea></div>
+          </div>
+          <div class="actions"><button type="submit" class="btn" id="rep-save">Ajouter au répertoire</button><button type="button" class="btn secondary hidden" id="rep-cancel">Annuler la modification</button></div>
+        </form>
+      </div>
+    </section>
     <section id="view-data" class="view hidden"><div class="head-row"><div><h2>Mes données &amp; sauvegardes</h2><p class="sub">Trois fichiers JSON pour une vue unifiée, sans envoyer tes données sur un serveur.</p></div></div>
       <div class="panel padded"><div class="dropzone" id="dropzone"><div class="dropicon" aria-hidden="true">⇧</div><h3>Importer tes sauvegardes</h3><p>Sélectionne jusqu'à trois fichiers JSON en une seule fois, depuis ton iPad, iCloud Drive, Google Drive (dans l'app Fichiers) ou ton ordinateur. Tu peux ensuite remplacer une sauvegarde à la fois.</p><button class="btn" id="pick-files" type="button">Choisir les fichiers JSON</button><input id="file-input" type="file" accept=".json,application/json" multiple hidden><p style="margin:10px auto 0">Ou glisse les fichiers ici depuis un ordinateur.</p></div><div class="source-grid" id="sources-status"></div>
         <div class="privacy"><span class="privacy-symbol" aria-hidden="true">◎</span><div><strong>Confidentialité par défaut.</strong> Les fichiers sont analysés directement dans ton navigateur. Ils ne sont ni envoyés à GitHub ni publiés dans les dépôts des trois applications. Une copie est conservée localement sur cet appareil pour retrouver tes statistiques à la prochaine visite.</div></div>
       </div>
       <div class="instructions"><div class="panel padded"><h3>Actualisation sur ton iPad</h3><ol><li>Depuis chaque parcours, exporte sa sauvegarde JSON dans <strong>Fichiers</strong> (sur iPad, iCloud Drive ou Google Drive).</li><li>Dans ce tableau de bord, touche <strong>Choisir les fichiers JSON</strong> et sélectionne les trois fichiers. Tu peux aussi n'importer que celui qui a changé.</li><li>Les statistiques sont recalculées immédiatement. Une fois importées, elles restent disponibles dans ce navigateur.</li></ol><p>Si tu stockes les fichiers dans un dossier Google Drive, l'application <strong>Fichiers</strong> peut les présenter comme des documents locaux. Le choix du fichier reste une action manuelle.</p></div><div class="panel padded"><h3>Lecture automatique des sites GitHub</h3><p>Si cette page et tes applications Blues/Jazz sont ouvertes dans Safari sous le <strong>même domaine github.io</strong>, le tableau de bord peut lire leurs sauvegardes directement dans le stockage local, sans fichier à sélectionner.</p><label class="toggle-row"><input type="checkbox" id="auto-sync" checked><span><strong>Activer la lecture automatique locale</strong><small>Vérification à l'ouverture, au retour sur l'onglet et périodiquement si la page est visible. Fonctionne uniquement à origine web et profil de navigateur identiques.</small></span></label><button class="btn secondary" type="button" id="rescan">Vérifier les données locales</button><p>Le parcours Bases est actuellement déployé via Cloudflare : Safari isole ses données de celles des pages GitHub. Son import manuel reste nécessaire, sauf si tu utilises ultérieurement une version hébergée sur le même domaine.</p></div></div>
-      <div class="panel padded" style="margin-top:16px"><h3>Exporter et conserver ton historique</h3><p class="sub">Un export global permet de préserver les trois sauvegardes et tes réglages du tableau de bord. Le CSV est un relevé de statistiques, sans notes de séance.</p><div class="actions"><button class="btn secondary" id="export-bundle" type="button">Exporter mon archive JSON</button><button class="btn secondary" id="export-csv" type="button">Exporter le bilan CSV</button><button class="btn ghost" id="print" type="button">Imprimer / PDF</button></div><p class="sub">Attention : le stockage local de Safari peut être vidé si tu effaces les données du site. Continue de sauvegarder régulièrement tes parcours.</p></div>
+      <div class="panel padded" style="margin-top:16px"><h3>Exporter et conserver ton historique</h3><p class="sub">Un export global permet de préserver les trois sauvegardes, ton répertoire classique et tes réglages du tableau de bord. Le CSV est un relevé de statistiques, sans notes de séance.</p><div class="actions"><button class="btn secondary" id="export-bundle" type="button">Exporter mon archive JSON</button><button class="btn secondary" id="export-csv" type="button">Exporter le bilan CSV</button><button class="btn ghost" id="print" type="button">Imprimer / PDF</button></div><p class="sub">Attention : le stockage local de Safari peut être vidé si tu effaces les données du site. Continue de sauvegarder régulièrement tes parcours.</p></div>
     </section>
     <p class="footnote" id="footer-detail">Tableau de bord de pratique pianistique · Calculs fondés sur les séances terminées et leurs dates · Fichiers stockés sur ton appareil.</p>
   </main>
