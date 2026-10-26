@@ -535,7 +535,8 @@
   $("classical-dates").textContent=life.start?"Début de la règle quotidienne : "+shortDate(life.start)+(state.sources.blues?" (première séance Blues chargée).":" (provisoire tant que la sauvegarde Blues manque)."):"Le calcul quotidien sera disponible dès l'import de tes sauvegardes.";
 }
         function renderRepertoire(){const works=state.repertoire||[];$("repertoire-count").textContent=works.length+" œuvres";$("repertoire-list").textContent=["studied","current","planned"].map(status=>works.filter(w=>w.status===status).map(w=>w.composer+" : "+w.title+" ("+w.reference+")").join("\n")).join("\n\n");const select=$("rep-existing"),selected=select.value;select.length=1;for(const w of works)select.add(new Option(w.composer+" — "+w.title,w.id));select.value=works.some(w=>w.id===selected)?selected:"";}
-        function render(){
+        function editWork(id){ const w=state.repertoire.find(work=>work.id===id); if(!w)return; }
+    function render(){
       stats=calculate();const s=stats;
       $('header-sync').textContent=NAMES.filter(k=>!!state.sources[k]).length+' / 3 parcours chargés';
       $('hero-period').textContent=s.empty?'Période commune : à calculer':'Depuis le '+shortDate(s.common)+' · période commune';
