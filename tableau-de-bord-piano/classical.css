@@ -22,3 +22,5 @@
     .work-field.wide{grid-column:1/-1}
     .works-header{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
     @media(max-width:720px){.classical-metrics,.works-list,.work-form-grid{grid-template-columns:1fr}.work-actions{flex-direction:column}}
+
+.work-actions button:hover{background:#e7eef9}
