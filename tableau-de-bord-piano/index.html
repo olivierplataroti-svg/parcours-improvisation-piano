@@ -534,8 +534,8 @@
   $("classical-kpis").innerHTML=kpi("Classique historique","380 h","Septembre 2024 à août 2026",true)+kpi("Cours inclus","50 h","Déjà dans les 380 h")+kpi("Classique depuis septembre 2026",life.addedDays+" h","Une heure par journée active")+kpi("Total piano cumulé",total,ready?"Trois parcours chargés":"Sources incomplètes");
   $("classical-dates").textContent=life.start?"Début de la règle quotidienne : "+shortDate(life.start)+(state.sources.blues?" (première séance Blues chargée).":" (provisoire tant que la sauvegarde Blues manque)."):"Le calcul quotidien sera disponible dès l'import de tes sauvegardes.";
 }
-        function renderRepertoire(){const works=state.repertoire||[];$("repertoire-count").textContent=works.length+" œuvres";$("repertoire-list").textContent=works.map(w=>w.composer+" — "+w.title).join(" · ");}
-    function render(){
+        function renderRepertoire(){const works=state.repertoire||[];$("repertoire-count").textContent=works.length+" œuvres";$("repertoire-list").textContent=["studied","current","planned"].map(status=>works.filter(w=>w.status===status).map(w=>w.composer+" : "+w.title+" ("+w.reference+")").join("\n")).join("\n\n");const select=$("rep-existing"),selected=select.value;select.length=1;for(const w of works)select.add(new Option(w.composer+" — "+w.title,w.id));select.value=works.some(w=>w.id===selected)?selected:"";}
+        function render(){
       stats=calculate();const s=stats;
       $('header-sync').textContent=NAMES.filter(k=>!!state.sources[k]).length+' / 3 parcours chargés';
       $('hero-period').textContent=s.empty?'Période commune : à calculer':'Depuis le '+shortDate(s.common)+' · période commune';
