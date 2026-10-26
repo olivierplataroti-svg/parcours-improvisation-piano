@@ -560,9 +560,9 @@
     }
     function download(name,contents,mime){const blob=new Blob([contents],{type:mime}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),15000);}
     function exportBundle(){
-      if(!NAMES.some(k=>state.sources[k]))return notify('Aucune donnée à exporter.');
-      const bundle={kind:'piano-dashboard-bundle',version:1,createdAt:new Date().toISOString(),sources:Object.fromEntries(NAMES.filter(k=>state.sources[k]).map(k=>[k,{raw:state.sources[k].raw,filename:state.sources[k].filename}]))};
-      download('mes-trois-parcours-piano-'+TODAY+'.json',JSON.stringify(bundle,null,2),'application/json;charset=utf-8');notify('Archive personnelle créée.');
+      // Le répertoire peut être sauvegardé même en l'absence de sauvegardes de parcours.
+      const bundle={kind:'piano-dashboard-bundle',version:2,createdAt:new Date().toISOString(),classical:{historicalHours:HISTORIC_HOURS,from:HISTORIC_FROM,to:HISTORIC_TO,minutesPerActiveDay:60,repertoire:state.repertoire},sources:Object.fromEntries(NAMES.filter(k=>state.sources[k]).map(k=>[k,{raw:state.sources[k].raw,filename:state.sources[k].filename}]))};
+      download('mon-piano-tableau-de-bord-'+TODAY+'.json',JSON.stringify(bundle,null,2),'application/json;charset=utf-8');notify('Archive personnelle créée.');
     }
     function exportCSV(){if(stats.empty)return notify('Aucune statistique à exporter.');
       const rows=[['Date','Parcours','Identifiant seance','Minutes','Heures'],...stats.rows.sort((a,b)=>a.date.localeCompare(b.date)).map(r=>[r.date,TRACKS[r.track].name,r.id,r.minutes===null?'':r.minutes,r.minutes===null?'':(r.minutes/60).toFixed(2).replace('.',',')])];
