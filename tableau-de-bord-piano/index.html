@@ -240,11 +240,17 @@
     const KEY = 'piano-tableau-de-bord-v1';
     const TRACKS = {blues:{name:'Blues',color:'#4267db',abbr:'Blues',keys:['parcours-improvisation-olivier-v2']},jazz:{name:'Jazz',color:'#11a994',abbr:'Jazz',keys:['parcours-improvisation-jazz-olivier-v4']},bases:{name:"Bases de l'improvisation",color:'#f1a649',abbr:'Bases',keys:['bases_improvisation_132_olivier_v1','bases_improvisation_208_olivier_v4']}};
     const NAMES = Object.keys(TRACKS);
+    const CLASSICAL = {name:'Classique',color:'#9770be',abbr:'Classique'};
+    const DISPLAY_NAMES = NAMES.concat('classical');
+    const TRACK_META = {...TRACKS,classical:CLASSICAL};
+    const HISTORIC_HOURS = 380;
+    const HISTORIC_FROM = '2024-09-01', HISTORIC_TO = '2026-08-31';
+    const DEFAULT_WORKS = [{"id":"petzold-114","composer":"Christian Petzold","title":"Menuet en sol majeur","reference":"BWV Anh. 114 · Petit livre d’Anna Magdalena Bach","status":"studied","notes":"Anciennement attribué à Johann Sebastian Bach."},{"id":"petzold-115","composer":"Christian Petzold","title":"Menuet en sol mineur","reference":"BWV Anh. 115 · Petit livre d’Anna Magdalena Bach","status":"studied","notes":"Anciennement attribué à Johann Sebastian Bach."},{"id":"schumann-68-5","composer":"Robert Schumann","title":"Stückchen (Petite pièce)","reference":"Album für die Jugend, op. 68, n° 5","status":"studied","notes":""},{"id":"schumann-68-2","composer":"Robert Schumann","title":"Soldatenmarsch (Marche des soldats)","reference":"Album für die Jugend, op. 68, n° 2","status":"studied","notes":""},{"id":"schumann-15-1","composer":"Robert Schumann","title":"Von fremden Ländern und Menschen (Des pays et des gens étrangers)","reference":"Kinderszenen (Scènes d’enfants), op. 15, n° 1","status":"studied","notes":""},{"id":"chopin-b150","composer":"Frédéric Chopin","title":"Valse en la mineur","reference":"B. 150 · KK IVb/11 · op. posthume","status":"studied","notes":""},{"id":"chopin-op69","composer":"Frédéric Chopin","title":"Valse, op. 69 (n° à préciser)","reference":"Op. 69, n° 1 en la bémol majeur OU n° 2 en si mineur","status":"studied","notes":"À préciser : il existe deux valses publiées sous l’opus posthume 69."},{"id":"bach-bwv846","composer":"Johann Sebastian Bach","title":"Prélude n° 1 en do majeur","reference":"Le Clavier bien tempéré, livre I · BWV 846","status":"studied","notes":"Prélude seul, sans la fugue."},{"id":"debussy-l114","composer":"Claude Debussy","title":"Le petit Nègre","reference":"L. 114 · CD 122","status":"studied","notes":"Titre original de l’œuvre, parfois cataloguée « The Little Nigar »."},{"id":"satie-gym1","composer":"Erik Satie","title":"Gymnopédie n° 1 (Lent et douloureux)","reference":"Trois Gymnopédies, n° 1","status":"studied","notes":""},{"id":"chopin-28-4","composer":"Frédéric Chopin","title":"Prélude n° 4 en mi mineur","reference":"Vingt-quatre Préludes, op. 28, n° 4","status":"studied","notes":""},{"id":"chopin-28-6","composer":"Frédéric Chopin","title":"Prélude n° 6 en si mineur","reference":"Vingt-quatre Préludes, op. 28, n° 6","status":"studied","notes":""},{"id":"chopin-28-7","composer":"Frédéric Chopin","title":"Prélude n° 7 en la majeur","reference":"Vingt-quatre Préludes, op. 28, n° 7","status":"studied","notes":""}];
     const DAY = 86400000;
     const $ = id => document.getElementById(id);
     const TODAY = new Date().toLocaleDateString('sv-SE');
     let tab='overview', measure='minutes', toastTimer=null;
-    let state={sources:{},period:'common',customStart:'',customEnd:'',autoSync:true};
+    let state={sources:{},period:'common',customStart:'',customEnd:'',autoSync:true,repertoire:DEFAULT_WORKS.map(w=>({...w}))};
     let stats=null;
 
     function escapeHTML(str){return String(str??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
@@ -287,9 +293,43 @@
       return {rows:arr,invalidDates,undated,unmeasured};
     }
     function srcMeta(kind,raw){const rec=records(kind,raw);const dates=rec.rows.map(v=>v.date).sort();return {count:rec.rows.length,first:dates[0]||'',last:dates[dates.length-1]||'',missing:rec.unmeasured+rec.invalidDates+rec.undated};}
+    function cleanWork(value){
+  if(!value||typeof value!=="object"||Array.isArray(value))return null;
+  const composer=String(value.composer||"").trim().slice(0,120);
+  const title=String(value.title||"").trim().slice(0,240);
+  const reference=String(value.reference||"").trim().slice(0,200);
+  const notes=String(value.notes||"").trim().slice(0,700);
+  const id=String(value.id||"").trim().slice(0,90);
+  const status=["studied","current","planned"].includes(value.status)?value.status:"planned";
+  return composer&&title&&id?{id,composer,title,reference,notes,status}:null;
+}
+
+    function classicalStartDate(){
+  // Le Blues est le premier parcours : si la sauvegarde manque, toutes les dates
+  // des autres parcours sont nécessairement postérieures à son démarrage.
+  if(state.sources.blues){
+    try {const date=srcMeta("blues",state.sources.blues.raw).first;if(date)return date} catch(e){}
+  }
+  const dates=NAMES.flatMap(k=>{
+    try{return state.sources[k]?records(k,state.sources[k].raw).rows.map(r=>r.date):[]}catch(e){return []}
+  }).sort();
+  return dates[0]||null;
+}
+
+    function lifetimeStats(){
+  const all=NAMES.flatMap(k=>{
+    try{return state.sources[k]?records(k,state.sources[k].raw).rows:[]}catch(e){return []}
+  });
+  const observedMinutes=all.reduce((sum,row)=>sum+(row.minutes||0),0);
+  const start=classicalStartDate();
+  const days=[...new Set(all.map(row=>row.date).filter(date=>!start||date>=start))].sort();
+  const addedDays=days.filter(d=>d>HISTORIC_TO).length;
+  const inHistoryDays=days.filter(d=>d<=HISTORIC_TO).length;
+  return {observedMinutes,addedDays,inHistoryDays,totalMinutes:HISTORIC_HOURS*60+observedMinutes+addedDays*60,start,missing:NAMES.filter(k=>!state.sources[k])};
+}
     function persist(){try{localStorage.setItem(KEY,JSON.stringify(state));return true}catch(e){notify('Stockage indisponible dans ce navigateur : conserve les JSON originaux.');return false}}
     function load(){try{const saved=JSON.parse(localStorage.getItem(KEY)||'null');if(saved&&typeof saved==='object'){
-      state={sources:saved.sources&&typeof saved.sources==='object'?saved.sources:{},period:['common','30','90','all','custom'].includes(saved.period)?saved.period:'common',customStart:saved.customStart||'',customEnd:saved.customEnd||'',autoSync:saved.autoSync!==false};
+      state={sources:saved.sources&&typeof saved.sources==='object'?saved.sources:{},period:['common','30','90','all','custom'].includes(saved.period)?saved.period:'common',customStart:saved.customStart||'',customEnd:saved.customEnd||'',autoSync:saved.autoSync!==false,repertoire:Array.isArray(saved.repertoire)?saved.repertoire.map(cleanWork).filter(Boolean):DEFAULT_WORKS.map(w=>({...w}))};
     }}catch(e){console.warn('Données du tableau de bord illisibles',e);}}
     function notify(message){const el=$('toast');el.textContent=message;el.classList.add('visible');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('visible'),3800);}
     function banner(message,tone){const el=$('notice');el.textContent=message;el.className='notice'+(tone?' '+tone:'');}
