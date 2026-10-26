@@ -391,53 +391,90 @@
       $('file-input').value='';
     }
     function calculate(){
-      const per={};const missing=NAMES.filter(x=>!state.sources[x]);let all=[];
-      for(const kind of NAMES){
-        const src=state.sources[kind];per[kind]=src?records(kind,src.raw):{rows:[],invalidDates:0,undated:0,unmeasured:0};
-        all=all.concat(per[kind].rows);
-      }
-      const allDates=all.map(x=>x.date).sort();
-      if(!allDates.length)return {empty:true,missing,per,tracks:{}};
-      const first=allDates[0],last=allDates[allDates.length-1];
-      const starts=NAMES.map(k=>per[k].rows.map(x=>x.date).sort()[0]).filter(Boolean);
-      const common=starts.reduce((a,b)=>a>b?a:b,starts[0]);
-      let from=common,to=last;
-      if(state.period==='all')from=first;
-      if(state.period==='30'||state.period==='90')from=addDays(last,-(Number(state.period)-1));
-      if(state.period==='custom'){
-        if(Number.isFinite(parseISO(state.customStart)))from=state.customStart;
-        if(Number.isFinite(parseISO(state.customEnd)))to=state.customEnd;
-      }
-      if(from>to){[from,to]=[to,from]}
-      const rows=all.filter(s=>s.date>=from&&s.date<=to);
-      const tracks={},weeks=new Map(),months=new Map(),dow=Array(7).fill(0),dates=new Set();
-      for(const k of NAMES)tracks[k]={minutes:0,sessions:0,withDuration:0,days:new Set(),unmeasured:0};
-      let minutes=0,withDuration=0;
-      for(const r of rows){
-        const {track,date}=r,mins=r.minutes??0;dates.add(date);dow[(new Date(parseISO(date)).getUTCDay()+6)%7]+=mins;
-        tracks[track].minutes+=mins;tracks[track].sessions++;tracks[track].days.add(date);
-        if(r.minutes!==null){withDuration++;tracks[track].withDuration++}else{tracks[track].unmeasured++}
-        minutes+=mins;
-        const wk=monday(date),mo=date.slice(0,7);
-        if(!weeks.has(wk))weeks.set(wk,{date:wk,blues:{minutes:0,sessions:0},jazz:{minutes:0,sessions:0},bases:{minutes:0,sessions:0},days:new Set(),minutes:0,sessions:0});
-        const w=weeks.get(wk);w[track].minutes+=mins;w[track].sessions++;w.minutes+=mins;w.sessions++;w.days.add(date);
-        if(!months.has(mo))months.set(mo,{date:mo,blues:0,jazz:0,bases:0,minutes:0,sessions:0,days:new Set()});
-        const m=months.get(mo);m[track]+=mins;m.minutes+=mins;m.sessions++;m.days.add(date);
-      }
-      if(Number.isFinite(parseISO(from))&&Number.isFinite(parseISO(to))){
-        let week=monday(from),maxWeeks=0;
-        while(week<=to&&maxWeeks<1100){if(!weeks.has(week))weeks.set(week,{date:week,blues:{minutes:0,sessions:0},jazz:{minutes:0,sessions:0},bases:{minutes:0,sessions:0},days:new Set(),minutes:0,sessions:0});week=addDays(week,7);maxWeeks++}
-      }
-      const weeksArr=[...weeks.values()].sort((a,b)=>a.date.localeCompare(b.date)),monthArr=[...months.values()].sort((a,b)=>a.date.localeCompare(b.date));
-      const periodDays=Math.round((parseISO(to)-parseISO(from))/DAY)+1;
-      const sortedDays=[...dates].sort();let longest=0,streak=0,prior='';
-      for(const day of sortedDays){streak=prior&&addDays(prior,1)===day?streak+1:1;longest=Math.max(longest,streak);prior=day}
-      let bestDay='',bestDayMinutes=0;const dayTotals={};
-      for(const row of rows)dayTotals[row.date]=(dayTotals[row.date]||0)+(row.minutes??0);
-      for(const [day,v] of Object.entries(dayTotals))if(v>bestDayMinutes){bestDayMinutes=v;bestDay=day}
-      return {empty:false,first,last,common,from,to,missing,per,rows,tracks,dates,minutes,withDuration,sessions:rows.length,activeDays:dates.size,periodDays,longest,weekAvgMinutes:minutes*7/periodDays,weekAvgSessions:rows.length*7/periodDays,activeDaysPerWeek:dates.size*7/periodDays,avgSession:withDuration?minutes/withDuration:0,avgDay:dates.size?minutes/dates.size:0,weekly:weeksArr,monthly:monthArr,dow,bestDay,bestDayMinutes};
+  const per={},missing=NAMES.filter(name=>!state.sources[name]);
+  let all=[];
+  for(const kind of NAMES){
+    const src=state.sources[kind];
+    per[kind]=src?records(kind,src.raw):{rows:[],invalidDates:0,undated:0,unmeasured:0};
+    all=all.concat(per[kind].rows);
+  }
+  const allDates=all.map(row=>row.date).sort();
+  if(!allDates.length)return {empty:true,missing,per,tracks:{}};
+  const first=allDates[0],last=allDates[allDates.length-1];
+  const starts=NAMES.map(k=>per[k].rows.map(row=>row.date).sort()[0]).filter(Boolean);
+  const common=starts.reduce((a,b)=>a>b?a:b,starts[0]);
+  let from=common,to=last;
+  if(state.period==="all")from=first;
+  if(state.period==="30"||state.period==="90")from=addDays(last,-(Number(state.period)-1));
+  if(state.period==="custom"){
+    if(Number.isFinite(parseISO(state.customStart)))from=state.customStart;
+    if(Number.isFinite(parseISO(state.customEnd)))to=state.customEnd;
+  }
+  if(from>to)[from,to]=[to,from];
+  const rows=all.filter(row=>row.date>=from&&row.date<=to);
+  const tracks={},weeks=new Map(),months=new Map(),dow=Array(7).fill(0),dates=new Set();
+  for(const key of DISPLAY_NAMES)tracks[key]={minutes:0,sessions:0,withDuration:0,days:new Set(),unmeasured:0};
+  function getWeek(date){
+    const wk=monday(date);
+    if(!weeks.has(wk))weeks.set(wk,{date:wk,blues:{minutes:0,sessions:0},jazz:{minutes:0,sessions:0},bases:{minutes:0,sessions:0},classical:{minutes:0,sessions:0},days:new Set(),minutes:0,sessions:0});
+    return weeks.get(wk);
+  }
+  function getMonth(date){
+    const month=date.slice(0,7);
+    if(!months.has(month))months.set(month,{date:month,blues:0,jazz:0,bases:0,classical:0,minutes:0,sessions:0,days:new Set()});
+    return months.get(month);
+  }
+  let recordedMinutes=0,measuredMinutes=0,withDuration=0;
+  for(const row of rows){
+    const {track,date}=row,mins=row.minutes??0;
+    dates.add(date);
+    dow[(new Date(parseISO(date)).getUTCDay()+6)%7]+=mins;
+    tracks[track].minutes+=mins;
+    tracks[track].sessions++;
+    tracks[track].days.add(date);
+    if(row.minutes!==null){withDuration++;measuredMinutes+=mins;tracks[track].withDuration++;}
+    else tracks[track].unmeasured++;
+    recordedMinutes+=mins;
+    const w=getWeek(date);w[track].minutes+=mins;w[track].sessions++;w.minutes+=mins;w.sessions++;w.days.add(date);
+    const m=getMonth(date);m[track]+=mins;m.minutes+=mins;m.sessions++;m.days.add(date);
+  }
+  const classicalFrom=classicalStartDate();
+  const classicalDates=[...dates].filter(date=>!classicalFrom||date>=classicalFrom);
+  for(const date of classicalDates){
+    const mins=60;
+    tracks.classical.minutes+=mins;
+    tracks.classical.days.add(date);
+    dow[(new Date(parseISO(date)).getUTCDay()+6)%7]+=mins;
+    const w=getWeek(date);w.classical.minutes+=mins;w.minutes+=mins;
+    const m=getMonth(date);m.classical+=mins;m.minutes+=mins;
+  }
+  if(Number.isFinite(parseISO(from))&&Number.isFinite(parseISO(to))){
+    let week=monday(from),maxWeeks=0;
+    while(week<=to&&maxWeeks<1100){
+      getWeek(week);week=addDays(week,7);maxWeeks++;
     }
-    function kpi(label,value,hint,strong=false){return `<article class="kpi panel${strong?' strong':''}"><div class="label">${label}</div><div class="value">${escapeHTML(value)}</div><div class="hint">${hint}</div></article>`;}
+  }
+  const weeksArr=[...weeks.values()].sort((a,b)=>a.date.localeCompare(b.date));
+  const monthArr=[...months.values()].sort((a,b)=>a.date.localeCompare(b.date));
+  const minutes=recordedMinutes+classicalDates.length*60;
+  const periodDays=Math.round((parseISO(to)-parseISO(from))/DAY)+1;
+  const sortedDays=[...dates].sort();
+  let longest=0,streak=0,prior="";
+  for(const day of sortedDays){
+    streak=prior&&addDays(prior,1)===day?streak+1:1;
+    longest=Math.max(longest,streak);
+    prior=day;
+  }
+  let bestDay="",bestDayMinutes=0;
+  const dayTotals={};
+  for(const row of rows)dayTotals[row.date]=(dayTotals[row.date]||0)+(row.minutes??0);
+  for(const date of classicalDates)dayTotals[date]=(dayTotals[date]||0)+60;
+  for(const [day,value] of Object.entries(dayTotals)){
+    if(value>bestDayMinutes){bestDayMinutes=value;bestDay=day;}
+  }
+  return {empty:false,first,last,common,from,to,missing,per,rows,tracks,dates,minutes,recordedMinutes,classicMinutes:classicalDates.length*60,classicDates:classicalDates,classicDays:classicalDates.length,withDuration,sessions:rows.length,activeDays:dates.size,periodDays,longest,weekAvgMinutes:minutes*7/periodDays,weekAvgSessions:rows.length*7/periodDays,activeDaysPerWeek:dates.size*7/periodDays,avgSession:withDuration?measuredMinutes/withDuration:0,avgDay:dates.size?minutes/dates.size:0,weekly:weeksArr,monthly:monthArr,dow,bestDay,bestDayMinutes};
+}
+        function kpi(label,value,hint,strong=false){return `<article class="kpi panel${strong?' strong':''}"><div class="label">${label}</div><div class="value">${escapeHTML(value)}</div><div class="hint">${hint}</div></article>`;}
     function renderChart(where,data,mode='minutes',daysOfWeek=false){
       const max=Math.max(1,...data.map(w=>daysOfWeek?w.value:w[mode]));
       const top=Math.max(1,Math.ceil(max/(mode==='minutes'?60:1))*(mode==='minutes'?60:1));
