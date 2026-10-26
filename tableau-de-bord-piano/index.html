@@ -546,8 +546,15 @@
         return `<article class="source panel"><div class="source-top"><h3><i class="dot" style="background:${TRACKS[k].color};width:12px;height:12px"></i>${TRACKS[k].name}</h3><span class="pill${src?'':' off'}">${src?'Importé':'À importer'}</span></div>${src?`<div class="source-stats"><strong>${m.count}</strong> séances terminées<br>Première : <strong>${shortDate(m.first)}</strong><br>Dernière : <strong>${shortDate(m.last)}</strong><br>Origine : <strong>${src.origin==='local'?'Lecture automatique':'Import JSON'}</strong></div><div class="filename">${escapeHTML(src.filename||'')}<br>Actualisé le ${escapeHTML(new Date(src.importedAt).toLocaleString('fr-FR'))}</div><button type="button" class="btn secondary" data-replace="${k}" style="margin-top:10px;padding:7px 11px;min-height:34px">Remplacer</button>`:`<p class="source-empty">Aucune sauvegarde chargée. Importe les séances de ce parcours.</p><button type="button" class="btn ghost" data-replace="${k}" style="margin-top:12px;padding:7px 11px;min-height:34px">Importer</button>`}</article>`;
       }).join('');
     }
-    function renderClassicHistory(){const life=lifetimeStats(),v=hours(life.totalMinutes);$("classical-history").textContent="Classique historique : 380 h. Depuis septembre 2026 : "+life.addedDays+" h. Total piano : "+v;$("classical-kpis").textContent="Classique : 380 h, dont 50 h de cours. Cumul piano : "+v;$("classical-overlap").textContent=life.inHistoryDays+" journées classiques antérieures déjà comprises dans les 380 h.";$("classical-dates").textContent=life.start?shortDate(life.start):"Données à importer.";}
-    function render(){
+    function renderClassicHistory(){
+  const life=lifetimeStats(),ready=!life.missing.length,total=hours(life.totalMinutes);
+  const cards=[["380 h","Classique estimé · septembre 2024 à août 2026 (50 h de cours incluses)"],[life.addedDays+" h","Classique depuis septembre 2026 · 1 h par journée active"],[total,"Cumul global depuis septembre 2024 · "+(ready?"3 parcours chargés":"bilan partiel")]];
+  $("classical-history").innerHTML=cards.map(x=>'<div class="classical-metric"><div class="n">'+escapeHTML(x[0])+'</div><div class="t">'+escapeHTML(x[1])+'</div></div>').join("");
+  $("classical-overlap").textContent="Les "+life.inHistoryDays+" journées classiques déduites des parcours avant septembre 2026 sont déjà comprises dans les 380 h historiques (aucun double comptage). Les durées Blues, Jazz et Bases sont additionnées séparément.";
+  $("classical-kpis").innerHTML=kpi("Classique historique","380 h","Septembre 2024 à août 2026",true)+kpi("Cours inclus","50 h","Déjà dans les 380 h")+kpi("Classique depuis septembre 2026",life.addedDays+" h","Une heure par journée active")+kpi("Total piano cumulé",total,ready?"Trois parcours chargés":"Sources incomplètes");
+  $("classical-dates").textContent=life.start?"Début de la règle quotidienne : "+shortDate(life.start)+(state.sources.blues?" (première séance Blues chargée).":" (provisoire tant que la sauvegarde Blues manque)."):"Le calcul quotidien sera disponible dès l'import de tes sauvegardes.";
+}
+        function render(){
       stats=calculate();const s=stats;
       $('header-sync').textContent=NAMES.filter(k=>!!state.sources[k]).length+' / 3 parcours chargés';
       $('hero-period').textContent=s.empty?'Période commune : à calculer':'Depuis le '+shortDate(s.common)+' · période commune';
