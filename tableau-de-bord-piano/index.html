@@ -135,31 +135,8 @@
     @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
     @media print{.mast,.nav,.controls,.dropzone,.actions,.hero .lead-action{display:none!important}.layout{max-width:100%;padding:0}.hero{background:#f2f6fb;color:#1b3358;box-shadow:none;border:1px solid #ddd}.hero p,.eyebrow{color:#42607a}.panel{box-shadow:none;break-inside:avoid}}
 
-    .classical-intro{font-size:13px;color:#64758d;line-height:1.7;margin:9px 0 16px}
-    .classical-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-    .classical-metric{padding:15px 17px;background:#f6f5fc;border:1px solid #e9e4f6;border-radius:12px}
-    .classical-metric .n{font-size:clamp(20px,2.5vw,29px);font-weight:820;color:#674a98;letter-spacing:-.04em}
-    .classical-metric .t{font-size:11px;line-height:1.4;color:#6d6982}
-    .classical-note{font-size:11px;color:#69768d;line-height:1.65;margin:12px 0 0}
-    .works-groups{display:grid;gap:22px;margin-top:18px}
-    .works-group h3{margin-bottom:10px}
-    .works-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-    .work-card{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;padding:13px 14px;border:1px solid #e5e9f2;background:#fff;border-radius:12px;min-width:0}
-    .work-card strong{display:block;font-size:13px;color:#283d61;line-height:1.4}
-    .work-card .composer{color:#795eab;font-size:11px;font-weight:780;margin-bottom:3px}
-    .work-card .reference,.work-card .notes{color:#73849a;font-size:11px;line-height:1.5;margin-top:4px;overflow-wrap:anywhere}
-    .work-actions{display:flex;gap:5px;flex-shrink:0}
-    .work-actions button{background:#f2f5fa;border:1px solid #e2e9f1;color:#31527d;border-radius:7px;padding:5px 8px;font-size:11px;font-weight:730}
-    .work-actions button.danger{color:#a4484a}
-    .work-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-    .work-field{display:flex;flex-direction:column;gap:5px;min-width:0}
-    .work-field label{font-size:11px;font-weight:770;color:#4e617e}
-    .work-field input,.work-field select,.work-field textarea{width:100%;min-width:0;border:1px solid #d7e1ed;border-radius:9px;padding:10px 11px;background:#fff;color:#233753;font:inherit;font-size:13px}
-    .work-field textarea{resize:vertical;min-height:66px}
-    .work-field.wide{grid-column:1/-1}
-    .works-header{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
-    @media(max-width:720px){.classical-metrics,.works-list,.work-form-grid{grid-template-columns:1fr}.work-actions{flex-direction:column}}
   </style>
+  <link rel="stylesheet" href="classical.css">
 </head>
 <body>
   <header class="mast"><div class="mast-inner"><a class="brand" href="#haut" aria-label="Retour en haut"><span class="brand-mark" aria-hidden="true">♫</span> MON PIANO <span style="color:#9aa9b8;font-weight:500">/ Statistiques</span></a><span class="tag" id="header-sync">Données personnelles · locales</span></div></header>
@@ -234,6 +211,7 @@
     <p class="footnote" id="footer-detail">Tableau de bord de pratique pianistique · Calculs fondés sur les séances terminées et leurs dates · Fichiers stockés sur ton appareil.</p>
   </main>
   <div id="toast" role="status" aria-live="polite"></div>
+  <script src="classical-defaults.js"></script>
   <script>
   (() => {
     'use strict';
@@ -245,7 +223,6 @@
     const TRACK_META = {...TRACKS,classical:CLASSICAL};
     const HISTORIC_HOURS = 380;
     const HISTORIC_FROM = '2024-09-01', HISTORIC_TO = '2026-08-31';
-    const DEFAULT_WORKS = [{"id":"petzold-114","composer":"Christian Petzold","title":"Menuet en sol majeur","reference":"BWV Anh. 114 · Petit livre d’Anna Magdalena Bach","status":"studied","notes":"Anciennement attribué à Johann Sebastian Bach."},{"id":"petzold-115","composer":"Christian Petzold","title":"Menuet en sol mineur","reference":"BWV Anh. 115 · Petit livre d’Anna Magdalena Bach","status":"studied","notes":"Anciennement attribué à Johann Sebastian Bach."},{"id":"schumann-68-5","composer":"Robert Schumann","title":"Stückchen (Petite pièce)","reference":"Album für die Jugend, op. 68, n° 5","status":"studied","notes":""},{"id":"schumann-68-2","composer":"Robert Schumann","title":"Soldatenmarsch (Marche des soldats)","reference":"Album für die Jugend, op. 68, n° 2","status":"studied","notes":""},{"id":"schumann-15-1","composer":"Robert Schumann","title":"Von fremden Ländern und Menschen (Des pays et des gens étrangers)","reference":"Kinderszenen (Scènes d’enfants), op. 15, n° 1","status":"studied","notes":""},{"id":"chopin-b150","composer":"Frédéric Chopin","title":"Valse en la mineur","reference":"B. 150 · KK IVb/11 · op. posthume","status":"studied","notes":""},{"id":"chopin-op69","composer":"Frédéric Chopin","title":"Valse, op. 69 (n° à préciser)","reference":"Op. 69, n° 1 en la bémol majeur OU n° 2 en si mineur","status":"studied","notes":"À préciser : il existe deux valses publiées sous l’opus posthume 69."},{"id":"bach-bwv846","composer":"Johann Sebastian Bach","title":"Prélude n° 1 en do majeur","reference":"Le Clavier bien tempéré, livre I · BWV 846","status":"studied","notes":"Prélude seul, sans la fugue."},{"id":"debussy-l114","composer":"Claude Debussy","title":"Le petit Nègre","reference":"L. 114 · CD 122","status":"studied","notes":"Titre original de l’œuvre, catalogue L. 114."},{"id":"satie-gym1","composer":"Erik Satie","title":"Gymnopédie n° 1 (Lent et douloureux)","reference":"Trois Gymnopédies, n° 1","status":"studied","notes":""},{"id":"chopin-28-4","composer":"Frédéric Chopin","title":"Prélude n° 4 en mi mineur","reference":"Vingt-quatre Préludes, op. 28, n° 4","status":"studied","notes":""},{"id":"chopin-28-6","composer":"Frédéric Chopin","title":"Prélude n° 6 en si mineur","reference":"Vingt-quatre Préludes, op. 28, n° 6","status":"studied","notes":""},{"id":"chopin-28-7","composer":"Frédéric Chopin","title":"Prélude n° 7 en la majeur","reference":"Vingt-quatre Préludes, op. 28, n° 7","status":"studied","notes":""}];
     const DAY = 86400000;
     const $ = id => document.getElementById(id);
     const TODAY = new Date().toLocaleDateString('sv-SE');
