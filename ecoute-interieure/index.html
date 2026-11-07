@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="fr" data-theme="light">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#10283c"><meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="description" content="Mon écoute intérieure : 36 paliers progressifs, séances guidées de 10 à 15 minutes, atelier sonore et carnet de pratique.">
+<title>Mon écoute intérieure</title>
+<link rel="manifest" href="./manifest.webmanifest"><link rel="icon" href="./icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="./icon-192.png"><link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<div class="app-shell">
+<aside class="sidebar" id="sidebar">
+ <div class="brand"><div class="brand-mark" aria-hidden="true">♪</div><div><h1>Mon écoute intérieure</h1><p>Le parcours d’Olivier</p></div></div>
+ <nav class="main-nav" id="nav" aria-label="Navigation principale"></nav>
+ <div class="sidebar-progress"><div><span>Mon parcours</span><strong id="sidePercent">0 %</strong></div><div class="meter"><span id="sideMeter"></span></div><small id="sideCount">0 / 36 paliers validés</small></div>
+ <div class="sidebar-principle"><span class="eyebrow">Une idée, puis un son</span><p>Écouter. Garder le son en soi. Chanter. Vérifier. Avancer à son rythme.</p></div>
+ <div class="sidebar-footer">10 à 15 minutes par jour<br>En complément du blues, du jazz et de l’improvisation.</div>
+</aside>
+<main class="main">
+ <header class="topbar"><div class="topbar-title"><button class="icon-btn mobile-menu" id="menu" aria-label="Ouvrir le menu">☰</button><div><h2 id="topTitle">Vue d’ensemble</h2><span>Le son se construit un peu chaque jour</span></div></div><div class="top-actions"><button class="icon-btn" id="theme" aria-label="Changer le thème">◐</button><button class="btn btn-secondary btn-sm" data-action="export">Sauvegarder</button></div></header>
+ <div id="content"></div>
+</main>
+</div>
+<dialog id="dialog"><div class="dialog-head"><h2 id="dialogTitle"></h2><button class="icon-btn" data-action="close-dialog" aria-label="Fermer">×</button></div><div id="dialogBody"></div></dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script type="module" src="./app.js"></script>
+</body></html>
