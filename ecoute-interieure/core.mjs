@@ -66,11 +66,11 @@ export function makeQuestion(stage,root=48,random=Math.random){
  if(stage<=2){const first=root+pick([0,2,4]);notes=stage===1?[first]:[first,pick([root,root+2,root+4].filter(n=>n!==first))];prompt=stage===1?'Écoute la note. Attends une à deux secondes, puis chante-la.':'Écoute A puis B. La note à garder et à chanter est la dernière : B.';}
  else if(stage<=4){mode='direction';const interval=pick(stage===3?[-5,-4,-3,0,3,4,5]:[-2,-1,0,1,2]),first=root+pick([0,2,4]);notes=[first,first+interval];answer=interval>0?'monte':interval<0?'descend':'pareil';prompt='La deuxième note est-elle plus haute, plus basse ou identique ?';}
  else if(stage>=23&&stage<=32){mode='harmony';const I=[root,root+4,root+7],V=[root-5,root-1,root+2],IV=[root-7,root-3,root];
-  let choices=stage===23?[[root,root+4]]:stage===24?[I,IV,V]:stage===25?[I,[root,root+3,root+7]]:stage===26?[V,I]:stage===27?[I,IV,V]:stage===28?[[root+2,root+5,root+9,root+12]]:stage===29?[[...V,root+5]]:stage===30?[[...I,root+10],[...I,root+11]]:stage===31?[[root+2,root+5,root+9,root+12],[...V,root+5],[...I,root+11]]:[[...I,root+10],[...IV,root+3],[...V,root+5]];
+  let choices=stage===23?[[root,root+4]]:stage===24?[I,IV,V]:stage===25?[I,[root,root+3,root+7]]:stage===26?[V,I]:stage===27?[I,IV,V]:stage===28?[[root+2,root+5,root+9,root+12]]:stage===29?[[...V,root+5]]:stage===30?[[...I,root+11]]:stage===31?[[root+2,root+5,root+9,root+12],[...V,root+5],[...I,root+11]]:[[...I,root+10],[...IV,root+3],[...V,root+5]];
   notes=pick(choices);prompt='Écoute cet accord en arpège, garde ses sons intérieurement, puis vérifie l’accord plaqué.';
  }else{
-  let set=stage===7?[0,2]:stage<=14?[0,2,4]:stage===15?[0,2,4,5]:stage===16?[0,2,4,5,7]:stage===17||stage===18?[0,2,4,5,7,9,11,12]:[0,2,4];
-  const n=stage===5||stage===6?2:stage<=8?3:stage===14?2:stage===13?3:stage>=33?3:4;notes=Array.from({length:n},()=>root+pick(set));
+  let set=stage>=5&&stage<=7?[0,2]:stage<=14?[0,2,4]:stage===15?[0,2,4,5]:stage===16?[0,2,4,5,7]:stage===17?[0,2,4,5,7,9]:stage===18?[0,2,4,5,7,9,11,12]:[0,2,4];
+  const n=[5,6,14,17,19].includes(stage)?2:stage<=8||[13,15,16,20].includes(stage)?3:stage>=33?3:4;notes=Array.from({length:n},()=>root+pick(set));
   if(stage>=13&&stage<=18){mode='reading';prompt='Écoute uniquement le Do de référence. Lis et entends le motif intérieurement, chante-le, puis écoute la correction.';}
   if(stage>=19&&stage<=22){mode='keyboard';prompt='Écoute et chante le motif. Prévois les touches, saisis ta réponse sans son, puis vérifie.';}
   if(stage>=33){mode='create';prompt='Imagine une phrase de deux ou trois notes avant de jouer. Utilise le clavier pour noter ton intention, puis écoute-la.';notes=[];}
