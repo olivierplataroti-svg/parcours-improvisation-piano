@@ -78,3 +78,17 @@ export function makeQuestion(stage,root=48,random=Math.random){
  durations=notes.map(()=>1);if(stage===11&&notes.length===4)durations=[1,.5,.5,2];
  return{stage,root,notes,durations,mode,prompt,answer};
 }
+
+export function workshopDestination(state,stage,origin){
+ stage=Number(stage);
+ const free={stage,slot:'free',kind:'free',title:'Atelier d’écoute · palier '+stage,duration:state.profile.defaultDuration};
+ if(!origin||Number(origin.stage)!==stage)return free;
+ const slot=String(origin.slot);
+ if(slot.startsWith('extra:')){
+  const p=state.extraPlans.find(p=>p.id===slot.slice(6)&&p.stage===stage);
+  return p?{stage,slot,kind:'extra',title:p.title,duration:p.duration}:free;
+ }
+ if(!/^[0-4]$/.test(slot))return free;
+ const p=sessionPlan(stage,Number(slot),state);
+ return{stage,slot,kind:p.optional?'extra':'guided',title:p.title,duration:p.duration};
+}

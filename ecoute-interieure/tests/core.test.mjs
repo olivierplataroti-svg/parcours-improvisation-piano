@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {fresh,normalizeRecord,stats,qualification,importState,mergeStates,timerSeconds,makeQuestion,sessionPlan,csv} from '../core.mjs';
+import {fresh,workshopDestination,normalizeRecord,stats,qualification,importState,mergeStates,timerSeconds,makeQuestion,sessionPlan,csv} from '../core.mjs';
 import {PROGRAM,PHASES} from '../program.js';
 const record=(x={})=>normalizeRecord({id:'a',stage:1,minutes:12,date:'2026-11-07',title:'Test',kind:'guided',trials:10,pitch:null,rhythm:null,done:true,...x});
 test('36 paliers complets, sans numéro absent, répartis dans les phases',()=>{assert.deepEqual(PROGRAM.map(p=>p.id),Array.from({length:36},(_,i)=>i+1));for(const p of PROGRAM){assert.ok(p.exercise.length>100);assert.ok(p.criterion.length>50);const ph=PHASES.find(x=>x.id===p.phase);assert.ok(p.id>=ph.start&&p.id<=ph.end)}});
@@ -16,3 +16,8 @@ test('les premiers paliers restent sur un vocabulaire restreint',()=>{for(let i=
 test('la direction est cohérente avec les sons, même lorsque les notes se répètent',()=>{for(let i=0;i<50;i++){const q=makeQuestion(3),d=q.notes[1]-q.notes[0];assert.equal(q.answer,d>0?'monte':d<0?'descend':'pareil')}});
 test('les modèles commencent par la première sous-étape de chaque palier',()=>{for(let i=0;i<30;i++){assert.ok(makeQuestion(5).notes.every(n=>[48,50].includes(n)));assert.equal(makeQuestion(15).notes.length,3);assert.equal(makeQuestion(16).notes.length,3);assert.ok(makeQuestion(17).notes.every(n=>n<=57));assert.equal(makeQuestion(19).notes.length,2);assert.equal(makeQuestion(20).notes.length,3);assert.deepEqual(makeQuestion(30).notes,[48,52,55,59])}});
 test('édition des séances et export CSV conservent les valeurs et caractères',()=>{const s=fresh();s.plans['1-0']={duration:15,title:'À mon rythme'};assert.equal(sessionPlan(1,0,s).duration,15);assert.equal(sessionPlan(1,0,s).title,'À mon rythme');assert.ok(csv([['a;b','"x"','ligne\n2']]).includes('""x""'))});
+
+test('l’atelier conserve la séance guidée ouverte et ses éditions',()=>{const s=fresh();s.plans['1-1']={title:'Ma séance B',duration:15};const d=workshopDestination(s,1,{stage:1,slot:'1'});assert.deepEqual(d,{stage:1,slot:'1',kind:'guided',title:'Ma séance B',duration:15})});
+test('atelier indépendant, autre palier et rattachement invalide restent libres',()=>{const s=fresh();for(const origin of [null,{stage:2,slot:'0'},{stage:1,slot:'free'},{stage:1,slot:'extra:absente'}])assert.equal(workshopDestination(s,1,origin).kind,'free')});
+test('les séances optionnelles gardent leur rattachement dans l’atelier',()=>{const s=fresh();s.extraPlans=[{id:'x',stage:1,title:'Révision',duration:10}];assert.equal(workshopDestination(s,1,{stage:1,slot:'extra:x'}).kind,'extra');assert.equal(workshopDestination(s,2,{stage:1,slot:'extra:x'}).kind,'free')});
+test('reclasser une séance existante conserve son identifiant et ses minutes',()=>{const s=fresh(),old=record({kind:'free',slot:'free',pitch:9,trials:9});s.records=[old];const d=workshopDestination(s,1,{stage:1,slot:'0'});s.records[0]=normalizeRecord({...old,...d,minutes:old.minutes});assert.equal(s.records[0].id,old.id);assert.equal(s.records[0].slot,'0');assert.equal(s.records[0].kind,'guided');assert.equal(stats(s).sessions,1);assert.equal(stats(s).minutes,12);assert.equal(s.records[0].pitch,9)});
