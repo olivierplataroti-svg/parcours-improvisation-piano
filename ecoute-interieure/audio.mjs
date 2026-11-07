@@ -1,7 +1,18 @@
-let context;const voices=new Set();
-export async function audioContext(){context ||= new (window.AudioContext||window.webkitAudioContext)();if(context.state==='suspended')await context.resume();return context}
+let context,output;const voices=new Set();
+export async function audioContext(){
+ if(!context){
+  context=new (window.AudioContext||window.webkitAudioContext)();
+  // Amplify the whole envelope, including the quiet sustained part of each note.
+  output=context.createGain();output.gain.value=3;
+  const limiter=context.createDynamicsCompressor();
+  limiter.threshold.value=-6;limiter.knee.value=6;limiter.ratio.value=12;
+  limiter.attack.value=0;limiter.release.value=.1;
+  output.connect(limiter);limiter.connect(context.destination);
+ }
+ if(context.state==='suspended')await context.resume();return context;
+}
 function sound(ctx,midi,start,duration,volume=.15){
- const freq=440*Math.pow(2,(midi-69)/12);const gain=ctx.createGain();gain.connect(ctx.destination);gain.gain.setValueAtTime(0,start);gain.gain.linearRampToValueAtTime(volume,start+.012);gain.gain.exponentialRampToValueAtTime(.025,start+Math.min(.2,duration*.5));gain.gain.exponentialRampToValueAtTime(.0001,start+duration+.18);
+ const freq=440*Math.pow(2,(midi-69)/12);const gain=ctx.createGain();gain.connect(output);gain.gain.setValueAtTime(0,start);gain.gain.linearRampToValueAtTime(volume,start+.012);gain.gain.exponentialRampToValueAtTime(.025,start+Math.min(.2,duration*.5));gain.gain.exponentialRampToValueAtTime(.0001,start+duration+.18);
  for(const [multiple,level]of [[1,1],[2,.35],[3,.12]]){const osc=ctx.createOscillator(),part=ctx.createGain();osc.type='sine';osc.frequency.value=freq*multiple;part.gain.value=level;osc.connect(part);part.connect(gain);osc.start(start);osc.stop(start+duration+.2);voices.add(osc);osc.onended=()=>{voices.delete(osc);osc.disconnect();part.disconnect()}}
  setTimeout(()=>gain.disconnect(),Math.max(0,(start-ctx.currentTime+duration+.3)*1000));
 }

@@ -1,6 +1,6 @@
 import {PROGRAM,PHASES} from './program.js';
 import {APP_ID,STORE_KEY,OBJECTIVES,uid,today,fresh,importState,mergeStates,normalizeRecord,stats,qualification,timerSeconds,sessionPlan,csv,noteName,makeQuestion} from './core.mjs';
-import {playNotes,stopAudio} from './audio.mjs';
+import {playNotes,stopAudio} from './audio.mjs?v=1.0.2';
 
 const $=s=>document.querySelector(s),esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const routes={dashboard:['Vue d’ensemble','Ta pratique en un regard'],program:['Mon parcours','Les 36 paliers'],session:['Séance guidée','Écouter, chanter, vérifier'],workshop:['Atelier d’écoute','Modèles sonores et clavier'],history:['Mes séances','Historique et séances libres'],journal:['Journal','Réussites et points à reprendre'],vocabulary:['Mes motifs','Un vocabulaire sonore personnel'],keys:['Tonalités','Repères et transposition'],assessment:['Bilans','Tes cinq objectifs'],resources:['Méthode & ressources','Programme, sources, EarMaster'],data:['Sauvegardes','Données et préférences']};
