@@ -4,7 +4,7 @@ export const OBJECTIVES=['Reproduire une mélodie entendue','Entendre une partit
 export const uid=()=>globalThis.crypto?.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`;
 export function today(){return new Intl.DateTimeFormat('fr-CA',{timeZone:'Europe/Paris',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date())}
 export function dayNumber(date){return Date.parse(date+'T12:00:00Z')/86400000}
-export function fresh(){return{appId:APP_ID,version:1,profile:{name:'Olivier',currentStage:1,weeklyTarget:5,defaultDuration:12,theme:'light',startDate:'',root:48,tempo:65},stageOverrides:{},stageStatus:{},stageNotes:{},plans:{},extraPlans:[],records:[],journal:[],vocabulary:[],assessments:[],keys:{},timer:null,updatedAt:new Date().toISOString()}}
+export function fresh(){return{appId:APP_ID,version:1,profile:{name:'Olivier',currentStage:1,weeklyTarget:5,defaultDuration:15,defaultDurationVersion:1,theme:'light',startDate:'',root:48,tempo:65},stageOverrides:{},stageStatus:{},stageNotes:{},plans:{},extraPlans:[],records:[],journal:[],vocabulary:[],assessments:[],keys:{},timer:null,updatedAt:new Date().toISOString()}}
 export function normalizeRecord(r){
  if(!r||typeof r!=='object')throw Error('Séance invalide.');
  const minutes=Number(r.minutes),stage=Number(r.stage);
@@ -20,10 +20,13 @@ export function importState(input){
  if(input?.appId!==APP_ID||input.version!==1)throw Error('Choisis une sauvegarde JSON de Mon écoute intérieure (version 1).');
  const base=fresh(),out={...base};
  out.profile={...base.profile,...safeMap(input.profile)};
+ const migrateDuration=Number(input.profile?.defaultDurationVersion||0)<1;
+ if(migrateDuration&&Number(out.profile.defaultDuration)===12)out.profile.defaultDuration=15;
+ out.profile.defaultDurationVersion=1;
  if(!Number.isInteger(Number(out.profile.currentStage))||out.profile.currentStage<1||out.profile.currentStage>36)throw Error('Palier courant invalide.');
  out.profile.currentStage=Number(out.profile.currentStage);
  out.profile.weeklyTarget=Math.max(1,Math.min(7,Number(out.profile.weeklyTarget)||5));
- out.profile.defaultDuration=Math.max(10,Math.min(15,Number(out.profile.defaultDuration)||12));
+ out.profile.defaultDuration=Math.max(10,Math.min(15,Number(out.profile.defaultDuration)||15));
  out.profile.tempo=Math.max(40,Math.min(120,Number(out.profile.tempo)||65));
  out.profile.root=Math.max(36,Math.min(60,Number(out.profile.root)||48));
  out.profile.theme=out.profile.theme==='dark'?'dark':'light';
@@ -32,6 +35,10 @@ export function importState(input){
   if(input[k]!==undefined&&!Array.isArray(input[k]))throw Error(`Le champ ${k} est invalide.`);
   out[k]=(input[k]||[]).map(x=>k==='records'?normalizeRecord(x):({...x,id:String(x.id||uid())}));
   const ids=out[k].map(x=>x.id);if(new Set(ids).size!==ids.length)throw Error(`Identifiants en double dans ${k}.`);
+ }
+ if(migrateDuration){
+  for(const [key,plan] of Object.entries(out.plans))if(Number(plan?.duration)===12)out.plans[key]={...plan,duration:15};
+  for(const plan of out.extraPlans)if(Number(plan.duration)===12)plan.duration=15;
  }
  out.timer=input.timer&&Number.isFinite(input.timer.elapsed)&&Number.isFinite(input.timer.stage)?{...input.timer,running:false,startedAt:null}:null;
  out.updatedAt=new Date().toISOString();return out;
@@ -125,3 +132,4 @@ export function appendWorkshopResult(state,dest,row){
  state.records[state.records.findIndex(x=>x.id===r.id)]=updated;
  return updated;
 }
+
