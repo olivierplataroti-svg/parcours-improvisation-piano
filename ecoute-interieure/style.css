@@ -79,3 +79,9 @@
 .session-card.selected{border:2px solid var(--teal);box-shadow:0 0 0 2px color-mix(in srgb,var(--teal) 10%,transparent)}
 .session-card.selected .session-letter{background:var(--teal);color:#fff}
 .session-card.selected [data-action="choose-slot"]{border-color:var(--teal);color:var(--teal)}
+
+
+/* Le statut achevé reste vert, même lorsque la séance est sélectionnée. */
+.session-card.done .session-letter,html[data-theme=dark] .session-card.done .session-letter{background:#167342;color:#fff;font-size:22px}
+.session-complete{display:inline-block;margin-left:10px;padding:2px 8px;border-radius:999px;background:#e6f5ec;color:#146738;font-size:11px;font-weight:800;line-height:1.6;vertical-align:middle;white-space:nowrap}
+html[data-theme=dark] .session-complete{background:#214a35;color:#b8edcc}
