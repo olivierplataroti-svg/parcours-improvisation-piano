@@ -92,3 +92,36 @@ export function workshopDestination(state,stage,origin){
  const p=sessionPlan(stage,Number(slot),state);
  return{stage,slot,kind:p.optional?'extra':'guided',title:p.title,duration:p.duration};
 }
+
+export function nextEssentialSlot(state,stage){
+ for(let i=0;i<5;i++)if(!sessionPlan(stage,i,state).optional&&!state.records.some(r=>r.done&&r.stage===Number(stage)&&r.slot===String(i)))return String(i);
+ return null;
+}
+export function preferredSessionSlot(state,stage){
+ const origin=state.profile.activePractice,dest=workshopDestination(state,stage,origin);
+ if(dest.kind!=='free'&&(state.records.some(r=>!r.done&&r.stage===Number(stage)&&r.slot===dest.slot)||!state.records.some(r=>r.done&&r.stage===Number(stage)&&r.slot===dest.slot)))return dest.slot;
+ return nextEssentialSlot(state,stage)||'0';
+}
+export function practiceRecord(state,dest,{newPractice=false}={}){
+ const matches=state.records.filter(r=>r.stage===dest.stage&&r.slot===dest.slot&&(dest.kind!=='free'||r.id===state.profile.activeFreeRecordId));
+ let r=matches.findLast(r=>!r.done);
+ if(!r&&!newPractice)r=matches.at(-1);
+ if(!r){
+  r=normalizeRecord({id:uid(),stage:dest.stage,slot:dest.slot,kind:dest.kind,title:dest.title,date:today(),minutes:dest.duration,trials:10,pitch:null,rhythm:null,assisted:null,confidence:'hesitant',difficulty:3,key:'',notes:'',win:'',novel:false,technical:false,done:false});
+  state.records.push(r);
+ }
+ if(dest.kind==='free')state.profile.activeFreeRecordId=r.id;
+ return r;
+}
+export function appendWorkshopResult(state,dest,row){
+ // A fresh attempt after a completed practice starts a repeat; opening its form does not.
+ const existing=state.records.find(r=>r.workshopAttempts?.some(a=>a.id===row.id));
+ if(existing)return existing;
+ const r=practiceRecord(state,dest,{newPractice:true}),attempts=[...(r.workshopAttempts||[]),row];
+ const valid=attempts.filter(a=>a.result!=='technical');
+ if(valid.length>1000)throw Error('Termine cette séance avant de poursuivre les essais.');
+ const base=r.workshopBase||{trials:[r.pitch,r.rhythm,r.assisted].every(x=>x===null)?0:r.trials,pitch:r.pitch||0,assisted:r.assisted||0};
+ const updated=normalizeRecord({...r,workshopBase:base,workshopAttempts:attempts,trials:Math.max(1,base.trials+valid.length),pitch:valid.length?base.pitch+valid.filter(a=>a.result==='correct'&&!a.assisted).length:r.pitch,assisted:base.assisted+valid.filter(a=>a.result==='correct'&&a.assisted).length,novel:r.novel||valid.some(a=>!a.assisted)});
+ state.records[state.records.findIndex(x=>x.id===r.id)]=updated;
+ return updated;
+}
