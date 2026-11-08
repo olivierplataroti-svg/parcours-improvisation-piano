@@ -137,14 +137,15 @@
 
   </style>
   <link rel="stylesheet" href="classical.css">
+  <link rel="stylesheet" href="./ecoute-dashboard.css?v=1.0.0">
 </head>
 <body>
   <header class="mast"><div class="mast-inner"><a class="brand" href="#haut" aria-label="Retour en haut"><span class="brand-mark" aria-hidden="true">♫</span> MON PIANO <span style="color:#9aa9b8;font-weight:500">/ Statistiques</span></a><span class="tag" id="header-sync">Données personnelles · locales</span></div></header>
   <main class="layout" id="haut">
     <section class="hero" aria-label="Présentation">
-      <div class="eyebrow"><span>●</span> Carnet d'entraînement · Classique / Blues / Jazz / Improvisation</div>
+      <div class="eyebrow"><span>●</span> Carnet d'entraînement · Piano &amp; écoute intérieure</div>
       <h1>Chaque séance fait<br>progresser ton jeu.</h1>
-      <p>Retrouve ton apprentissage classique depuis septembre 2024, ton répertoire et tes parcours Blues, Jazz et Improvisation. Une heure de classique est estimée pour chaque journée avec une séance terminée.</p>
+      <p>Retrouve ton piano, ton répertoire et ton écoute intérieure dans une vue commune. Le temps au piano et le travail de l’oreille sont comptés séparément ; une heure de classique est estimée par journée travaillée en Blues, Jazz ou Improvisation.</p>
       <div class="hero-actions"><span class="hero-pill" id="hero-period">Période commune : —</span><span class="hero-pill" id="hero-update">Dernière séance : —</span><button class="btn lead-action" id="hero-import" type="button">+ Actualiser mes données</button></div>
     </section>
     <nav class="nav" aria-label="Sections du tableau de bord">
@@ -156,21 +157,22 @@
     </nav>
     <div class="notice hidden" id="notice" role="status"></div>
     <section id="view-overview" class="view">
-      <div class="head-row"><div><h2>Vue d'ensemble</h2><p class="sub" id="period-explainer">Comparaison sur une période commune aux trois parcours.</p></div><div class="controls"><select class="select" id="period-select" aria-label="Période d'analyse"><option value="common">Depuis les trois parcours</option><option value="30">30 derniers jours enregistrés</option><option value="90">90 derniers jours enregistrés</option><option value="all">Tout l'historique</option><option value="custom">Dates personnalisées</option></select><button class="btn secondary" type="button" id="show-data">Importer</button></div></div>
+      <div class="head-row"><div><h2>Vue d'ensemble</h2><p class="sub" id="period-explainer">Comparaison sur une période commune aux trois parcours.</p></div><div class="controls"><select class="select" id="period-select" aria-label="Période d'analyse"><option value="common">Depuis les trois parcours piano</option><option value="30">30 derniers jours enregistrés</option><option value="90">90 derniers jours enregistrés</option><option value="all">Tout l'historique</option><option value="custom">Dates personnalisées</option></select><button class="btn secondary" type="button" id="show-data">Importer</button></div></div>
       <div class="controls hidden" id="custom-dates" style="margin-bottom:16px"><label style="font-size:12px;color:#64758d">Du <input type="date" class="date" id="date-from"></label><label style="font-size:12px;color:#64758d">au <input type="date" class="date" id="date-to"></label><button class="btn ghost" id="apply-dates" type="button">Appliquer</button></div>
       <div class="kpis" id="overview-kpis"></div>
       <div class="panel padded" style="margin:16px 0 20px">
-        <div class="works-header"><h3>Ton apprentissage classique depuis 2024</h3><button type="button" class="btn secondary" id="open-repertoire">Voir mon répertoire</button></div>
-        <p class="classical-intro">Base historique : 380 h estimées de septembre 2024 à août 2026. Depuis septembre 2026, une heure de classique s'ajoute pour chaque journée active des parcours.</p>
+        <div class="works-header"><h3>Ton parcours musical depuis 2024</h3><button type="button" class="btn secondary" id="open-repertoire">Voir mon répertoire</button></div>
+        <p class="classical-intro">Base historique : 380 h estimées de septembre 2024 à août 2026. Depuis septembre 2026, une heure de classique s'ajoute pour chaque journée active en Blues, Jazz ou Bases. Une journée d’écoute seule n’ajoute aucune heure de classique.</p>
         <div id="classical-history" class="classical-metrics"></div>
         <p class="classical-note" id="classical-overlap"></p>
       </div>
-      <div class="grid-2"><div class="panel padded"><div class="panel-header"><div><h3>Ton rythme semaine après semaine</h3><p class="sub">Durée des parcours + classique estimé, semaines civiles</p></div><select id="chart-measure" class="tiny-option" aria-label="Mesure des barres"><option value="minutes">Heures</option><option value="sessions">Séances</option></select></div><div id="weekly-chart"></div><div class="legend"><span><i class="dot" style="background:var(--blues)"></i>Blues</span><span><i class="dot" style="background:var(--jazz)"></i>Jazz</span><span><i class="dot" style="background:var(--bases)"></i>Bases</span><span><i class="dot" style="background:#9770be"></i>Classique (1 h/jour actif)</span></div></div>
-      <div class="panel padded"><div class="panel-header"><div><h3>Répartition du temps : trois parcours et classique</h3><p class="sub">Volume de travail sur la période choisie</p></div></div><div class="track-list" id="track-share"></div><div class="summary-strip" id="mini-summary"></div></div></div>
-      <div class="grid-2 equal"><div class="panel padded"><div class="panel-header"><div><h3>Historique hebdomadaire</h3><p class="sub">Semaines civiles (les semaines aux bornes peuvent être partielles)</p></div></div><div class="table-wrap" id="weekly-table"></div></div><div class="panel padded"><div class="panel-header"><div><h3>Pratique par mois</h3><p class="sub">Parcours enregistrés + classique estimé</p></div></div><div class="table-wrap" id="monthly-table"></div></div></div>
+      <article class="panel padded ear-summary" id="ear-summary" aria-label="Synthèse de l’écoute intérieure"></article>
+      <div class="grid-2"><div class="panel padded"><div class="panel-header"><div><h3>Ton rythme semaine après semaine</h3><p class="sub">Deux barres par semaine : piano (P) et écoute intérieure (É)</p></div><select id="chart-measure" class="tiny-option" aria-label="Mesure des barres"><option value="minutes">Heures</option><option value="sessions">Séances</option></select></div><div id="weekly-chart"></div><div class="legend"><span><i class="dot" style="background:var(--blues)"></i>Blues</span><span><i class="dot" style="background:var(--jazz)"></i>Jazz</span><span><i class="dot" style="background:var(--bases)"></i>Bases</span><span><i class="dot" style="background:#9770be"></i>Classique (1 h/jour piano actif)</span><span><i class="dot" style="background:#a55736"></i>Écoute intérieure</span></div></div>
+      <div class="panel padded"><div class="panel-header"><div><h3>Répartition du temps au piano</h3><p class="sub">Blues, Jazz, Bases et classique · sur la période choisie</p></div></div><div class="track-list" id="track-share"></div><div class="summary-strip" id="mini-summary"></div></div></div>
+      <div class="grid-2 equal"><div class="panel padded"><div class="panel-header"><div><h3>Historique hebdomadaire</h3><p class="sub">Semaines civiles (les semaines aux bornes peuvent être partielles)</p></div></div><div class="table-wrap" id="weekly-table"></div></div><div class="panel padded"><div class="panel-header"><div><h3>Pratique par mois</h3><p class="sub">Piano et écoute intérieure, comptés séparément</p></div></div><div class="table-wrap" id="monthly-table"></div></div></div>
     </section>
-    <section id="view-rhythm" class="view hidden"><div class="head-row"><div><h2>Rythme &amp; régularité</h2><p class="sub">Comprendre comment la pratique s'installe dans la durée.</p></div></div><div class="kpis" id="rhythm-kpis"></div><div class="grid-2 equal"><div class="panel padded"><div class="panel-header"><div><h3>Jours de la semaine</h3><p class="sub">Durée cumulée du lundi au dimanche</p></div></div><div id="dow-chart"></div></div><div class="panel padded"><div class="panel-header"><div><h3>Tes repères de régularité</h3><p class="sub">Quelques indicateurs complémentaires</p></div></div><div id="rhythm-details"></div></div></div></section>
-    <section id="view-tracks" class="view hidden"><div class="head-row"><div><h2>Les trois parcours</h2><p class="sub">Comparer les efforts, pas uniquement le nombre de séances.</p></div></div><div class="source-grid" id="track-detail"></div><div class="panel padded"><h3>Comment lire ces chiffres ?</h3><p class="sub" style="font-size:13px;line-height:1.7;margin-top:12px">Une séance compte uniquement lorsqu'elle est marquée comme terminée. Les durées affichées sont celles inscrites dans tes trois applications (durée des séances Blues/Jazz et durée réelle renseignée dans Bases). Les moyennes représentent du temps enregistré, pas un suivi automatique du clavier ou de la concentration.</p></div></section>
+    <section id="view-rhythm" class="view hidden"><div class="head-row"><div><h2>Rythme &amp; régularité</h2><p class="sub">Les indicateurs ci-dessous décrivent la pratique au piano. L’écoute intérieure dispose de ses propres repères dans la vue d’ensemble.</p></div></div><div class="kpis" id="rhythm-kpis"></div><div class="grid-2 equal"><div class="panel padded"><div class="panel-header"><div><h3>Jours de la semaine</h3><p class="sub">Durée cumulée du lundi au dimanche</p></div></div><div id="dow-chart"></div></div><div class="panel padded"><div class="panel-header"><div><h3>Tes repères de régularité</h3><p class="sub">Quelques indicateurs complémentaires</p></div></div><div id="rhythm-details"></div></div></div></section>
+    <section id="view-tracks" class="view hidden"><div class="head-row"><div><h2>Mes quatre parcours</h2><p class="sub">Comparer les efforts, pas uniquement le nombre de séances.</p></div></div><div class="source-grid" id="track-detail"></div><div class="panel padded"><h3>Comment lire ces chiffres ?</h3><p class="sub" style="font-size:13px;line-height:1.7;margin-top:12px">Une séance compte uniquement lorsqu'elle est marquée comme terminée. Les durées affichées sont celles inscrites dans tes applications (durée des séances Blues/Jazz et durée réelle renseignée dans Bases et Écoute intérieure). Les moyennes représentent du temps enregistré, pas un suivi automatique du clavier ou de la concentration.</p></div><div class="panel padded" style="margin-top:18px"><div class="panel-header"><h3>Mes activités sur la période</h3><select id="activity-filter" class="select" aria-label="Filtrer les activités"><option value="all">Piano et écoute</option><option value="piano">Piano seulement</option><option value="ear">Écoute intérieure seulement</option></select></div><div class="table-wrap" id="activity-history"></div></div></section>
 
     <section id="view-classical" class="view hidden">
       <div class="head-row"><div><h2>Classique &amp; répertoire</h2><p class="sub">Tes deux premières années, les œuvres étudiées et les projets à venir.</p></div></div>
@@ -202,12 +204,12 @@
         </form>
       </div>
     </section>
-    <section id="view-data" class="view hidden"><div class="head-row"><div><h2>Mes données &amp; sauvegardes</h2><p class="sub">Trois fichiers JSON pour une vue unifiée, sans envoyer tes données sur un serveur.</p></div></div>
-      <div class="panel padded"><div class="dropzone" id="dropzone"><div class="dropicon" aria-hidden="true">⇧</div><h3>Importer tes sauvegardes</h3><p>Sélectionne jusqu'à trois fichiers JSON en une seule fois, depuis ton iPad, iCloud Drive, Google Drive (dans l'app Fichiers) ou ton ordinateur. Tu peux ensuite remplacer une sauvegarde à la fois.</p><button class="btn" id="pick-files" type="button">Choisir les fichiers JSON</button><input id="file-input" type="file" accept=".json,application/json" multiple hidden><p style="margin:10px auto 0">Ou glisse les fichiers ici depuis un ordinateur.</p></div><div class="source-grid" id="sources-status"></div>
-        <div class="privacy"><span class="privacy-symbol" aria-hidden="true">◎</span><div><strong>Confidentialité par défaut.</strong> Les fichiers sont analysés directement dans ton navigateur. Ils ne sont ni envoyés à GitHub ni publiés dans les dépôts des trois applications. Une copie est conservée localement sur cet appareil pour retrouver tes statistiques à la prochaine visite.</div></div>
+    <section id="view-data" class="view hidden"><div class="head-row"><div><h2>Mes données &amp; sauvegardes</h2><p class="sub">Quatre parcours pour une vue unifiée, sans envoyer tes données sur un serveur.</p></div></div>
+      <div class="panel padded"><div class="dropzone" id="dropzone"><div class="dropicon" aria-hidden="true">⇧</div><h3>Importer tes sauvegardes</h3><p>Sélectionne jusqu'à quatre fichiers JSON en une seule fois, depuis ton iPad, iCloud Drive, Google Drive (dans l'app Fichiers) ou ton ordinateur. Tu peux ensuite remplacer une sauvegarde à la fois.</p><button class="btn" id="pick-files" type="button">Choisir les fichiers JSON</button><input id="file-input" type="file" accept=".json,application/json" multiple hidden><p style="margin:10px auto 0">Ou glisse les fichiers ici depuis un ordinateur.</p></div><div class="source-grid" id="sources-status"></div>
+        <div class="privacy"><span class="privacy-symbol" aria-hidden="true">◎</span><div><strong>Confidentialité par défaut.</strong> Les fichiers sont analysés directement dans ton navigateur. Ils ne sont ni envoyés à GitHub ni publiés dans les dépôts des applications. Une copie est conservée localement sur cet appareil pour retrouver tes statistiques à la prochaine visite.</div></div>
       </div>
-      <div class="instructions"><div class="panel padded"><h3>Actualisation sur ton iPad</h3><ol><li>Depuis chaque parcours, exporte sa sauvegarde JSON dans <strong>Fichiers</strong> (sur iPad, iCloud Drive ou Google Drive).</li><li>Dans ce tableau de bord, touche <strong>Choisir les fichiers JSON</strong> et sélectionne les trois fichiers. Tu peux aussi n'importer que celui qui a changé.</li><li>Les statistiques sont recalculées immédiatement. Une fois importées, elles restent disponibles dans ce navigateur.</li></ol><p>Si tu stockes les fichiers dans un dossier Google Drive, l'application <strong>Fichiers</strong> peut les présenter comme des documents locaux. Le choix du fichier reste une action manuelle.</p></div><div class="panel padded"><h3>Lecture automatique des sites GitHub</h3><p>Si cette page et tes applications Blues/Jazz sont ouvertes dans Safari sous le <strong>même domaine github.io</strong>, le tableau de bord peut lire leurs sauvegardes directement dans le stockage local, sans fichier à sélectionner.</p><label class="toggle-row"><input type="checkbox" id="auto-sync" checked><span><strong>Activer la lecture automatique locale</strong><small>Vérification à l'ouverture, au retour sur l'onglet et périodiquement si la page est visible. Fonctionne uniquement à origine web et profil de navigateur identiques.</small></span></label><button class="btn secondary" type="button" id="rescan">Vérifier les données locales</button><p>Le parcours Bases est actuellement déployé via Cloudflare : Safari isole ses données de celles des pages GitHub. Son import manuel reste nécessaire, sauf si tu utilises ultérieurement une version hébergée sur le même domaine.</p></div></div>
-      <div class="panel padded" style="margin-top:16px"><h3>Exporter et conserver ton historique</h3><p class="sub">Un export global permet de préserver les trois sauvegardes, ton répertoire classique et tes réglages du tableau de bord. Le CSV est un relevé de statistiques, sans notes de séance.</p><div class="actions"><button class="btn secondary" id="export-bundle" type="button">Exporter mon archive JSON</button><button class="btn secondary" id="export-csv" type="button">Exporter le bilan CSV</button><button class="btn ghost" id="print" type="button">Imprimer / PDF</button></div><p class="sub">Attention : le stockage local de Safari peut être vidé si tu effaces les données du site. Continue de sauvegarder régulièrement tes parcours.</p></div>
+      <div class="instructions"><div class="panel padded"><h3>Actualisation sur ton iPad</h3><ol><li>Depuis chaque parcours, exporte sa sauvegarde JSON dans <strong>Fichiers</strong> (sur iPad, iCloud Drive ou Google Drive).</li><li>Dans ce tableau de bord, touche <strong>Choisir les fichiers JSON</strong> et sélectionne les sauvegardes des quatre parcours. Tu peux aussi n'importer que celui qui a changé.</li><li>Les statistiques sont recalculées immédiatement. Une fois importées, elles restent disponibles dans ce navigateur.</li></ol><p>Si tu stockes les fichiers dans un dossier Google Drive, l'application <strong>Fichiers</strong> peut les présenter comme des documents locaux. Le choix du fichier reste une action manuelle.</p></div><div class="panel padded"><h3>Lecture automatique des sites GitHub</h3><p>Si cette page et tes applications Blues/Jazz/Écoute intérieure sont ouvertes dans Safari sous le <strong>même domaine github.io</strong>, le tableau de bord peut lire leurs sauvegardes directement dans le stockage local, sans fichier à sélectionner.</p><label class="toggle-row"><input type="checkbox" id="auto-sync" checked><span><strong>Activer la lecture automatique locale</strong><small>Vérification à l'ouverture, au retour sur l'onglet et périodiquement si la page est visible. Fonctionne uniquement à origine web et profil de navigateur identiques.</small></span></label><button class="btn secondary" type="button" id="rescan">Vérifier les données locales</button><p>Si un parcours est ouvert sur un autre domaine ou dans une application dont le stockage est isolé, utilise l’import JSON. Les sites OpenAI ont des espaces de stockage distincts : exporte la sauvegarde de l’application, puis importe-la ici.</p></div></div>
+      <div class="panel padded" style="margin-top:16px"><h3>Exporter et conserver ton historique</h3><p class="sub">Un export global permet de préserver les quatre sauvegardes, ton répertoire classique et tes réglages du tableau de bord. Le CSV est un relevé de statistiques, sans notes de séance.</p><div class="actions"><button class="btn secondary" id="export-bundle" type="button">Exporter mon archive JSON</button><button class="btn secondary" id="export-csv" type="button">Exporter le bilan CSV</button><button class="btn ghost" id="print" type="button">Imprimer / PDF</button></div><p class="sub">Attention : le stockage local de Safari peut être vidé si tu effaces les données du site. Continue de sauvegarder régulièrement tes parcours.</p></div>
     </section>
     <p class="footnote" id="footer-detail">Tableau de bord de pratique pianistique · Calculs fondés sur les séances terminées et leurs dates · Fichiers stockés sur ton appareil.</p>
   </main>
@@ -218,20 +220,21 @@
   (() => {
     'use strict';
     const KEY = 'piano-tableau-de-bord-v1';
-    const TRACKS = {blues:{name:'Blues',color:'#4267db',abbr:'Blues',keys:['parcours-improvisation-olivier-v2']},jazz:{name:'Jazz',color:'#11a994',abbr:'Jazz',keys:['parcours-improvisation-jazz-olivier-v4']},bases:{name:"Bases de l'improvisation",color:'#f1a649',abbr:'Bases',keys:['bases_improvisation_132_olivier_v1','bases_improvisation_208_olivier_v4']}};
+    const TRACKS = {blues:{name:'Blues',color:'#4267db',abbr:'Blues',keys:['parcours-improvisation-olivier-v2']},jazz:{name:'Jazz',color:'#11a994',abbr:'Jazz',keys:['parcours-improvisation-jazz-olivier-v4']},bases:{name:"Bases de l'improvisation",color:'#f1a649',abbr:'Bases',keys:['bases_improvisation_132_olivier_v1','bases_improvisation_208_olivier_v4']},ear:{name:'Écoute intérieure',color:'#a55736',abbr:'Écoute',keys:['olivier.ecoute-interieure.v1']}};
     const NAMES = Object.keys(TRACKS);
     const CLASSICAL = {name:'Classique',color:'#9770be',abbr:'Classique'};
-    const DISPLAY_NAMES = NAMES.concat('classical');
+    const PIANO_NAMES = ['blues','jazz','bases'];
+    const DISPLAY_NAMES = PIANO_NAMES.concat('classical');
     const TRACK_META = {...TRACKS,classical:CLASSICAL};
     const HISTORIC_HOURS = 380;
     const HISTORIC_FROM = '2024-09-01', HISTORIC_TO = '2026-08-31';
     const DEFAULT_WORKS = window.PIANO_CLASSICAL_DEFAULT_WORKS || [];
     const DAY = 86400000;
     const $ = id => document.getElementById(id);
-    const TODAY = new Date().toLocaleDateString('sv-SE');
+    const TODAY = new Intl.DateTimeFormat('fr-CA',{timeZone:'Europe/Paris',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
     let tab='overview', measure='minutes', toastTimer=null;
     let state={sources:{},period:'common',customStart:'',customEnd:'',autoSync:true,repertoire:DEFAULT_WORKS.map(w=>({...w}))};
-    let stats=null;
+    let stats=null,activityFilter='all';
 
     function escapeHTML(str){return String(str??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
     function parseISO(s){if(!/^\d{4}-\d{2}-\d{2}$/.test(s||''))return NaN;const v=Date.parse(s+'T12:00:00Z');return Number.isFinite(v)&&new Date(v).toISOString().slice(0,10)===s?v:NaN;}
@@ -244,10 +247,11 @@
     function decimal(n,d=1){return Number.isFinite(n)?n.toLocaleString('fr-FR',{minimumFractionDigits:0,maximumFractionDigits:d}):'—';}
     function monday(date){const d=new Date(parseISO(date));let wd=d.getUTCDay();return addDays(date,-((wd+6)%7));}
     function validMinutes(n){if(n===null||n===undefined||n==='')return null;let x=Number(n);return Number.isFinite(x)&&x>=0&&x<=1440?x:null;}
-    function signature(raw){const str=JSON.stringify(raw);let h=2166136261;for(let i=0;i<str.length;i+=Math.max(1,Math.floor(str.length/2000))){h=Math.imul(h^str.charCodeAt(i),16777619)}return str.length+':'+(h>>>0);}
+    function signature(raw){const str=JSON.stringify(raw);let h=2166136261;for(let i=0;i<str.length;i++){h=Math.imul(h^str.charCodeAt(i),16777619)}return str.length+':'+(h>>>0);}
     function detect(raw,filename=''){
       if(!raw||typeof raw!=='object'||Array.isArray(raw))throw new Error('Ce fichier ne contient pas de sauvegarde compatible.');
       if(raw.kind==='piano-dashboard-bundle'&&raw.sources&&typeof raw.sources==='object')return 'bundle';
+      if(raw.appId==='ecoute-interieure'){if(raw.version!==1||!Array.isArray(raw.records))throw new Error('Sauvegarde Écoute intérieure incompatible.');return 'ear';}
       if(raw.sessionRecords&&typeof raw.sessionRecords==='object'&&!Array.isArray(raw.sessionRecords))return 'bases';
       if(raw.sessions&&typeof raw.sessions==='object'&&!Array.isArray(raw.sessions)){
         const ids=Object.keys(raw.sessions);const sample=ids.find(x=>x)||'';
@@ -255,9 +259,10 @@
         if(/^S\d+[-_]/i.test(sample))return 'jazz';
         const f=filename.toLowerCase();if(f.includes('jazz'))return 'jazz';if(f.includes('blues')||f.includes('parcours'))return 'blues';
       }
-      throw new Error('Format non reconnu : exporte une sauvegarde JSON depuis Blues, Jazz ou Bases.');
+      throw new Error('Format non reconnu : exporte une sauvegarde JSON depuis Blues, Jazz, Bases ou Écoute intérieure.');
     }
     function records(kind,raw){
+      if(kind==='ear')return earRecords(raw);
       const key=kind==='bases'?'sessionRecords':'sessions'; const entry=raw?.[key];
       if(!entry||typeof entry!=='object'||Array.isArray(entry))throw new Error('Sauvegarde '+kind+' sans journal de séances.');
       const arr=[];let invalidDates=0,undated=0,unmeasured=0;
@@ -268,9 +273,38 @@
         if(!Number.isFinite(parseISO(s.date))){invalidDates++;continue;}
         const mins=validMinutes(kind==='bases'?s.actualMinutes:s.duration);
         if(mins===null)unmeasured++;
-        arr.push({id:kind+':'+id,track:kind,date:s.date,minutes:mins});
+        arr.push({id:kind+':'+id,track:kind,date:s.date,minutes:mins,title:String(s.title||('Séance '+TRACKS[kind].name))});
       }
       return {rows:arr,invalidDates,undated,unmeasured};
+    }
+    function earRecords(raw){
+      if(detect(raw)!=='ear')throw new Error('Sauvegarde Écoute intérieure attendue.');
+      const ids=new Map();let invalidDates=0,undated=0,unmeasured=0;
+      for(const r of raw.records){
+        if(!r||typeof r!=='object'||!r.id)continue;
+        // La dernière version d’un identifiant remplace la précédente.
+        ids.set(String(r.id),r);
+      }
+      const rows=[];
+      for(const [id,r] of ids){
+        if(r.done!==true)continue;
+        if(!r.date){undated++;continue;}
+        if(!Number.isFinite(parseISO(r.date))){invalidDates++;continue;}
+        const minutes=validMinutes(r.minutes);if(minutes===null)unmeasured++;
+        rows.push({id:'ear:'+id,track:'ear',date:r.date,minutes,title:String(r.title||'Séance d’écoute'),stage:Number(r.stage),slot:String(r.slot||'free')});
+      }
+      return {rows,invalidDates,undated,unmeasured};
+    }
+    function earProgress(raw){
+      if(!raw)return null;
+      const stage=Math.max(1,Math.min(36,Number(raw.profile?.currentStage)||1));
+      const complete=slot=>raw.records.some(r=>r.done===true&&Number(r.stage)===stage&&String(r.slot)===String(slot));
+      const slots=[0,1,2,3,4].filter(i=>!raw.plans?.[stage+'-'+i]?.optional);
+      let next=slots.find(i=>!complete(i));
+      const active=raw.profile?.activePractice;
+      if(Number(active?.stage)===stage&&/^[0-4]$/.test(String(active.slot))&&raw.records.some(r=>r.done===false&&Number(r.stage)===stage&&String(r.slot)===String(active.slot)))next=Number(active.slot);
+      const labels=['Découvrir et comprendre','Retrouver sans aide','Stabiliser après un délai','Transférer à la musique','Vérifier les acquis'];
+      return {stage,title:String(raw.stageOverrides?.[stage]?.title||('Palier '+stage)),validated:Object.entries(raw.stageStatus||{}).filter(([k,v])=>Number(k)>=1&&Number(k)<=36&&v==='done').length,next:next===undefined?'Séances A–E achevées · consolider le palier':'Séance '+String.fromCharCode(65+next)+' · '+String(raw.plans?.[stage+'-'+next]?.title||labels[next])};
     }
     function srcMeta(kind,raw){const rec=records(kind,raw);const dates=rec.rows.map(v=>v.date).sort();return {count:rec.rows.length,first:dates[0]||'',last:dates[dates.length-1]||'',missing:rec.unmeasured+rec.invalidDates+rec.undated};}
     function cleanWork(value){
@@ -290,14 +324,14 @@
   if(state.sources.blues){
     try {const date=srcMeta("blues",state.sources.blues.raw).first;if(date)return date} catch(e){}
   }
-  const dates=NAMES.flatMap(k=>{
+  const dates=PIANO_NAMES.flatMap(k=>{
     try{return state.sources[k]?records(k,state.sources[k].raw).rows.map(r=>r.date):[]}catch(e){return []}
   }).sort();
   return dates[0]||null;
 }
 
     function lifetimeStats(){
-  const all=NAMES.flatMap(k=>{
+  const all=PIANO_NAMES.flatMap(k=>{
     try{return state.sources[k]?records(k,state.sources[k].raw).rows:[]}catch(e){return []}
   });
   const observedMinutes=all.reduce((sum,row)=>sum+(row.minutes||0),0);
@@ -305,7 +339,9 @@
   const days=[...new Set(all.map(row=>row.date).filter(date=>!start||date>=start))].sort();
   const addedDays=days.filter(d=>d>HISTORIC_TO).length;
   const inHistoryDays=days.filter(d=>d<=HISTORIC_TO).length;
-  return {observedMinutes,addedDays,inHistoryDays,totalMinutes:HISTORIC_HOURS*60+observedMinutes+addedDays*60,start,missing:NAMES.filter(k=>!state.sources[k])};
+  const totalMinutes=HISTORIC_HOURS*60+observedMinutes+addedDays*60;
+  const earMinutes=state.sources.ear?records('ear',state.sources.ear.raw).rows.reduce((sum,r)=>sum+(r.minutes||0),0):0;
+  return {observedMinutes,addedDays,inHistoryDays,totalMinutes,earMinutes,musicMinutes:totalMinutes+earMinutes,start,missing:PIANO_NAMES.filter(k=>!state.sources[k])};
 }
     function persist(){try{localStorage.setItem(KEY,JSON.stringify(state));return true}catch(e){notify('Stockage indisponible dans ce navigateur : conserve les JSON originaux.');return false}}
     function load(){try{const saved=JSON.parse(localStorage.getItem(KEY)||'null');if(saved&&typeof saved==='object'){
@@ -317,7 +353,7 @@
     function addSource(kind,raw,{origin='file',filename='',save=true}={}){
       if(!NAMES.includes(kind))throw new Error('Parcours inconnu');
       const d=detect(raw,filename);if(d!==kind)throw new Error('Ce fichier ne correspond pas au parcours '+TRACKS[kind].name);
-      const meta=srcMeta(kind,raw);if(meta.count===0)throw new Error('Aucune séance terminée trouvée dans le fichier '+(filename||kind));
+      const meta=srcMeta(kind,raw);if(meta.count===0&&kind!=='ear')throw new Error('Aucune séance terminée trouvée dans le fichier '+(filename||kind));
       state.sources[kind]={raw,filename:filename||('Données '+TRACKS[kind].name),origin,importedAt:new Date().toISOString(),sig:signature(raw)};
       if(save)persist();return meta;
     }
@@ -330,7 +366,7 @@
           let candidate;try{const t=localStorage.getItem(key);if(!t)continue;candidate=JSON.parse(t);if(detect(candidate,key)!==track)continue;}
           catch(e){continue;}
           let meta;try{meta=srcMeta(track,candidate);}catch(e){continue;}
-          if(!meta.count)continue;
+          if(!meta.count&&track!=='ear')continue;
           if(!best||meta.last>bestMeta.last||(meta.last===bestMeta.last&&meta.count>bestMeta.count)){
             best=candidate;bestMeta=meta;bestKey=key;
           }
@@ -342,7 +378,9 @@
         if(prev){
           const previousMeta=srcMeta(track,prev.raw);
           const noRegression=bestMeta.count>=previousMeta.count&&bestMeta.last>=previousMeta.last;
-          replace=prev.sig!==nextSig && (prev.origin==='local' || noRegression);
+          const earNewer=track==='ear'&&Number.isFinite(Date.parse(best.updatedAt))&&Date.parse(best.updatedAt)>=Date.parse(prev.raw.updatedAt||'');
+          const comparable=track==='ear'&&Number.isFinite(Date.parse(best.updatedAt))&&Number.isFinite(Date.parse(prev.raw.updatedAt));
+          replace=prev.sig!==nextSig && (prev.origin==='local' || (comparable?earNewer:noRegression));
         }
         if(replace){addSource(track,best,{origin:'local',filename:'Lecture locale · '+bestKey,save:false});changed++;}
       }
@@ -359,6 +397,7 @@
           if(file.size>15*1024*1024)throw new Error('Fichier trop volumineux (limite 15 Mo).');
           const content=JSON.parse(await file.text());const kind=detect(content,file.name);
           if(kind==='bundle'){
+            const settings=content.settings;if(settings&&typeof settings==='object'){if(['common','30','90','all','custom'].includes(settings.period))state.period=settings.period;for(const key of ['customStart','customEnd'])if(Number.isFinite(parseISO(settings[key])))state[key]=settings[key];if(typeof settings.autoSync==='boolean')state.autoSync=settings.autoSync;}
             if(content.classical&&Array.isArray(content.classical.repertoire)){state.repertoire=content.classical.repertoire.map(cleanWork).filter(Boolean);succeeded.push('Répertoire classique');}
             for(const [k,v] of Object.entries(content.sources)){
               if(!NAMES.includes(k)||!v)continue;
@@ -367,12 +406,12 @@
           }else{addSource(kind,content,{filename:file.name,origin:'file',save:false});succeeded.push(TRACKS[kind].name)}
         }catch(e){failed.push(file.name+' : '+e.message)}
       }
-      if(succeeded.length){persist();clearBanner();state.period='common';render();selectTab('overview');notify('Données importées : '+[...new Set(succeeded)].join(', '));}
+      if(succeeded.length){persist();clearBanner();render();selectTab('overview');notify('Données importées : '+[...new Set(succeeded)].join(', '));}
       if(failed.length)banner('Import incomplet : '+failed.join(' | '),'error');
       $('file-input').value='';
     }
     function calculate(){
-  const per={},missing=NAMES.filter(name=>!state.sources[name]);
+  const per={},missing=PIANO_NAMES.filter(name=>!state.sources[name]);
   let all=[];
   for(const kind of NAMES){
     const src=state.sources[kind];
@@ -382,8 +421,8 @@
   const allDates=all.map(row=>row.date).sort();
   if(!allDates.length)return {empty:true,missing,per,tracks:{}};
   const first=allDates[0],last=allDates[allDates.length-1];
-  const starts=NAMES.map(k=>per[k].rows.map(row=>row.date).sort()[0]).filter(Boolean);
-  const common=starts.reduce((a,b)=>a>b?a:b,starts[0]);
+  const starts=PIANO_NAMES.map(k=>per[k].rows.map(row=>row.date).sort()[0]).filter(Boolean);
+  const common=starts.reduce((a,b)=>a>b?a:b,starts[0]||first);
   let from=common,to=last;
   if(state.period==="all")from=first;
   if(state.period==="30"||state.period==="90")from=addDays(last,-(Number(state.period)-1));
@@ -394,19 +433,21 @@
   if(from>to)[from,to]=[to,from];
   const rows=all.filter(row=>row.date>=from&&row.date<=to);
   const tracks={},weeks=new Map(),months=new Map(),dow=Array(7).fill(0),dates=new Set();
-  for(const key of DISPLAY_NAMES)tracks[key]={minutes:0,sessions:0,withDuration:0,days:new Set(),unmeasured:0};
+  for(const key of NAMES.concat('classical'))tracks[key]={minutes:0,sessions:0,withDuration:0,days:new Set(),unmeasured:0};
   function getWeek(date){
     const wk=monday(date);
-    if(!weeks.has(wk))weeks.set(wk,{date:wk,blues:{minutes:0,sessions:0},jazz:{minutes:0,sessions:0},bases:{minutes:0,sessions:0},classical:{minutes:0,sessions:0},days:new Set(),minutes:0,sessions:0});
+    if(!weeks.has(wk))weeks.set(wk,{date:wk,blues:{minutes:0,sessions:0},jazz:{minutes:0,sessions:0},bases:{minutes:0,sessions:0},classical:{minutes:0,sessions:0},ear:{minutes:0,sessions:0},days:new Set(),earDays:new Set(),minutes:0,sessions:0});
     return weeks.get(wk);
   }
   function getMonth(date){
     const month=date.slice(0,7);
-    if(!months.has(month))months.set(month,{date:month,blues:0,jazz:0,bases:0,classical:0,minutes:0,sessions:0,days:new Set()});
+    if(!months.has(month))months.set(month,{date:month,blues:0,jazz:0,bases:0,classical:0,ear:0,earSessions:0,earDays:new Set(),minutes:0,sessions:0,days:new Set()});
     return months.get(month);
   }
   let recordedMinutes=0,measuredMinutes=0,withDuration=0;
-  for(const row of rows){
+  const pianoRows=rows.filter(r=>r.track!=='ear'),earRows=rows.filter(r=>r.track==='ear');
+  for(const row of earRows){const t=tracks.ear,mins=row.minutes||0;t.minutes+=mins;t.sessions++;t.days.add(row.date);if(row.minutes!==null)t.withDuration++;else t.unmeasured++;const w=getWeek(row.date);w.ear.minutes+=mins;w.ear.sessions++;w.earDays.add(row.date);const m=getMonth(row.date);m.ear+=mins;m.earSessions++;m.earDays.add(row.date);}
+  for(const row of pianoRows){
     const {track,date}=row,mins=row.minutes??0;
     dates.add(date);
     dow[(new Date(parseISO(date)).getUTCDay()+6)%7]+=mins;
@@ -448,12 +489,12 @@
   }
   let bestDay="",bestDayMinutes=0;
   const dayTotals={};
-  for(const row of rows)dayTotals[row.date]=(dayTotals[row.date]||0)+(row.minutes??0);
+  for(const row of pianoRows)dayTotals[row.date]=(dayTotals[row.date]||0)+(row.minutes??0);
   for(const date of classicalDates)dayTotals[date]=(dayTotals[date]||0)+60;
   for(const [day,value] of Object.entries(dayTotals)){
     if(value>bestDayMinutes){bestDayMinutes=value;bestDay=day;}
   }
-  return {empty:false,first,last,common,from,to,missing,per,rows,tracks,dates,minutes,recordedMinutes,classicMinutes:classicalDates.length*60,classicDates:classicalDates,classicDays:classicalDates.length,withDuration,sessions:rows.length,activeDays:dates.size,periodDays,longest,weekAvgMinutes:minutes*7/periodDays,weekAvgSessions:rows.length*7/periodDays,activeDaysPerWeek:dates.size*7/periodDays,avgSession:withDuration?measuredMinutes/withDuration:0,avgDay:dates.size?minutes/dates.size:0,weekly:weeksArr,monthly:monthArr,dow,bestDay,bestDayMinutes};
+  return {empty:false,first,last,common,from,to,missing,per,rows,pianoRows,earRows,tracks,dates,minutes,earMinutes:tracks.ear.minutes,musicMinutes:minutes+tracks.ear.minutes,recordedMinutes,classicMinutes:classicalDates.length*60,classicDates:classicalDates,classicDays:classicalDates.length,withDuration,sessions:pianoRows.length,activeDays:dates.size,periodDays,longest,weekAvgMinutes:minutes*7/periodDays,weekAvgSessions:pianoRows.length*7/periodDays,activeDaysPerWeek:dates.size*7/periodDays,avgSession:withDuration?measuredMinutes/withDuration:0,avgDay:dates.size?minutes/dates.size:0,weekly:weeksArr,monthly:monthArr,dow,bestDay,bestDayMinutes};
 }
         function kpi(label,value,hint,strong=false){return `<article class="kpi panel${strong?' strong':''}"><div class="label">${label}</div><div class="value">${escapeHTML(value)}</div><div class="hint">${hint}</div></article>`;}
     function renderChart(where,data,mode='minutes',daysOfWeek=false){
@@ -483,30 +524,60 @@
         const t=s.tracks[k],pct=s.minutes?t.minutes*100/s.minutes:0;
         return `<div class="track-row"><div class="track-head"><strong><i class="dot" style="background:${TRACK_META[k].color}"></i>${TRACK_META[k].name}</strong><span>${hours(t.minutes)} · ${decimal(pct)} %</span></div><div class="progress"><div style="width:${pct}%;background:${TRACK_META[k].color}"></div></div><div class="track-meta">${k==='classical'?t.days.size+' jours × 1 h de classique estimé':t.sessions+' séance'+(t.sessions>1?'s':'')+' · '+(t.withDuration?decimal(t.minutes/t.withDuration)+' min':'—')+' par séance renseignée'}</div></div>`;
       }).join('');
-      $('mini-summary').innerHTML=`<div><div class="n">${s.activeDays}</div><div class="t">jours de pratique</div></div><div><div class="n">${decimal(s.activeDaysPerWeek)}</div><div class="t">jours / semaine</div></div><div><div class="n">${hours(s.avgDay)}</div><div class="t">par jour pratiqué</div></div>`;
+      $('mini-summary').innerHTML=`<div><div class="n">${s.activeDays}</div><div class="t">jours de pratique</div></div><div><div class="n">${decimal(s.activeDaysPerWeek)}</div><div class="t">jours / semaine</div></div><div><div class="n">${hours(s.avgDay)}</div><div class="t">par jour pratiqué</div></div><div><div class="n">${s.sessions}</div><div class="t">séances de piano terminées</div></div><div><div class="n">${decimal(s.weekAvgSessions)}</div><div class="t">séances de piano / semaine</div></div><div><div class="n">${hours(s.avgSession)}</div><div class="t">par séance de piano, hors classique</div></div>`;
     }
     function renderTable(where,heads,rows,empty){
       $(where).innerHTML=rows.length?`<table><thead><tr>${heads.map(h=>'<th>'+h+'</th>').join('')}</tr></thead><tbody>${rows.join('')}</tbody></table>`:`<div class="source-empty">${escapeHTML(empty||'Aucune donnée pour cette période.')}</div>`;
     }
     function renderOverview(){
-      const s=stats;
+      const s=stats,ready=!s.empty;
+      $('overview-kpis').innerHTML=kpi('Temps au piano',ready?hours(s.minutes):'—','Sur la période · classique inclus',true)+kpi('Écoute intérieure',ready&&state.sources.ear?hours(s.earMinutes):'—',state.sources.ear?'Sur la période · hors temps au piano':'Sauvegarde d’écoute à importer')+kpi('Temps musical total',ready?hours(s.musicMinutes):'—',state.sources.ear?'Piano + écoute intérieure':'Piano chargé · écoute à importer');
+      renderEarSummary();
       if(s.empty){
-        $('overview-kpis').innerHTML=kpi('Heures de pratique','—','Importe les sauvegardes')+kpi('Séances terminées','—','Sur les trois parcours')+kpi('Séances par semaine','—','Période commune')+kpi('Temps par séance','—','Durée moyenne');
         $('weekly-chart').innerHTML='<div class="empty-chart">Tes graphiques apparaîtront après import.</div>';
-        $('track-share').innerHTML='<div class="source-empty">Charge tes fichiers JSON pour comparer les trois parcours.</div>';
-        $('mini-summary').innerHTML='';$('weekly-table').innerHTML='';$('monthly-table').innerHTML='';$('period-explainer').textContent='Importe les trois sauvegardes pour calculer la période commune.';return;
+        $('track-share').innerHTML='<div class="source-empty">Importe tes sauvegardes pour afficher le temps au piano.</div>';
+        $('mini-summary').innerHTML='';$('weekly-table').innerHTML='';$('monthly-table').innerHTML='';$('period-explainer').textContent='Importe les sauvegardes de tes parcours. L’écoute intérieure est comptée séparément.';return;
       }
-      $('period-explainer').textContent=`Du ${shortDate(s.from)} au ${shortDate(s.to)} · ${s.periodDays} jours${s.missing.length?' · résultat partiel : '+s.missing.length+' parcours absent(s)':''}`;
-      $('overview-kpis').innerHTML=kpi('Temps de pratique',hours(s.minutes), 'Trois parcours + classique estimé',true)+kpi('Séances terminées',decimal(s.sessions,0),'Trois parcours, hors classique')+kpi('Séances par semaine',decimal(s.weekAvgSessions),'Moyenne sur les jours calendaires')+kpi('Durée moyenne par séance',decimal(s.avgSession)+' min',s.withDuration+' séances mesurées, hors classique');
-      renderChart('weekly-chart',s.weekly.slice(-12),measure);renderTrackShare();
-      const weeklyRows=[...s.weekly].reverse().map(w=>`<tr><td><b>${shortDate(w.date)}</b></td><td>${w.sessions}</td><td>${w.days.size}</td><td><b>${hours(w.minutes)}</b></td></tr>`);
-      renderTable('weekly-table',['Semaine du','Séances','Jours','Durée'],weeklyRows);
-      const monthRows=[...s.monthly].reverse().map(m=>`<tr><td><b>${new Date(m.date+'-01T12:00:00Z').toLocaleDateString('fr-FR',{month:'long',year:'numeric',timeZone:'UTC'})}</b></td><td>${m.sessions}</td><td>${m.days.size}</td><td><b>${hours(m.minutes)}</b></td></tr>`);
-      renderTable('monthly-table',['Mois','Séances','Jours','Durée'],monthRows);
+      $('period-explainer').textContent=`Du ${shortDate(s.from)} au ${shortDate(s.to)} · ${s.periodDays} jours${s.missing.length?' · piano : '+s.missing.length+' parcours absent(s)':''}`;
+      renderPracticeChart();renderTrackShare();
+      const weeklyRows=[...s.weekly].reverse().map(w=>`<tr><td><b>${shortDate(w.date)}</b></td><td>${w.sessions} / ${w.ear.sessions}</td><td>${hours(w.minutes)}</td><td>${hours(w.ear.minutes)}</td><td><b>${hours(w.minutes+w.ear.minutes)}</b></td></tr>`);
+      renderTable('weekly-table',['Semaine du','Séances P / É','Piano','Écoute','Total'],weeklyRows);
+      const monthRows=[...s.monthly].reverse().map(m=>`<tr><td><b>${new Date(m.date+'-01T12:00:00Z').toLocaleDateString('fr-FR',{month:'long',year:'numeric',timeZone:'UTC'})}</b></td><td>${m.sessions} / ${m.earSessions}</td><td>${hours(m.minutes)}</td><td>${hours(m.ear)}</td><td><b>${hours(m.minutes+m.ear)}</b></td></tr>`);
+      renderTable('monthly-table',['Mois','Séances P / É','Piano','Écoute','Total'],monthRows);
     }
+    function renderEarSummary(){
+      const src=state.sources.ear,raw=src?.raw,progress=earProgress(raw),all=src?records('ear',raw).rows:[],period=stats.tracks?.ear;
+      const sum=rows=>rows.reduce((n,r)=>n+(r.minutes||0),0),week=monday(TODAY),weekRows=all.filter(r=>r.date>=week&&r.date<=TODAY),dates=all.map(r=>r.date).sort();
+      const link=location.hostname.endsWith('github.io')?'https://olivierplataroti-svg.github.io/parcours-improvisation-piano/ecoute-interieure/':'https://ecoute-interieure-olivier.greta-de-gre-1408.chatgpt.site';
+      $('ear-summary').innerHTML=`<div class="panel-header"><div><div class="ear-eyebrow">LE TRAVAIL DE L’OREILLE</div><h3>Mon écoute intérieure</h3><p class="sub">Une séance, même avec plusieurs séries, compte une seule fois.</p></div><a class="btn secondary" href="${link}" target="_blank" rel="noopener">Ouvrir l’application</a></div>${src?`<div class="ear-metrics"><div><strong>${hours(sum(all))}</strong><span>Temps cumulé d’écoute</span></div><div><strong>${hours(sum(weekRows))}</strong><span>Cette semaine · ${weekRows.length} séance(s)</span></div><div><strong>${all.length}</strong><span>Séances terminées au total</span></div><div><strong>${period?.withDuration?decimal(period.minutes/period.withDuration)+' min':'—'}</strong><span>Moyenne par séance · période choisie</span></div></div><div class="ear-progress"><div><strong>Palier ${progress.stage} / 36</strong><p>${progress.validated} paliers validés sur 36 · ${Math.round(progress.validated/36*100)} %</p><div class="progress"><div style="width:${progress.validated/36*100}%;background:#a55736"></div></div></div><div><strong>À reprendre</strong><p>${escapeHTML(progress.next)}</p><p>Dernière séance : ${dates.length?shortDate(dates.at(-1)):'Aucune séance terminée'}</p></div></div>`:'<p class="sub" style="margin-top:18px">Importe la sauvegarde JSON de Mon écoute intérieure dans « Mes données ». Sur GitHub, la lecture locale peut aussi actualiser ce parcours automatiquement.</p>'}`;
+    }
+    function renderPracticeChart(){
+      const data=stats.weekly.slice(-12),mode=measure,max=Math.max(1,...data.flatMap(w=>[w[mode],w.ear[mode]])),step=mode==='minutes'?60:1,top=Math.ceil(max/step)*step;
+      let html='<div class="chart-area"><div class="chart-grid">';
+      for(let i=4;i>=0;i--)html+=`<div class="grid-line"><span>${mode==='minutes'?decimal(top/60*i/4):decimal(top*i/4)}</span></div>`;
+      html+='</div><div class="bar-plot practice-plot">';
+      for(const w of data){
+        html+='<div class="practice-week"><div class="practice-bars">';
+        for(const ear of [false,true]){
+          const total=ear?w.ear[mode]:w[mode],label=ear?'Écoute intérieure':'Piano',height=total?Math.max(2,100*total/top):0;
+          const desc=`${label} · semaine du ${shortDate(w.date)} : ${mode==='minutes'?hours(total):total+' séances'}`;
+          const segments=ear?`<div class="segment" style="height:100%;background:#a55736"></div>`:(mode==='minutes'?DISPLAY_NAMES:PIANO_NAMES).map(k=>`<div class="segment" style="height:${total?w[k][mode]/total*100:0}%;background:${TRACK_META[k].color}"></div>`).join('');
+          html+=`<div class="bar-col" title="${escapeHTML(desc)}"><div class="bar-value">${mode==='minutes'?hoursShort(total):total}</div><div class="bar" role="img" aria-label="${escapeHTML(desc)}" style="height:${height}%">${segments}</div><span class="practice-type">${ear?'É':'P'}</span></div>`;
+        }
+        html+=`</div><div class="bar-label">${escapeHTML(shortWeek(w.date))}</div></div>`;
+      }
+      $('weekly-chart').innerHTML=html+'</div></div>';
+    }
+    function renderActivityHistory(){
+      if(stats.empty){$('activity-history').innerHTML='<p class="source-empty">Aucune séance sur cette période.</p>';return;}
+      const classical=(stats.classicDates||[]).map(date=>({id:'classical:'+date,date,track:'classical',minutes:60,title:'Classique estimé · journée de piano'}));
+      const rows=stats.rows.concat(classical).filter(r=>activityFilter==='all'||(activityFilter==='ear'?r.track==='ear':r.track!=='ear')).sort((a,b)=>b.date.localeCompare(a.date)||a.id.localeCompare(b.id));
+      renderTable('activity-history',['Date','Activité','Séance','Durée'],rows.map(r=>`<tr><td>${shortDate(r.date)}</td><td><span class="activity-category ${r.track==='ear'?'ear':''}">${r.track==='ear'?'Écoute intérieure':'Piano'}</span><small class="activity-track">${TRACK_META[r.track].name}</small></td><td>${escapeHTML(r.title)}</td><td>${r.minutes===null?'Non renseignée':hours(r.minutes)}</td></tr>`),'Aucune activité de cette catégorie sur la période.');
+    }
+
     function renderRhythm(){const s=stats;
       if(s.empty){$('rhythm-kpis').innerHTML='';$('dow-chart').innerHTML='';$('rhythm-details').innerHTML='';return}
-      $('rhythm-kpis').innerHTML=kpi('Temps par semaine',hours(s.weekAvgMinutes),'Parcours + classique estimé',true)+kpi('Jours actifs par semaine',decimal(s.activeDaysPerWeek),'Sur 7 jours calendaires')+kpi('Temps par journée pratiquée',hours(s.avgDay),'Parcours + classique, jours actifs')+kpi('Série maximale',s.longest+' jours','Jours de pratique consécutifs');
+      $('rhythm-kpis').innerHTML=kpi('Temps par semaine',hours(s.weekAvgMinutes),'Piano : parcours + classique estimé',true)+kpi('Jours actifs par semaine',decimal(s.activeDaysPerWeek),'Sur 7 jours calendaires')+kpi('Temps par journée pratiquée',hours(s.avgDay),'Piano : parcours + classique, jours actifs')+kpi('Série maximale',s.longest+' jours','Jours de pratique consécutifs');
       const labels=['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];const values=labels.map((label,i)=>({label,value:s.dow[i]}));
       renderChart('dow-chart',values,'minutes',true);
       $('rhythm-details').innerHTML=`<div class="record-cols"><div class="record-box"><div class="big">${s.activeDays} / ${s.periodDays}</div><div class="small">Jours actifs / jours couverts</div></div><div class="record-box"><div class="big">${decimal(s.sessions/Math.max(1,s.activeDays))}</div><div class="small">Séances par journée active</div></div><div class="record-box"><div class="big">${Math.round(s.activeDays/s.periodDays*100)} %</div><div class="small">Jours avec pratique</div></div></div><div style="margin-top:22px;padding-top:17px;border-top:1px solid #edf0f5"><h3>Journée la plus longue</h3><p class="sub" style="font-size:13px;margin-top:8px">${s.bestDay?shortDate(s.bestDay)+' · '+hours(s.bestDayMinutes):'Aucune durée renseignée'}</p></div><div style="margin-top:16px"><h3>Interprétation</h3><p class="sub" style="font-size:13px;line-height:1.7;margin-top:8px">Les moyennes hebdomadaires divisent le volume total par le nombre de jours couverts puis multiplient par 7. Les semaines incomplètes sont donc correctement pondérées. Une journée avec plusieurs séances ne compte que pour un jour de pratique.</p></div>`;
@@ -517,8 +588,8 @@
         const file=s.per?.[k]?.rows||[];
         const first=file.length?file.map(v=>v.date).sort()[0]:'';
         const last=file.length?file.map(v=>v.date).sort().at(-1):'';
-        const pct=s.empty||!s.recordedMinutes?0:Math.round(t.minutes*100/s.recordedMinutes);
-        return `<article class="source panel"><div class="source-top"><h3><i class="dot" style="background:${TRACKS[k].color};width:12px;height:12px"></i>${TRACKS[k].name}</h3><span class="pill${!state.sources[k]?' off':''}">${state.sources[k]?'Chargé':'Non chargé'}</span></div><div style="font-size:31px;font-weight:820;letter-spacing:-.055em;margin-top:18px;color:${TRACKS[k].color}">${hours(t.minutes)}</div><p class="sub">${pct} % de ton temps sur la période</p><div class="progress" style="margin:15px 0"><div style="width:${pct}%;background:${TRACKS[k].color}"></div></div><div class="source-stats"><div><strong>${t.sessions}</strong> séances terminées</div><div><strong>${t.withDuration?decimal(t.minutes/t.withDuration)+' min':'—'}</strong> en moyenne par séance</div><div><strong>${t.days.size}</strong> journées avec pratique</div><div>Historique disponible : <strong>${first?shortDate(first)+' → '+shortDate(last):'—'}</strong></div></div></article>`;
+        const pct=s.empty||!(s.recordedMinutes+s.earMinutes)?0:Math.round(t.minutes*100/(s.recordedMinutes+s.earMinutes));
+        return `<article class="source panel"><div class="source-top"><h3><i class="dot" style="background:${TRACKS[k].color};width:12px;height:12px"></i>${TRACKS[k].name}</h3><span class="pill${!state.sources[k]?' off':''}">${state.sources[k]?'Chargé':'Non chargé'}</span></div><div style="font-size:31px;font-weight:820;letter-spacing:-.055em;margin-top:18px;color:${TRACKS[k].color}">${hours(t.minutes)}</div><p class="sub">${pct} % du temps des quatre parcours sur la période</p><div class="progress" style="margin:15px 0"><div style="width:${pct}%;background:${TRACKS[k].color}"></div></div><div class="source-stats"><div><strong>${t.sessions}</strong> séances terminées</div><div><strong>${t.withDuration?decimal(t.minutes/t.withDuration)+' min':'—'}</strong> en moyenne par séance</div><div><strong>${t.days.size}</strong> journées avec pratique</div><div>Historique disponible : <strong>${first?shortDate(first)+' → '+shortDate(last):'—'}</strong></div></div></article>`;
       }).join('');
     }
     function renderSources(){
@@ -529,7 +600,7 @@
     }
     function renderClassicHistory(){
   const life=lifetimeStats(),ready=!life.missing.length,total=hours(life.totalMinutes);
-  const cards=[["380 h","Classique estimé · septembre 2024 à août 2026 (50 h de cours incluses)"],[life.addedDays+" h","Classique depuis septembre 2026 · 1 h par journée active"],[total,"Cumul global depuis septembre 2024 · "+(ready?"3 parcours chargés":"bilan partiel")]];
+  const cards=[[total,"Piano cumulé depuis septembre 2024 · "+(ready?"3 parcours piano chargés":"bilan piano partiel")],[state.sources.ear?hours(life.earMinutes):"—","Écoute intérieure cumulée · hors piano"],[hours(life.musicMinutes),"Temps musical total cumulé · piano + écoute"+(state.sources.ear?"":" · écoute à importer")]];
   $("classical-history").innerHTML=cards.map(x=>'<div class="classical-metric"><div class="n">'+escapeHTML(x[0])+'</div><div class="t">'+escapeHTML(x[1])+'</div></div>').join("");
   $("classical-overlap").textContent="Les "+life.inHistoryDays+" journées classiques déduites des parcours avant septembre 2026 sont déjà comprises dans les 380 h historiques (aucun double comptage). Les durées Blues, Jazz et Bases sont additionnées séparément.";
   $("classical-kpis").innerHTML=kpi("Classique historique","380 h","Septembre 2024 à août 2026",true)+kpi("Cours inclus","50 h","Déjà dans les 380 h")+kpi("Classique depuis septembre 2026",life.addedDays+" h","Une heure par journée active")+kpi("Total piano cumulé",total,ready?"Trois parcours chargés":"Sources incomplètes");
@@ -540,8 +611,8 @@
     function saveWork(){ const title=$('rep-title').value; }
     function render(){
       stats=calculate();const s=stats;
-      $('header-sync').textContent=NAMES.filter(k=>!!state.sources[k]).length+' / 3 parcours chargés';
-      $('hero-period').textContent=s.empty?'Période commune : à calculer':'Depuis le '+shortDate(s.common)+' · période commune';
+      $('header-sync').textContent=NAMES.filter(k=>!!state.sources[k]).length+' / 4 parcours chargés';
+      $('hero-period').textContent=s.empty?'Période commune : à calculer':'Repère piano : '+shortDate(s.common);
       $('hero-update').textContent=s.empty?'Dernière séance : —':'Dernière séance : '+shortDate(s.last);
       $('period-select').value=state.period;
       $('custom-dates').classList.toggle('hidden',state.period!=='custom');
@@ -550,8 +621,8 @@
       const missing=s.missing;
       if(missing.length&&NAMES.some(k=>!!state.sources[k])) banner('Comparaison provisoire : il manque '+missing.map(k=>TRACKS[k].name).join(', ')+'. Importe les autres sauvegardes pour une période commune fiable.');
       else if(!missing.length&&$('notice').classList.contains('notice')&&!$('notice').classList.contains('error'))clearBanner();
-      renderOverview();renderRhythm();renderTracks();renderSources();renderClassicHistory();renderRepertoire();
-      $('footer-detail').textContent=s.empty?'Tableau de bord de pratique pianistique · Toutes les analyses sont calculées dans ton navigateur.':`Statistiques calculées sur ${s.sessions} séances du ${shortDate(s.from)} au ${shortDate(s.to)} · Source : sauvegardes personnelles · Aucune donnée transmise en ligne.`;
+      renderOverview();renderRhythm();renderTracks();renderActivityHistory();renderSources();renderClassicHistory();renderRepertoire();
+      $('footer-detail').textContent=s.empty?'Tableau de bord de pratique pianistique · Toutes les analyses sont calculées dans ton navigateur.':`Statistiques calculées sur ${s.sessions} séances de piano et ${s.tracks.ear.sessions} séances d’écoute du ${shortDate(s.from)} au ${shortDate(s.to)} · Source : sauvegardes personnelles · Aucune donnée transmise en ligne.`;
     }
     function selectTab(which){tab=which;
       for(const el of document.querySelectorAll('[data-tab]'))el.setAttribute('aria-selected',String(el.dataset.tab===which));
@@ -560,16 +631,17 @@
       window.scrollTo({top:0,behavior:'smooth'});
     }
     function download(name,contents,mime){const blob=new Blob([contents],{type:mime}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),15000);}
+    function bundleData(){return {kind:'piano-dashboard-bundle',version:3,createdAt:new Date().toISOString(),settings:{period:state.period,customStart:state.customStart,customEnd:state.customEnd,autoSync:state.autoSync},classical:{historicalHours:HISTORIC_HOURS,from:HISTORIC_FROM,to:HISTORIC_TO,minutesPerActiveDay:60,repertoire:state.repertoire},sources:Object.fromEntries(NAMES.filter(k=>state.sources[k]).map(k=>[k,{raw:state.sources[k].raw,filename:state.sources[k].filename}]))};}
     function exportBundle(){
       // Le répertoire peut être sauvegardé même en l'absence de sauvegardes de parcours.
-      const bundle={kind:'piano-dashboard-bundle',version:2,createdAt:new Date().toISOString(),classical:{historicalHours:HISTORIC_HOURS,from:HISTORIC_FROM,to:HISTORIC_TO,minutesPerActiveDay:60,repertoire:state.repertoire},sources:Object.fromEntries(NAMES.filter(k=>state.sources[k]).map(k=>[k,{raw:state.sources[k].raw,filename:state.sources[k].filename}]))};
+      const bundle=bundleData();
       download('mon-piano-tableau-de-bord-'+TODAY+'.json',JSON.stringify(bundle,null,2),'application/json;charset=utf-8');notify('Archive personnelle créée.');
     }
     function exportCSV(){
       if(stats.empty)return notify('Aucune séance de parcours à exporter. Utilise l’archive JSON pour conserver ton répertoire.');
       const activeClassical=(stats.classicDates||[]).map(date=>({date,track:'classical',id:'classical:'+date,minutes:60}));
       const data=stats.rows.concat(activeClassical).sort((a,b)=>a.date.localeCompare(b.date));
-      const rows=[['Date','Parcours','Identifiant séance','Minutes','Heures','Nature'],...data.map(r=>[r.date,TRACK_META[r.track].name,r.id,r.minutes===null?'':r.minutes,r.minutes===null?'':(r.minutes/60).toFixed(2).replace('.',','),r.track==='classical'?'Estimé : 1 h par date active':'Séance enregistrée'])];
+      const rows=[['Date','Parcours','Identifiant séance','Minutes','Heures','Nature','Catégorie'],...data.map(r=>[r.date,TRACK_META[r.track].name,r.id,r.minutes===null?'':r.minutes,r.minutes===null?'':(r.minutes/60).toFixed(2).replace('.',','),r.track==='classical'?'Estimé : 1 h par journée piano':r.track==='ear'?'Écoute intérieure · hors temps au piano':'Piano · séance enregistrée',r.track==='ear'?'Écoute intérieure':'Piano'])];
       const csv=String.fromCharCode(0xFEFF)+rows.map(row=>row.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(';')).join(String.fromCharCode(13,10));
       download('statistiques-piano-'+TODAY+'.csv',csv,'text/csv;charset=utf-8');notify('Fichier CSV créé avec les heures classiques des journées actives.');
     }
@@ -581,6 +653,7 @@
       $('file-input').addEventListener('change',e=>handleFiles(e.target.files));
       $('period-select').addEventListener('change',e=>{state.period=e.target.value;persist();render()});
       $('apply-dates').addEventListener('click',()=>{const from=$('date-from').value,to=$('date-to').value;if(!Number.isFinite(parseISO(from))||!Number.isFinite(parseISO(to))||from>to){notify('Saisis une date de début antérieure à la date de fin.');return}state.customStart=from;state.customEnd=to;persist();render()});
+      $('activity-filter').addEventListener('change',e=>{activityFilter=e.target.value;renderActivityHistory()});
       $('chart-measure').addEventListener('change',e=>{measure=e.target.value;renderOverview()});
       $('auto-sync').addEventListener('change',e=>{state.autoSync=e.target.checked;persist();if(state.autoSync)scanLocal(true);render()});
       $('rescan').addEventListener('click',()=>scanLocal(true));
