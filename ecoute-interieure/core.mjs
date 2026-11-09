@@ -109,27 +109,48 @@ export function preferredSessionSlot(state,stage){
  if(dest.kind!=='free'&&(state.records.some(r=>!r.done&&r.stage===Number(stage)&&r.slot===dest.slot)||!state.records.some(r=>r.done&&r.stage===Number(stage)&&r.slot===dest.slot)))return dest.slot;
  return nextEssentialSlot(state,stage)||'0';
 }
-export function practiceRecord(state,dest,{newPractice=false}={}){
- const matches=state.records.filter(r=>r.stage===dest.stage&&r.slot===dest.slot&&(dest.kind!=='free'||r.id===state.profile.activeFreeRecordId));
+export function practiceRecord(state,dest,{newPractice=false,date=today()}={}){
+ const matches=state.records.filter(r=>r.stage===dest.stage&&r.slot===dest.slot&&r.date===date&&(dest.kind!=='free'||r.id===state.profile.activeFreeRecordId));
  let r=matches.findLast(r=>!r.done);
  if(!r&&!newPractice)r=matches.at(-1);
  if(!r){
-  r=normalizeRecord({id:uid(),stage:dest.stage,slot:dest.slot,kind:dest.kind,title:dest.title,date:today(),minutes:dest.duration,trials:10,pitch:null,rhythm:null,assisted:null,confidence:'hesitant',difficulty:3,key:'',notes:'',win:'',novel:false,technical:false,done:false});
+  r=normalizeRecord({id:uid(),stage:dest.stage,slot:dest.slot,kind:dest.kind,title:dest.title,date,minutes:dest.duration,trials:10,pitch:null,rhythm:null,assisted:null,confidence:'hesitant',difficulty:3,key:'',notes:'',win:'',novel:false,technical:false,done:false});
   state.records.push(r);
  }
  if(dest.kind==='free')state.profile.activeFreeRecordId=r.id;
  return r;
 }
-export function appendWorkshopResult(state,dest,row){
- // A fresh attempt after a completed practice starts a repeat; opening its form does not.
+export function dailyWorkshopRecord(state,stage,date=today()){
+ return state.records.find(r=>r.stage===Number(stage)&&r.date===date&&(r.workshopDaily===true||r.workshopAttempts?.length>0));
+}
+export function dailyWorkshopDestination(state,dest,date=today()){
+ const r=dailyWorkshopRecord(state,dest.stage,date);
+ return r?{...workshopDestination(state,dest.stage,{stage:r.stage,slot:r.slot}),slot:r.slot,kind:r.kind,title:r.title}:dest;
+}
+export function ensureDailyWorkshop(state,dest,date=today()){
+ const found=dailyWorkshopRecord(state,dest.stage,date);
+ const r=found||practiceRecord(state,dest,{date});
+ r.workshopDaily=true;
+ return r;
+}
+export function appendWorkshopResult(state,dest,row,date=today()){
  const existing=state.records.find(r=>r.workshopAttempts?.some(a=>a.id===row.id));
  if(existing)return existing;
- const r=practiceRecord(state,dest,{newPractice:true}),attempts=[...(r.workshopAttempts||[]),row];
+ const r=ensureDailyWorkshop(state,dest,date),attempts=[...(r.workshopAttempts||[]),row];
  const valid=attempts.filter(a=>a.result!=='technical');
- if(valid.length>1000)throw Error('Termine cette séance avant de poursuivre les essais.');
+ if(valid.length>1000)throw Error('Le cumul de cette journée atteint la limite de 1 000 essais.');
  const base=r.workshopBase||{trials:[r.pitch,r.rhythm,r.assisted].every(x=>x===null)?0:r.trials,pitch:r.pitch||0,assisted:r.assisted||0};
  const updated=normalizeRecord({...r,workshopBase:base,workshopAttempts:attempts,trials:Math.max(1,base.trials+valid.length),pitch:valid.length?base.pitch+valid.filter(a=>a.result==='correct'&&!a.assisted).length:r.pitch,assisted:base.assisted+valid.filter(a=>a.result==='correct'&&a.assisted).length,novel:r.novel||valid.some(a=>!a.assisted)});
  state.records[state.records.findIndex(x=>x.id===r.id)]=updated;
  return updated;
 }
-
+export function addWorkshopMinutes(record,visitId,minutes,date=today()){
+ minutes=Number(minutes);
+ if(!visitId||!Number.isFinite(minutes)||minutes<0||minutes>1440)throw Error('Durée du passage invalide.');
+ const visits=[...new Map((record.workshopVisits||[]).filter(v=>v&&v.id&&Number.isFinite(v.minutes)&&v.minutes>=0).map(v=>[v.id,{...v}])).values()];
+ const previous=visits.find(v=>v.id===visitId);
+ const total=(record.done||visits.length?record.minutes:0)+minutes-(previous?.minutes||0);
+ const entry={id:visitId,date,minutes};
+ if(previous)visits[visits.indexOf(previous)]=entry;else visits.push(entry);
+ return normalizeRecord({...record,minutes:total,workshopDaily:true,workshopVisits:visits});
+}
