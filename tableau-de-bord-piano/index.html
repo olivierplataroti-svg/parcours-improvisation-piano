@@ -319,11 +319,7 @@
 }
 
     function classicalStartDate(){
-  // Le Blues est le premier parcours : si la sauvegarde manque, toutes les dates
-  // des autres parcours sont nécessairement postérieures à son démarrage.
-  if(state.sources.blues){
-    try {const date=srcMeta("blues",state.sources.blues.raw).first;if(date)return date} catch(e){}
-  }
+  // A day belongs to the piano history regardless of which course started first.
   const dates=PIANO_NAMES.flatMap(k=>{
     try{return state.sources[k]?records(k,state.sources[k].raw).rows.map(r=>r.date):[]}catch(e){return []}
   }).sort();
@@ -339,9 +335,10 @@
   const days=[...new Set(all.map(row=>row.date).filter(date=>!start||date>=start))].sort();
   const addedDays=days.filter(d=>d>HISTORIC_TO).length;
   const inHistoryDays=days.filter(d=>d<=HISTORIC_TO).length;
-  const totalMinutes=HISTORIC_HOURS*60+observedMinutes+addedDays*60;
+  const classicalMinutes=HISTORIC_HOURS*60+addedDays*60;
+  const totalMinutes=classicalMinutes+observedMinutes;
   const earMinutes=state.sources.ear?records('ear',state.sources.ear.raw).rows.reduce((sum,r)=>sum+(r.minutes||0),0):0;
-  return {observedMinutes,addedDays,inHistoryDays,totalMinutes,earMinutes,musicMinutes:totalMinutes+earMinutes,start,missing:PIANO_NAMES.filter(k=>!state.sources[k])};
+  return {observedMinutes,addedDays,inHistoryDays,classicalMinutes,totalMinutes,earMinutes,musicMinutes:totalMinutes+earMinutes,start,missing:PIANO_NAMES.filter(k=>!state.sources[k])};
 }
     function persist(){try{localStorage.setItem(KEY,JSON.stringify(state));return true}catch(e){notify('Stockage indisponible dans ce navigateur : conserve les JSON originaux.');return false}}
     function load(){try{const saved=JSON.parse(localStorage.getItem(KEY)||'null');if(saved&&typeof saved==='object'){
@@ -602,9 +599,9 @@
   const life=lifetimeStats(),ready=!life.missing.length,total=hours(life.totalMinutes);
   const cards=[[total,"Piano cumulé depuis septembre 2024 · "+(ready?"3 parcours piano chargés":"bilan piano partiel")],[state.sources.ear?hours(life.earMinutes):"—","Écoute intérieure cumulée · hors piano"],[hours(life.musicMinutes),"Temps musical total cumulé · piano + écoute"+(state.sources.ear?"":" · écoute à importer")]];
   $("classical-history").innerHTML=cards.map(x=>'<div class="classical-metric"><div class="n">'+escapeHTML(x[0])+'</div><div class="t">'+escapeHTML(x[1])+'</div></div>').join("");
-  $("classical-overlap").textContent="Les "+life.inHistoryDays+" journées classiques déduites des parcours avant septembre 2026 sont déjà comprises dans les 380 h historiques (aucun double comptage). Les durées Blues, Jazz et Bases sont additionnées séparément.";
-  $("classical-kpis").innerHTML=kpi("Classique historique","380 h","Septembre 2024 à août 2026",true)+kpi("Cours inclus","50 h","Déjà dans les 380 h")+kpi("Classique depuis septembre 2026",life.addedDays+" h","Une heure par journée active")+kpi("Total piano cumulé",total,ready?"Trois parcours chargés":"Sources incomplètes");
-  $("classical-dates").textContent=life.start?"Début de la règle quotidienne : "+shortDate(life.start)+(state.sources.blues?" (première séance Blues chargée).":" (provisoire tant que la sauvegarde Blues manque)."):"Le calcul quotidien sera disponible dès l'import de tes sauvegardes.";
+  $("classical-overlap").textContent="Classique cumulé : "+hours(life.classicalMinutes)+" = 380 h historiques + "+life.addedDays+" h depuis septembre 2026. Les "+life.inHistoryDays+" journées repérées avant septembre sont déjà comprises dans les 380 h. Une journée compte une seule fois, même avec plusieurs parcours ; une journée d’écoute seule n’ajoute pas de classique.";
+  $("classical-kpis").innerHTML=kpi("Classique historique","380 h","Sept. 2024 à août 2026 · dont 50 h de cours")+kpi("Classique depuis septembre 2026",life.addedDays+" h","1 h × "+life.addedDays+" journées de piano")+kpi("Total musique classique",hours(life.classicalMinutes),"380 h historiques + "+life.addedDays+" h ajoutées",true)+kpi("Total piano · tous parcours",total,"Classique + Blues + Jazz + Bases"+(ready?"":" · bilan partiel"));
+  $("classical-dates").textContent=life.start?"Première journée de piano repérée : "+shortDate(life.start)+". Les heures de classique ajoutées aux 380 h historiques commencent le 1er septembre 2026. Les graphiques portent sur la période choisie ; le total classique ci-dessus couvre tout l’historique depuis septembre 2024.":"Le total classique inclut les 380 h historiques. Les journées supplémentaires seront calculées dès réception de tes suivis.";
 }
         function renderRepertoire(){const works=state.repertoire||[];$("repertoire-count").textContent=works.length+" œuvres";$("repertoire-list").textContent=["studied","current","planned"].map(status=>works.filter(w=>w.status===status).map(w=>w.composer+" : "+w.title+" ("+w.reference+")").join("\n")).join("\n\n");const select=$("rep-existing"),selected=select.value;select.length=1;for(const w of works)select.add(new Option(w.composer+" — "+w.title,w.id));select.value=works.some(w=>w.id===selected)?selected:"";}
         function editWork(id){ const w=state.repertoire.find(work=>work.id===id); if(!w)return; $('rep-id').value=w.id; $('rep-title').value=w.title; $('rep-composer').value=w.composer; $('rep-reference').value=w.reference; $('rep-status').value=w.status; $('rep-notes').value=w.notes; $('repertoire-form-title').textContent='Modifier une œuvre'; $('rep-save').textContent='Enregistrer les modifications'; $('rep-cancel').classList.remove('hidden'); }
@@ -695,3 +692,4 @@
   <script defer src="../piano-sync.js?v=1.0.0" data-piano-app="dashboard"></script>
 </body>
 </html>
+

@@ -80,3 +80,26 @@ test('a cloud deletion resulting in an empty journal clears the dashboard totals
  ctx.PianoDashboard.applyCloudSources({jazz:raw({})},'owner');
  assert.equal(ctx.PianoDashboard.getStatistics().empty,true);
 });
+test('classical lifetime is 380 historical hours plus 61 unique later days, with overlaps and ear-only days excluded',()=>{
+ const ctx=dashboard();
+ const days=Array.from({length:61},(_,i)=>new Date(Date.UTC(2026,8,1+i)).toISOString().slice(0,10));
+ const pianoSession=date=>({completed:true,date,duration:20});
+ const blues={sessions:Object.fromEntries(days.map((date,i)=>['P'+i,pianoSession(date)]))};
+ // Historical days are already part of the 380 h estimate.
+ for(let i=1;i<=21;i++)blues.sessions['old'+i]=pianoSession('2026-08-'+String(i).padStart(2,'0'));
+ const jazz={sessions:Object.fromEntries(days.slice(6).map((date,i)=>['S'+i,pianoSession(date)]))};
+ const bases={sessionRecords:Object.fromEntries(days.map((date,i)=>[i+'-0',{done:true,date,actualMinutes:30}]))};
+ const ear={appId:'ecoute-interieure',version:1,records:[{id:'ear-only',date:'2026-11-14',done:true,minutes:15}]};
+ ctx.PianoDashboard.applyCloudSources({blues,jazz,bases,ear},'owner');
+ const life=ctx.PianoDashboard.getClassicalLifetime();
+ assert.equal(life.addedDays,61);assert.equal(life.inHistoryDays,21);assert.equal(life.classicalMinutes,441*60);
+ assert.equal(life.totalMinutes,life.classicalMinutes+life.observedMinutes);
+ assert.equal(life.musicMinutes,life.totalMinutes+15);
+ assert.equal(ctx.PianoDashboard.getStatistics().tracks.classical.days.size,55);
+});
+test('a course starting before Blues still contributes its unique classical days',()=>{
+ const ctx=dashboard();
+ ctx.PianoDashboard.applyCloudSources({blues:{sessions:{P1:{completed:true,date:'2026-09-15',duration:20}}},bases:{sessionRecords:{a:{done:true,date:'2026-09-02',actualMinutes:25}}}},'owner');
+ assert.equal(ctx.PianoDashboard.getClassicalLifetime().classicalMinutes,382*60);
+ assert.equal(ctx.PianoDashboard.getClassicalLifetime().addedDays,2);
+});
