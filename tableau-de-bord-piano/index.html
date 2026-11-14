@@ -204,11 +204,11 @@
         </form>
       </div>
     </section>
-    <section id="view-data" class="view hidden"><div class="head-row"><div><h2>Mes données &amp; sauvegardes</h2><p class="sub">Quatre parcours pour une vue unifiée, sans envoyer tes données sur un serveur.</p></div></div>
+    <section id="view-data" class="view hidden"><div class="head-row"><div><h2>Mes données &amp; sauvegardes</h2><p class="sub">Quatre parcours réunis grâce à la synchronisation privée, à la lecture locale ou aux sauvegardes.</p></div></div>
       <div class="panel padded"><div class="dropzone" id="dropzone"><div class="dropicon" aria-hidden="true">⇧</div><h3>Importer tes sauvegardes</h3><p>Sélectionne jusqu'à quatre fichiers JSON en une seule fois, depuis ton iPad, iCloud Drive, Google Drive (dans l'app Fichiers) ou ton ordinateur. Tu peux ensuite remplacer une sauvegarde à la fois.</p><button class="btn" id="pick-files" type="button">Choisir les fichiers JSON</button><input id="file-input" type="file" accept=".json,application/json" multiple hidden><p style="margin:10px auto 0">Ou glisse les fichiers ici depuis un ordinateur.</p></div><div class="source-grid" id="sources-status"></div>
-        <div class="privacy"><span class="privacy-symbol" aria-hidden="true">◎</span><div><strong>Confidentialité par défaut.</strong> Les fichiers sont analysés directement dans ton navigateur. Ils ne sont ni envoyés à GitHub ni publiés dans les dépôts des applications. Une copie est conservée localement sur cet appareil pour retrouver tes statistiques à la prochaine visite.</div></div>
+        <div class="privacy"><span class="privacy-symbol" aria-hidden="true">◎</span><div><strong>Confidentialité par défaut.</strong> Les imports de fichiers sont analysés dans ton navigateur. Si tu actives la synchronisation privée, tes applications transmettent leur suivi à ton espace Supabase protégé par ton accès Piano. Tes séances ne sont pas publiées dans GitHub. Une copie reste conservée localement sur cet appareil.</div></div>
       </div>
-      <div class="instructions"><div class="panel padded"><h3>Actualisation sur ton iPad</h3><ol><li>Depuis chaque parcours, exporte sa sauvegarde JSON dans <strong>Fichiers</strong> (sur iPad, iCloud Drive ou Google Drive).</li><li>Dans ce tableau de bord, touche <strong>Choisir les fichiers JSON</strong> et sélectionne les sauvegardes des quatre parcours. Tu peux aussi n'importer que celui qui a changé.</li><li>Les statistiques sont recalculées immédiatement. Une fois importées, elles restent disponibles dans ce navigateur.</li></ol><p>Si tu stockes les fichiers dans un dossier Google Drive, l'application <strong>Fichiers</strong> peut les présenter comme des documents locaux. Le choix du fichier reste une action manuelle.</p></div><div class="panel padded"><h3>Lecture automatique des sites GitHub</h3><p>Si cette page et tes applications Blues/Jazz/Écoute intérieure sont ouvertes dans Safari sous le <strong>même domaine github.io</strong>, le tableau de bord peut lire leurs sauvegardes directement dans le stockage local, sans fichier à sélectionner.</p><label class="toggle-row"><input type="checkbox" id="auto-sync" checked><span><strong>Activer la lecture automatique locale</strong><small>Vérification à l'ouverture, au retour sur l'onglet et périodiquement si la page est visible. Fonctionne uniquement à origine web et profil de navigateur identiques.</small></span></label><button class="btn secondary" type="button" id="rescan">Vérifier les données locales</button><p>Si un parcours est ouvert sur un autre domaine ou dans une application dont le stockage est isolé, utilise l’import JSON. Les sites OpenAI ont des espaces de stockage distincts : exporte la sauvegarde de l’application, puis importe-la ici.</p></div></div>
+      <div class="instructions"><div class="panel padded"><h3>Synchronisation depuis les icônes iPad</h3><p>Touche <strong>☁ Connecter mon suivi</strong> en bas à droite et utilise le même accès Piano que dans tes quatre applications. Ouvre chaque icône une première fois pour transmettre son historique. Ensuite, le tableau de bord récupère les mises à jour à son ouverture, à ton retour et toutes les 30 secondes lorsqu’il est visible.</p><h3>Import manuel facultatif</h3><ol><li>Depuis chaque parcours, exporte sa sauvegarde JSON dans <strong>Fichiers</strong> (sur iPad, iCloud Drive ou Google Drive).</li><li>Dans ce tableau de bord, touche <strong>Choisir les fichiers JSON</strong> et sélectionne les sauvegardes des quatre parcours. Tu peux aussi n'importer que celui qui a changé.</li><li>Les statistiques sont recalculées immédiatement. Une fois importées, elles restent disponibles dans ce navigateur.</li></ol><p>Si tu stockes les fichiers dans un dossier Google Drive, l'application <strong>Fichiers</strong> peut les présenter comme des documents locaux. Le choix du fichier reste une action manuelle.</p></div><div class="panel padded"><h3>Lecture automatique des sites GitHub</h3><p>Si cette page et tes applications Blues/Jazz/Écoute intérieure sont ouvertes dans Safari sous le <strong>même domaine github.io</strong>, le tableau de bord peut lire leurs sauvegardes directement dans le stockage local, sans fichier à sélectionner.</p><label class="toggle-row"><input type="checkbox" id="auto-sync" checked><span><strong>Activer la lecture automatique locale</strong><small>Vérification à l'ouverture, au retour sur l'onglet et périodiquement si la page est visible. Fonctionne uniquement à origine web et profil de navigateur identiques.</small></span></label><button class="btn secondary" type="button" id="rescan">Vérifier les données locales</button><p>Les applications installées séparément sur l’écran d’accueil ont des stockages isolés : utilise la synchronisation privée pour les relier. La lecture locale reste disponible pour les onglets Safari partageant le même stockage. Les sites OpenAI d’origine nécessitent un import séparé.</p></div></div>
       <div class="panel padded" style="margin-top:16px"><h3>Exporter et conserver ton historique</h3><p class="sub">Un export global permet de préserver les quatre sauvegardes, ton répertoire classique et tes réglages du tableau de bord. Le CSV est un relevé de statistiques, sans notes de séance.</p><div class="actions"><button class="btn secondary" id="export-bundle" type="button">Exporter mon archive JSON</button><button class="btn secondary" id="export-csv" type="button">Exporter le bilan CSV</button><button class="btn ghost" id="print" type="button">Imprimer / PDF</button></div><p class="sub">Attention : le stockage local de Safari peut être vidé si tu effaces les données du site. Continue de sauvegarder régulièrement tes parcours.</p></div>
     </section>
     <p class="footnote" id="footer-detail">Tableau de bord de pratique pianistique · Calculs fondés sur les séances terminées et leurs dates · Fichiers stockés sur ton appareil.</p>
@@ -353,7 +353,7 @@
     function addSource(kind,raw,{origin='file',filename='',save=true}={}){
       if(!NAMES.includes(kind))throw new Error('Parcours inconnu');
       const d=detect(raw,filename);if(d!==kind)throw new Error('Ce fichier ne correspond pas au parcours '+TRACKS[kind].name);
-      const meta=srcMeta(kind,raw);if(meta.count===0&&kind!=='ear')throw new Error('Aucune séance terminée trouvée dans le fichier '+(filename||kind));
+      const meta=srcMeta(kind,raw);if(meta.count===0&&kind!=='ear'&&origin!=='cloud')throw new Error('Aucune séance terminée trouvée dans le fichier '+(filename||kind));
       state.sources[kind]={raw,filename:filename||('Données '+TRACKS[kind].name),origin,importedAt:new Date().toISOString(),sig:signature(raw)};
       if(save)persist();return meta;
     }
@@ -373,7 +373,7 @@
         }
         if(!best)continue;
         found++;
-        const prev=state.sources[track];const nextSig=signature(best);
+        const prev=state.sources[track];if(prev?.origin==='cloud')continue;const nextSig=signature(best);
         let replace=!prev;
         if(prev){
           const previousMeta=srcMeta(track,prev.raw);
@@ -536,7 +536,7 @@
       if(s.empty){
         $('weekly-chart').innerHTML='<div class="empty-chart">Tes graphiques apparaîtront après import.</div>';
         $('track-share').innerHTML='<div class="source-empty">Importe tes sauvegardes pour afficher le temps au piano.</div>';
-        $('mini-summary').innerHTML='';$('weekly-table').innerHTML='';$('monthly-table').innerHTML='';$('period-explainer').textContent='Importe les sauvegardes de tes parcours. L’écoute intérieure est comptée séparément.';return;
+        $('mini-summary').innerHTML='';$('weekly-table').innerHTML='';$('monthly-table').innerHTML='';$('period-explainer').textContent='Connecte ton suivi pour retrouver tes quatre parcours. L’écoute intérieure est comptée séparément.';return;
       }
       $('period-explainer').textContent=`Du ${shortDate(s.from)} au ${shortDate(s.to)} · ${s.periodDays} jours${s.missing.length?' · piano : '+s.missing.length+' parcours absent(s)':''}`;
       renderPracticeChart();renderTrackShare();
@@ -595,7 +595,7 @@
     function renderSources(){
       $('sources-status').innerHTML=NAMES.map(k=>{
         const src=state.sources[k];let m={count:0,first:'',last:'',missing:0};try{if(src)m=srcMeta(k,src.raw)}catch(e){};
-        return `<article class="source panel"><div class="source-top"><h3><i class="dot" style="background:${TRACKS[k].color};width:12px;height:12px"></i>${TRACKS[k].name}</h3><span class="pill${src?'':' off'}">${src?'Importé':'À importer'}</span></div>${src?`<div class="source-stats"><strong>${m.count}</strong> séances terminées<br>Première : <strong>${shortDate(m.first)}</strong><br>Dernière : <strong>${shortDate(m.last)}</strong><br>Origine : <strong>${src.origin==='local'?'Lecture automatique':'Import JSON'}</strong></div><div class="filename">${escapeHTML(src.filename||'')}<br>Actualisé le ${escapeHTML(new Date(src.importedAt).toLocaleString('fr-FR'))}</div><button type="button" class="btn secondary" data-replace="${k}" style="margin-top:10px;padding:7px 11px;min-height:34px">Remplacer</button>`:`<p class="source-empty">Aucune sauvegarde chargée. Importe les séances de ce parcours.</p><button type="button" class="btn ghost" data-replace="${k}" style="margin-top:12px;padding:7px 11px;min-height:34px">Importer</button>`}</article>`;
+        return `<article class="source panel"><div class="source-top"><h3><i class="dot" style="background:${TRACKS[k].color};width:12px;height:12px"></i>${TRACKS[k].name}</h3><span class="pill${src?'':' off'}">${src?'Importé':'À importer'}</span></div>${src?`<div class="source-stats"><strong>${m.count}</strong> séances terminées<br>Première : <strong>${shortDate(m.first)}</strong><br>Dernière : <strong>${shortDate(m.last)}</strong><br>Origine : <strong>${src.origin==='cloud'?'Synchronisation privée':src.origin==='local'?'Lecture automatique':'Import JSON'}</strong></div><div class="filename">${escapeHTML(src.filename||'')}<br>Actualisé le ${escapeHTML(new Date(src.importedAt).toLocaleString('fr-FR'))}</div><button type="button" class="btn secondary" data-replace="${k}" style="margin-top:10px;padding:7px 11px;min-height:34px">Remplacer</button>`:`<p class="source-empty">Aucune sauvegarde chargée. Importe les séances de ce parcours.</p><button type="button" class="btn ghost" data-replace="${k}" style="margin-top:12px;padding:7px 11px;min-height:34px">Importer</button>`}</article>`;
       }).join('');
     }
     function renderClassicHistory(){
@@ -671,9 +671,27 @@
     }
     load();wire();if(state.autoSync)scanLocal(false);render();
     // Exposed only for local verification of the calculations; does not upload anything.
-    window.PianoDashboard={getStatistics:()=>calculate(),getLoadedSources:()=>Object.keys(state.sources),getClassicalLifetime:()=>lifetimeStats(),getRepertoire:()=>state.repertoire.map(w=>({...w})),setRepertoire:works=>{if(!Array.isArray(works))return;state.repertoire=works.map(cleanWork).filter(Boolean);persist();renderRepertoire();},importFile:async(file)=>handleFiles([file])};
+    window.PianoDashboard={applyCloudSources:(sources,accountId)=>{
+      const prepared=[];
+      for(const [kind,raw] of Object.entries(sources)) {
+        if(!NAMES.includes(kind)||detect(raw,kind)!==kind)throw new Error('Parcours cloud incompatible');
+        records(kind,raw);prepared.push([kind,raw]);
+      }
+      for(const kind of NAMES) {
+        const old=state.sources[kind];
+        if(old?.origin==='cloud'&&(!sources[kind]||old.cloudUser!==accountId))delete state.sources[kind];
+      }
+      for(const [kind,raw] of prepared) {
+        addSource(kind,raw,{origin:'cloud',filename:'Synchronisation privée · '+TRACKS[kind].name,save:false});
+        state.sources[kind].cloudUser=accountId;
+      }
+      persist();render();
+    },getStatistics:()=>calculate(),getLoadedSources:()=>Object.keys(state.sources),getClassicalLifetime:()=>lifetimeStats(),getRepertoire:()=>state.repertoire.map(w=>({...w})),setRepertoire:works=>{if(!Array.isArray(works))return;state.repertoire=works.map(cleanWork).filter(Boolean);persist();renderRepertoire();},importFile:async(file)=>handleFiles([file])};
   })();
   </script>
   <script src="./classical-repertoire.js"></script>
+
+  <script defer src="../vendor/supabase-2.95.3.js"></script>
+  <script defer src="../piano-sync.js?v=1.0.0" data-piano-app="dashboard"></script>
 </body>
 </html>

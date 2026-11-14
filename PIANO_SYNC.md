@@ -1,0 +1,65 @@
+# Synchronisation du suivi Piano
+
+Les quatre applications transmettent leur suivi à un projet Supabase commun.
+Le tableau de bord reçoit les données à l'ouverture, au retour sur l'onglet et
+toutes les 30 secondes lorsqu'il reste visible. Les applications sources gardent
+leur stockage local et leurs fonctions habituelles.
+
+## Première activation sur l'iPad
+
+1. Dans le projet `piano-olivier-sync` de Supabase, ouvrir **Authentication → Users**.
+2. Choisir **Add user → Create new user**. Renseigner son adresse e-mail et un mot
+   de passe pour l'accès Piano. Laisser **Auto Confirm User** activé. Ce compte
+   applicatif est distinct du compte de gestion Supabase, même avec le même e-mail.
+3. Ouvrir chacune des quatre applications depuis **son icône existante**, sans la
+   supprimer ni la réinstaller. Si nécessaire, fermer puis rouvrir l'application
+   pour charger sa mise à jour.
+4. Toucher **☁ Connecter mon suivi**, saisir le même accès Piano et attendre
+   **Suivi synchronisé**. L'historique local de cette installation est envoyé.
+5. Faire la même connexion dans le tableau de bord. Il indique les parcours reçus.
+
+Les mots de passe ne sont jamais écrits dans GitHub ni conservés par le module.
+Les sessions Supabase restent dans le stockage de chaque application.
+
+## Périmètre et fonctionnement
+
+- Une coupure réseau conserve les changements localement. La transmission reprend
+  quand l'application est rouverte avec Internet ; aucune exécution en arrière-plan
+  d'une application fermée sur iPad n'est supposée.
+- Seules les quatre clés de suivi connues sont lues ; aucun autre stockage Safari,
+  aucune clé d'authentification et aucun mot de passe n'est envoyé comme suivi.
+- Chaque installation possède un identifiant. Ses instantanés sont conservés à part.
+  Le tableau de bord fusionne les identifiants de séances, sans additionner deux
+  copies d'une même séance. Les changements observés après installation du module
+  ont une date par séance ; les suppressions possèdent des marqueurs.
+- L'heure de modification antérieure à l'activation est inconnue (valeur 0).
+  Deux copies initiales divergentes d'une même séance terminée sont départagées
+  par leur réception. Un état par défaut non terminé ne remplace pas une séance
+  terminée. Une modification observée ensuite prévaut sur ces copies initiales.
+- Le tableau de bord reçoit le suivi : le module ne remplace jamais les données
+  locales des applications sources par des données téléchargées. Sur un autre
+  appareil, le tableau de bord peut consulter le suivi reçu ; une restauration
+  du parcours complet dans une application source reste une opération distincte.
+- Le répertoire classique et les réglages personnels du tableau de bord restent
+  locaux. Le calcul classique de 1 h par journée piano active et la séparation
+  de l'écoute intérieure sont conservés.
+
+## Maintenance
+
+Projet : `bwsqextibrjbunlpdwok`, région Paris. Table `public.piano_snapshots`.
+La clé du navigateur est une clé **publishable**. Les accès sont protégés par
+Supabase Auth et des règles RLS limitées au propriétaire. La fonction de publication
+est `SECURITY INVOKER` et rejette les révisions arrivées en retard.
+
+Le schéma est versionné dans `supabase/piano_sync.sql`. Le SDK Supabase JS est
+vendu localement en version fixe **2.95.3**, avec sa licence MIT. Les trois dépôts
+portent la même version de `piano-sync.js` et du SDK pour fonctionner indépendamment.
+Le service worker de l'écoute intérieure conserve aussi ces ressources hors ligne.
+
+Tests : `node --test tests/piano-cloud-core.test.cjs tests/piano-cloud-runtime.test.cjs`.
+Les chemins des tests publiés doivent pointer vers `../piano-sync.js` et
+`../tableau-de-bord-piano/index.html`.
+
+L'offre gratuite Supabase peut mettre le projet en pause après une période de
+faible activité. Le suivi local reste utilisable ; reprendre le projet dans
+Supabase puis rouvrir les applications rétablit les transmissions.
