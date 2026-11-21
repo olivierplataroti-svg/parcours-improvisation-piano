@@ -9,8 +9,8 @@ const settle=()=>new Promise(r=>setTimeout(r,25));
 function runtime({offline=false,fail=false,rows=[],app='jazz'}={}){
  class Storage{constructor(){this.data=new Map()}getItem(k){return this.data.get(k)||null}setItem(k,v){this.data.set(k,String(v))}}
  const storage=new Storage();
- const key='parcours-improvisation-jazz-olivier-v4';
- const original={version:5,sessions:{S1:{completed:true,date:'2026-11-14',duration:20}}};
+ const key=app==='vocab'?'olivier.vocabulaire-ii-v-i.v1':'parcours-improvisation-jazz-olivier-v4';
+ const original=app==='vocab'?{app:'vocabulaire-ii-v-i',version:1,sessions:[{id:'v1',completed:true,date:'2026-11-20',minutes:17,pianoMinutes:12,offPianoMinutes:5,notes:'private note',lickIds:['one','two']}],licks:[{id:'one',supports:['private URL']},{id:'two'}]}:{version:5,sessions:{S1:{completed:true,date:'2026-11-14',duration:20}}};
  storage.setItem(key,JSON.stringify(original));
  const elements=new Map(),calls=[],applied=[];
  const node=id=>{if(!elements.has(id))elements.set(id,{hidden:false,disabled:false,textContent:'',value:'',classList:{toggle(){}},addEventListener(type,cb){this[type]=cb},replaceChildren(){},append(){},showModal(){},close(){},elements:{email:{value:'piano@example.test'},password:{value:'secret-input'}},querySelector(){return node('submit')}});return elements.get(id)};
@@ -52,3 +52,12 @@ test('dashboard receives cloud snapshots and passes merged raw data to its exist
  assert.equal(r.calls.length,0);assert.equal(r.applied.length,1);assert.equal(r.applied[0].sources.jazz.sessions.S1.duration,20);assert.equal(r.applied[0].user,'owner');
  await r.ctx.PianoCloudSync.sync();assert.equal(r.applied.length,1);
 });
+test('Vocabulaire runtime publishes only its dashboard projection and acknowledges subsequent manual corrections',async()=>{
+ const r=runtime({app:'vocab'});await settle();assert.equal(r.calls.length,1);
+ assert.equal(r.calls[0].params.p_payload.sessions[0].pianoMinutes,12);
+ assert.doesNotMatch(JSON.stringify(r.calls[0].params.p_payload),/private|lickIds/);
+ r.storage.setItem(r.key,JSON.stringify({...r.original,sessions:[{...r.original.sessions[0],pianoMinutes:0,offPianoMinutes:17}]}));
+ await settle();assert.equal(r.calls.length,2);assert.equal(r.calls[1].params.p_payload.sessions[0].offPianoMinutes,17);
+ assert.equal(JSON.parse(r.storage.getItem(r.key)).licks.length,2);
+});
+

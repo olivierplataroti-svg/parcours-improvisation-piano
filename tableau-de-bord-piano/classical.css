@@ -1,5 +1,5 @@
     .classical-intro{font-size:13px;color:#64758d;line-height:1.7;margin:9px 0 16px}
-    .classical-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+    .classical-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
     .classical-metric{padding:15px 17px;background:#f6f5fc;border:1px solid #e9e4f6;border-radius:12px}
     .classical-metric .n{font-size:clamp(20px,2.5vw,29px);font-weight:820;color:#674a98;letter-spacing:-.04em}
     .classical-metric .t{font-size:11px;line-height:1.4;color:#6d6982}
@@ -24,3 +24,4 @@
     @media(max-width:720px){.classical-metrics,.works-list,.work-form-grid{grid-template-columns:1fr}.work-actions{flex-direction:column}}
 
 .work-actions button:hover{background:#e7eef9}
+

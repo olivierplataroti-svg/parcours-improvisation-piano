@@ -1,17 +1,36 @@
-/* Piano cloud sync v1.0.0. Only publishable configuration belongs in this file. */
+/* Piano cloud sync v1.1.0. Only publishable configuration belongs in this file. */
 (function (global) {
   'use strict';
   const PROJECT_URL = 'https://bwsqextibrjbunlpdwok.supabase.co';
   const PUBLISHABLE_KEY = 'sb_publishable_cEcuxPKe1l55D-7WROwbwA_DTWAlGe3';
-  const LABELS = {blues:'Blues', jazz:'Jazz', bases:'Bases de l’impro', ear:'Écoute intérieure'};
+  const LABELS = {blues:'Blues', jazz:'Jazz', bases:'Bases de l’impro', ear:'Écoute intérieure', vocab:'Vocabulaire'};
   const KEYS = {
     blues:['parcours-improvisation-olivier-v2'],
     jazz:['parcours-improvisation-jazz-olivier-v4','parcours-improvisation-jazz-olivier-v3'],
     bases:['bases_improvisation_132_olivier_v1','bases_improvisation_208_olivier_v4'],
-    ear:['olivier.ecoute-interieure.v1']
+    ear:['olivier.ecoute-interieure.v1'],
+    vocab:['olivier.vocabulaire-ii-v-i.v1']
   };
   const own = (o,k) => Object.prototype.hasOwnProperty.call(o || {},k);
   const object = o => o !== null && typeof o === 'object' && !Array.isArray(o);
+  // Vocabulaire shares only dashboard indicators, never the Drive catalogue,
+  // supports, lick descriptions, notes or profile. One ID remains one session.
+  function projectPayload(app, raw, summary) {
+    if(app!=='vocab') return raw;
+    if(raw?.app!=='vocabulaire-ii-v-i'||raw.version!==1||!Array.isArray(raw.sessions)) return null;
+    const sessions=raw.sessions.filter(r=>object(r)&&r.id).map(r=>{
+      const row={};
+      for(const k of ['id','date','minutes','pianoMinutes','offPianoMinutes','activityMode','completed','updatedAt','stage'])if(own(r,k))row[k]=r[k];
+      row.kind=r.kind==='lick'?'lick':'method';
+      row.module=row.kind==='method'?(r.plan||r.module||null):null;
+      row.mode=row.kind==='lick'?'personal':String(row.module||'').startsWith('minor-')?'minor':'major';
+      return row;
+    });
+    const progress={};
+    for(const k of ['complete','usable','pct'])if(Number.isFinite(summary?.[k]))progress[k]=summary[k];
+    progress.licksCount=Array.isArray(raw.licks)?raw.licks.filter(r=>!r.archived).length:Number(raw.summary?.licksCount)||0;
+    return {app:raw.app,version:1,sessions,summary:summary?progress:(raw.summary||progress),deleted:{...(raw.deleted||{})}};
+  }
   function stable(value) {
     if (Array.isArray(value)) return '['+value.map(stable).join(',')+']';
     if (object(value)) return '{'+Object.keys(value).sort().map(k=>JSON.stringify(k)+':'+stable(value[k])).join(',')+'}';
@@ -24,10 +43,11 @@
   }
   function recordMap(app,raw) {
     if (!object(raw)) return null;
-    if (app==='ear') {
-      if(raw.appId!=='ecoute-interieure'||raw.version!==1||!Array.isArray(raw.records)) return null;
+    if (app==='ear'||app==='vocab') {
+      const valid=app==='ear'?raw.appId==='ecoute-interieure'&&raw.version===1&&Array.isArray(raw.records):raw.app==='vocabulaire-ii-v-i'&&raw.version===1&&Array.isArray(raw.sessions);
+      if(!valid) return null;
       const result=Object.create(null);
-      for(const r of raw.records) if(object(r)&&r.id) result[String(r.id)]=r;
+      for(const r of (app==='ear'?raw.records:raw.sessions)) if(object(r)&&r.id) result[String(r.id)]=r;
       return result;
     }
     const records=raw[app==='bases'?'sessionRecords':'sessions'];
@@ -44,16 +64,20 @@
     for(const [id,record] of Object.entries(records)) {
       meta.records[id]=fingerprint(record);
       if(previous && (!own(previous.records,id)||previous.records[id]!==meta.records[id])) meta.clocks[id]=now;
-      else if(!own(meta.clocks,id)) meta.clocks[id]=0;
+      else if(!own(meta.clocks,id)) meta.clocks[id]=app==='vocab'?(Date.parse(record.updatedAt)||0):0;
       // A record explicitly brought back after removal is a new edit.
       if(own(meta.tombstones,id)) {meta.clocks[id]=now;delete meta.tombstones[id];}
     }
     if(previous) for(const id of Object.keys(previous.records||{})) if(!own(records,id)) {
       meta.tombstones[id]=now;delete meta.clocks[id];
     }
+    if(app==='vocab')for(const [id,date] of Object.entries(raw.deleted||{})){
+      const time=Date.parse(date)||0;
+      if(!own(records,id)&&time>0)meta.tombstones[id]=Math.max(meta.tombstones[id]||0,time);
+    }
     return meta;
   }
-  function completed(app,r) {return app==='blues'||app==='jazz'?r?.completed===true:r?.done===true;}
+  function completed(app,r) {return app==='vocab'?r?.completed!==false:app==='blues'||app==='jazz'?r?.completed===true:r?.done===true;}
   // Installations keep independent snapshots. Merge session IDs, never totals.
   // Per-record clocks let a correction replace an older duration, and tombstones
   // prevent a removed session reappearing from an older installation.
@@ -79,10 +103,11 @@
     const merged=Object.create(null);
     for(const [id,w] of winners) if(!w.deleted) merged[id]=w.record;
     if(app==='ear') base.records=Object.values(merged);
+    else if(app==='vocab') base.sessions=Object.values(merged);
     else base[app==='bases'?'sessionRecords':'sessions']=merged;
     return base;
   }
-  const core={KEYS,LABELS,recordMap,observe,mergeSnapshots,fingerprint,completed};
+  const core={KEYS,LABELS,recordMap,observe,mergeSnapshots,fingerprint,completed,projectPayload};
   if(typeof module==='object'&&module.exports) {module.exports=core;return;}
   global.PianoCloudCore=core;
   const script=document.currentScript,app=script?.dataset.pianoApp;
@@ -105,15 +130,15 @@
       label{display:block;font-weight:600;margin-top:15px}input{display:block;width:100%;margin-top:5px;padding:11px 12px;border:1px solid #bccbd4;border-radius:9px;background:#fff;color:#172a40;min-height:46px;font-size:16px}
       .primary{background:#175e76;color:white;border-color:#175e76}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.status{background:#eff6f8;border-radius:10px;padding:12px;margin:15px 0;overflow-wrap:anywhere}.error{color:#a63131}ul{padding-left:20px}li{margin:6px 0}a{color:#175e76}details{font-size:13px;margin-top:18px}summary{cursor:pointer;min-height:30px}code{font-size:12px}#account{overflow-wrap:anywhere;font-size:13px}#message{min-height:24px} [hidden]{display:none!important}
       @media print{:host{display:none}}
-    </style><button id="launch" type="button">☁ Connecter mon suivi</button>
+    </style>${app==='vocab'?'<style>:host{color:#49374e}#launch{background:#fdf7fd;border-color:#d8bce0;color:#70437d}.primary{background:#88569a;border-color:#88569a}.status{background:#f9eff8}a{color:#80508e}button:focus-visible,a:focus-visible,input:focus-visible{outline-color:#a96da4}</style>':''}<button id="launch" type="button">☁ Connecter mon suivi</button>
     <dialog aria-labelledby="cloud-title"><button class="close" id="close" type="button" aria-label="Fermer">×</button>
       <h2 id="cloud-title">Mon suivi synchronisé</h2>
-      <p class="muted">${isDashboard?'Retrouve ici les séances transmises par tes quatre applications.':'Ton suivi '+LABELS[app]+' rejoint automatiquement le tableau de bord, même depuis cette icône sur iPad.'}</p>
+      <p class="muted">${isDashboard?'Retrouve ici les séances transmises par tes cinq applications.':'Ton suivi '+LABELS[app]+' rejoint automatiquement le tableau de bord, même depuis cette icône sur iPad.'}</p>
       <div class="status" id="message" role="status" aria-live="polite">Connecte ton accès Piano pour activer la synchronisation.</div>
       <form id="login"><label>Adresse e-mail<input name="email" type="email" autocomplete="username" required></label><label>Mot de passe de ton accès Piano<input name="password" type="password" autocomplete="current-password" required></label><div class="actions"><button class="primary" type="submit">Se connecter</button></div>
-      <details><summary>Première connexion</summary><p>Crée une seule fois ton accès Piano dans <a href="https://supabase.com/dashboard/project/bwsqextibrjbunlpdwok/auth/users" target="_blank" rel="noopener noreferrer">la page Utilisateurs de ton projet</a> : Add user → Create new user, avec ton e-mail et un mot de passe. Laisse « Auto Confirm User » activé. Réutilise ce même accès dans les cinq applications.</p></details></form>
+      <details><summary>Première connexion</summary><p>Crée une seule fois ton accès Piano dans <a href="https://supabase.com/dashboard/project/bwsqextibrjbunlpdwok/auth/users" target="_blank" rel="noopener noreferrer">la page Utilisateurs de ton projet</a> : Add user → Create new user, avec ton e-mail et un mot de passe. Laisse « Auto Confirm User » activé. Réutilise ce même accès dans chaque application et dans le tableau de bord.</p></details></form>
       <div id="connected" hidden><p id="account"></p><div class="actions"><button class="primary" id="sync" type="button">${isDashboard?'Actualiser le tableau de bord':'Synchroniser maintenant'}</button><button id="logout" type="button">Déconnecter cette application</button></div><ul id="sources" hidden></ul></div>
-      <p><small>Les séances restent enregistrées sur cet appareil. La synchronisation transmet le suivi, les durées et les notes à ton espace privé. En cas de coupure, rouvre l’application avec Internet pour terminer l’envoi.</small></p>
+      <p><small>Les séances restent enregistrées sur cet appareil. ${app==='vocab'?'Seuls les indicateurs, les dates et les durées sont transmis à ton espace privé ; les liens Drive et tes notes restent dans l’application.':'La synchronisation transmet le suivi, les durées et les notes à ton espace privé.'} En cas de coupure, rouvre l’application avec Internet pour terminer l’envoi.</small></p>
       ${!isDashboard?'<p><a href="https://olivierplataroti-svg.github.io/parcours-improvisation-piano/tableau-de-bord-piano/" target="_blank" rel="noopener noreferrer">Ouvrir mon tableau de bord</a></p>':''}
     </dialog>`;
     document.body.append(host);
@@ -144,7 +169,7 @@
     const client=global.supabase.createClient(PROJECT_URL,PUBLISHABLE_KEY,{auth:{storageKey:AUTH_KEY,persistSession:true,autoRefreshToken:true,detectSessionInUrl:false}});
     function device(){let id=read(DEVICE_KEY);if(!id){id=crypto.randomUUID();save(DEVICE_KEY,id);}return id;}
     function localPayload(){
-      for(const key of KEYS[app]||[]) {const raw=read(key);if(recordMap(app,raw))return raw;}
+      for(const key of KEYS[app]||[]) {const raw=read(key);if(recordMap(app,raw))return projectPayload(app,raw,app==='vocab'?global.VocabApp?.getPracticeSummary():null);}
       return null;
     }
     function capture(){
@@ -190,8 +215,8 @@
         global.PianoDashboard.applyCloudSources(sources,session.user.id);lastCloudSignature=sig;
       }
       const count=Object.keys(sources).length;
-      badge(count+' / 4 parcours synchronisés');
-      status(count?'Tableau de bord actualisé · '+new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})+'.':'Aucun parcours reçu pour le moment. Connecte le même accès Piano depuis chacune de tes quatre icônes.');
+      badge(count+' / '+Object.keys(KEYS).length+' parcours synchronisés');
+      status(count?'Tableau de bord actualisé · '+new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})+'.':'Aucun parcours reçu pour le moment. Connecte le même accès Piano depuis chacune de tes cinq icônes.');
       $('sources').hidden=false;$('sources').replaceChildren();
       for(const track of Object.keys(KEYS)) {
         const li=document.createElement('li');const rs=sources[track]?recordMap(track,sources[track]):null;
@@ -232,6 +257,7 @@
     window.addEventListener('storage',e=>{if(!isDashboard&&KEYS[app].includes(e.key))schedule();});
     // No background-execution claim: iPad may suspend a closed application.
     setInterval(()=>{if(!document.hidden)sync();},isDashboard?30000:20000);
-    global.PianoCloudSync={sync,open:()=>{accountUI();dialog.showModal();},version:'1.0.0'};
+    global.PianoCloudSync={sync,open:()=>{accountUI();dialog.showModal();},version:'1.1.0'};
   }
 })(globalThis);
+

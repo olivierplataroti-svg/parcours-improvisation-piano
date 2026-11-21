@@ -2,7 +2,7 @@
 -- The browser only uses a publishable key; authentication and RLS protect rows.
 create table public.piano_snapshots (
   user_id uuid not null references auth.users(id) on delete cascade,
-  app_id text not null check (app_id in ('blues','jazz','bases','ear')),
+  app_id text not null check (app_id in ('blues','jazz','bases','ear','vocab')),
   device_id uuid not null,
   client_revision bigint not null check (client_revision >= 0),
   payload jsonb not null check (jsonb_typeof(payload) = 'object'),
@@ -44,3 +44,4 @@ end;
 $$;
 revoke all on function public.piano_publish_snapshot(text,uuid,bigint,jsonb,jsonb,jsonb) from public, anon;
 grant execute on function public.piano_publish_snapshot(text,uuid,bigint,jsonb,jsonb,jsonb) to authenticated;
+

@@ -103,3 +103,42 @@ test('a course starting before Blues still contributes its unique classical days
  assert.equal(ctx.PianoDashboard.getClassicalLifetime().classicalMinutes,382*60);
  assert.equal(ctx.PianoDashboard.getClassicalLifetime().addedDays,2);
 });
+
+const vocab=sessions=>({app:'vocabulaire-ii-v-i',version:1,sessions});
+const vs=(id,pianoMinutes,offPianoMinutes,date='2026-11-20')=>({id,date,kind:'lick',lickIds:['one','two'],minutes:pianoMinutes+offPianoMinutes,pianoMinutes,offPianoMinutes,completed:true,updatedAt:'2026-11-20T14:00:00Z'});
+test('Vocabulaire projection excludes notes, Drive resources and lick content',()=>{
+ const r=core.projectPayload('vocab',{...vocab([{...vs('s',12,5),notes:'private notes',support:'private Drive URL'}]),resources:{secret:'private'},profile:{name:'private'},licks:[{id:'one',title:'private title',supports:['private URL']}]},{complete:2,usable:4,pct:30,notes:'private'});
+ assert.equal(r.sessions.length,1);assert.equal(r.summary.complete,2);assert.equal(r.summary.licksCount,1);
+ assert.doesNotMatch(JSON.stringify(r),/private|lickIds|profile|resources|notes/);
+});
+test('Vocabulaire first publication, corrections, unchecks and persisted deletions merge by ID',()=>{
+ const old=vocab([vs('s',12,5)]),edited=vocab([{...vs('s',8,9),updatedAt:'2026-11-20T15:00:00Z'}]);
+ const one=core.observe('vocab',old,null,100),two=core.observe('vocab',edited,one,2000000000000);
+ let merged=core.mergeSnapshots('vocab',[snap('vocab',old,one.clocks),snap('vocab',edited,two.clocks)]);
+ assert.equal(merged.sessions.length,1);assert.equal(merged.sessions[0].pianoMinutes,8);
+ const deleted={...vocab([]),deleted:{s:'2034-01-01T00:00:00Z'}},three=core.observe('vocab',deleted,null);
+ assert.equal(core.mergeSnapshots('vocab',[snap('vocab',old,one.clocks),snap('vocab',deleted,three.clocks,three.tombstones)]).sessions.length,0);
+ merged=core.mergeSnapshots('vocab',[snap('vocab',old),snap('vocab',vocab([{...vs('s',12,5),completed:false}]),{s:200})]);
+ assert.equal(merged.sessions[0].completed,false);
+});
+test('off-piano Vocabulaire days add no piano or classical; mixed sessions never duplicate',()=>{
+ const ctx=dashboard();ctx.PianoDashboard.applyCloudSources({vocab:vocab([vs('mixed',12,5),vs('off',0,25,'2026-11-21')])},'owner');
+ const s=ctx.PianoDashboard.getStatistics(),life=ctx.PianoDashboard.getClassicalLifetime();
+ assert.equal(s.recordedMinutes,12);assert.equal(s.vocabOffMinutes,30);assert.equal(s.vocabSessions,2);
+ assert.equal(s.sessions,1);assert.equal(s.activeDays,1);assert.equal(s.classicDays,1);assert.equal(s.minutes,72);assert.equal(s.musicMinutes,102);
+ assert.equal(s.weekly.reduce((n,w)=>n+w.vocabOff.minutes,0),30);assert.equal(s.monthly.reduce((n,m)=>n+m.vocabOff,0),30);
+ assert.doesNotMatch(ctx.document.getElementById('track-share').innerHTML,/Vocabulaire hors piano/);
+ assert.equal(life.addedDays,1);assert.equal(life.observedMinutes,12);assert.equal(life.vocabOffMinutes,30);assert.equal(life.musicMinutes,381*60+42);
+});
+test('Vocabulaire correction or deletion recomputes all totals, keeping other apps and the common start',()=>{
+ const ctx=dashboard(),sources={jazz:raw({'S1-A':session(20)}),vocab:vocab([vs('s',12,5)])};
+ ctx.PianoDashboard.applyCloudSources(sources,'owner');assert.equal(ctx.PianoDashboard.getStatistics().common,'2026-11-14');
+ sources.vocab=vocab([vs('s',0,17)]);ctx.PianoDashboard.applyCloudSources(sources,'owner');
+ let s=ctx.PianoDashboard.getStatistics();assert.equal(s.recordedMinutes,20);assert.equal(s.vocabOffMinutes,17);assert.equal(s.classicDays,1);
+ sources.vocab=vocab([]);ctx.PianoDashboard.applyCloudSources(sources,'owner');s=ctx.PianoDashboard.getStatistics();assert.equal(s.recordedMinutes,20);assert.equal(s.vocabOffMinutes,0);assert.equal(s.vocabSessions,0);
+});
+test('unclassified or inconsistent Vocabulaire durations are never invented as piano time',()=>{
+ const ctx=dashboard();ctx.PianoDashboard.applyCloudSources({vocab:vocab([{id:'old',date:'2026-11-20',minutes:20},{...vs('bad',5,10),minutes:30},vs('off',0,15)])},'owner');
+ const s=ctx.PianoDashboard.getStatistics();assert.equal(s.recordedMinutes,0);assert.equal(s.classicDays,0);assert.equal(s.vocabOffMinutes,15);assert.equal(s.per.vocab.unmeasured,2);
+});
+

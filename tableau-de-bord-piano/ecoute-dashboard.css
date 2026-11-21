@@ -1,5 +1,10 @@
 /* L’écoute intérieure possède sa propre catégorie de temps. */
-#overview-kpis{grid-template-columns:repeat(3,minmax(0,1fr))}
+#overview-kpis{grid-template-columns:repeat(4,minmax(0,1fr))}
+#overview-kpis .kpi:nth-child(3){border-top:3px solid #a255a0}
+#overview-kpis .kpi:nth-child(3) .value{color:#92478c}
+.vocab-summary .ear-eyebrow,.vocab-summary .ear-metrics strong{color:#92478c}
+.vocab-summary{border-color:#e6d2e8;background:linear-gradient(120deg,#fdf9fd,#fff)}
+@media(min-width:721px) and (max-width:1020px){#overview-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
 #overview-kpis .kpi:nth-child(2){border-top:3px solid #a55736}
 #overview-kpis .kpi:nth-child(2) .value{color:#a55736}
 .source-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -22,3 +27,4 @@
 #activity-history td:nth-child(3){white-space:normal;min-width:150px}
 @media(max-width:1020px){.ear-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:720px){#overview-kpis{grid-template-columns:1fr}.source-grid{grid-template-columns:1fr}.ear-progress{grid-template-columns:1fr;gap:16px}.ear-summary .panel-header{align-items:flex-start;gap:15px;flex-wrap:wrap}.practice-week{min-width:0}.practice-bars .bar-value{font-size:8px}.practice-week>.bar-label{font-size:8px}.practice-plot{gap:6px}}
+

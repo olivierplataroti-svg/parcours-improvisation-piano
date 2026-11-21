@@ -63,3 +63,16 @@ Les chemins des tests publiés doivent pointer vers `../piano-sync.js` et
 L'offre gratuite Supabase peut mettre le projet en pause après une période de
 faible activité. Le suivi local reste utilisable ; reprendre le projet dans
 Supabase puis rouvrir les applications rétablit les transmissions.
+
+
+## Vocabulaire — novembre 2026
+
+Le module v1.1.0 ajoute une cinquième source, `vocab`, au tableau de bord. Utiliser le même accès Piano dans Vocabulaire et dans le tableau de bord. Les autres apps conservent leur format et leur connexion.
+
+Vocabulaire transmet une projection minimale : identifiant et date des séances, minutes au piano et hors piano, méthode majeure/mineure ou lick personnel, validation, dates de modification/suppression et compteurs de progression. Les liens Drive, supports, notes, descriptions des licks et profils ne sont pas transmis. La synchronisation est destinée au tableau de bord ; elle ne remplace pas la sauvegarde complète pour transférer l’app source entre Sites et GitHub.
+
+Une séance mixte garde un seul identifiant, même si elle est liée à plusieurs licks. Les graphiques affectent chaque durée à sa catégorie. Une séance purement hors piano n’ajoute ni temps au clavier, ni journée active au piano, ni heure classique estimée. Les journées avec du piano, Vocabulaire compris, restent regroupées par date pour l’heure classique habituelle.
+
+Le tableau de bord distingue le piano, l’écoute intérieure et Vocabulaire hors piano dans les totaux, graphiques, historiques et exports. Les anciennes sauvegardes restent acceptées. L’arrivée de Vocabulaire ne décale pas la période commune historique des trois premiers parcours. La migration additive `supabase/migrations/20261121_add_vocabulaire.sql` élargit uniquement la liste des applications autorisées ; les règles RLS et la fonction de publication restent inchangées.
+
+Vérification : tests du module, tests du calculateur réel et tests du runtime avec connexion simulée ; vérification de la publication RPC, du rejet des révisions anciennes et de l’isolation RLS dans une transaction annulée, sans données de démonstration persistantes.
