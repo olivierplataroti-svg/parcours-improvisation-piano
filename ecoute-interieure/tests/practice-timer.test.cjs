@@ -1,0 +1,4 @@
+const test=require('node:test'),a=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm'),path=require('node:path');
+const context={module:{exports:{}}};vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../practice-timer.js'),'utf8'),context);const t=context.module.exports;
+test('legacy paused and running timers retain elapsed time',()=>{a.equal(t.elapsed(t.fromLegacy({elapsed:120,running:false}),900000).off,120000);a.equal(t.elapsed(t.fromLegacy({elapsed:120,running:true,startedAt:1000}),61000).off,180000);a.equal(t.fromLegacy(null),null)});
+test('pause and resume across navigation keep a single duration',()=>{let s=t.start(t.clean({mode:'off'}),1000);s=t.pause(s,61000);a.equal(t.report(s,300000).minutes,1);s=t.start(s,300000);a.equal(t.report(s,360000).minutes,2);s.reported=true;a.equal(t.report(t.start(s,400000),460000).minutes,1)});
