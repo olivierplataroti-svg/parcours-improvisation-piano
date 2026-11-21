@@ -1,1 +1,18 @@
-{"name":"Mon écoute intérieure","short_name":"Écoute intérieure","id":"./","start_url":"./","scope":"./","display":"standalone","background_color":"#eef2f5","theme_color":"#10283c","icons":[{"src":"./icon-192.png","sizes":"192x192","type":"image/png"},{"src":"./icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any"}]}
+{
+  "name": "Mon écoute intérieure",
+  "short_name": "Écoute intérieure",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7fbfc",
+  "theme_color": "#edf5f7",
+  "icons": [
+    {
+      "src": "./icon-192.png?v=club-jazz-1",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
