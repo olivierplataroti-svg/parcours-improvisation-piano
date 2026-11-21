@@ -76,3 +76,9 @@ Une séance mixte garde un seul identifiant, même si elle est liée à plusieur
 Le tableau de bord distingue le piano, l’écoute intérieure et Vocabulaire hors piano dans les totaux, graphiques, historiques et exports. Les anciennes sauvegardes restent acceptées. L’arrivée de Vocabulaire ne décale pas la période commune historique des trois premiers parcours. La migration additive `supabase/migrations/20261121_add_vocabulaire.sql` élargit uniquement la liste des applications autorisées ; les règles RLS et la fonction de publication restent inchangées.
 
 Vérification : tests du module, tests du calculateur réel et tests du runtime avec connexion simulée ; vérification de la publication RPC, du rejet des révisions anciennes et de l’isolation RLS dans une transaction annulée, sans données de démonstration persistantes.
+
+## Chronomètres et classique — 21 novembre 2026
+
+Blues, Jazz, Bases et Vocabulaire proposent un chronomètre facultatif. Pause et reprise sont conservées localement par application. « Utiliser la durée » remplace le champ de durée de la fiche ouverte ; il faut ensuite enregistrer la séance. Les valeurs sont arrondies à la minute, séparément pour les deux natures dans Vocabulaire. Après un report, « Nouveau chrono » démarre une mesure distincte. Le chronomètre continue écran verrouillé : utiliser Pause pour les interruptions.
+
+Le classique conserve les 380 h historiques et les estimations des journées piano jusqu’au 21 novembre 2026 inclus. Dès le 22 novembre, il ne dépend plus des séances des autres parcours. Le formulaire quotidien remplace le total d’une date, y compris une ancienne estimation ; 0 minute annule cette estimation. Les journées de classique seul alimentent aussi les graphiques et le cumul. Les durées et le répertoire sont locaux au tableau de bord et inclus dans son archive JSON version 5 ; les anciennes archives restent compatibles. La synchronisation existante des cinq parcours reste inchangée.

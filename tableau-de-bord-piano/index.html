@@ -145,7 +145,7 @@
     <section class="hero" aria-label="Présentation">
       <div class="eyebrow"><span>●</span> Carnet d'entraînement · Piano &amp; écoute intérieure</div>
       <h1>Chaque séance fait<br>progresser ton jeu.</h1>
-      <p>Retrouve ton piano, ton répertoire et ton écoute intérieure dans une vue commune. Le temps au piano et le travail de l’oreille sont comptés séparément ; une heure de classique est estimée par journée travaillée au piano en Blues, Jazz, Improvisation ou Vocabulaire.</p>
+      <p>Retrouve ton piano, ton répertoire et ton écoute intérieure dans une vue commune. Le temps au piano et le travail de l’oreille sont comptés séparément ; le classique est renseigné chaque jour, avec conservation des estimations antérieures.</p>
       <div class="hero-actions"><span class="hero-pill" id="hero-period">Période commune : —</span><span class="hero-pill" id="hero-update">Dernière séance : —</span><button class="btn lead-action" id="hero-import" type="button">+ Actualiser mes données</button></div>
     </section>
     <nav class="nav" aria-label="Sections du tableau de bord">
@@ -162,13 +162,13 @@
       <div class="kpis" id="overview-kpis"></div>
       <div class="panel padded" style="margin:16px 0 20px">
         <div class="works-header"><h3>Ton parcours musical depuis 2024</h3><button type="button" class="btn secondary" id="open-repertoire">Voir mon répertoire</button></div>
-        <p class="classical-intro">Base historique : 380 h estimées de septembre 2024 à août 2026. Depuis septembre 2026, une heure de classique s'ajoute pour chaque journée active en Blues, Jazz, Bases ou Vocabulaire au piano. Une journée uniquement hors piano n’ajoute aucune heure de classique.</p>
+        <p class="classical-intro">Base historique : 380 h estimées de septembre 2024 à août 2026. Les anciennes estimations de classique sont conservées jusqu’au 21 novembre 2026. Renseigne désormais ta durée réelle dans « Classique &amp; répertoire », même les jours sans autre parcours.</p>
         <div id="classical-history" class="classical-metrics"></div>
         <p class="classical-note" id="classical-overlap"></p>
       </div>
       <article class="panel padded ear-summary vocab-summary" id="vocab-summary" aria-label="Synthèse du vocabulaire"></article>
       <article class="panel padded ear-summary" id="ear-summary" aria-label="Synthèse de l’écoute intérieure"></article>
-      <div class="grid-2"><div class="panel padded"><div class="panel-header"><div><h3>Ton rythme semaine après semaine</h3><p class="sub">Deux barres par semaine : piano (P) et hors piano (H)*</p></div><select id="chart-measure" class="tiny-option" aria-label="Mesure des barres"><option value="minutes">Heures</option><option value="sessions">Séances</option></select></div><div id="weekly-chart"></div><p class="sub" style="margin-top:12px">* Une séance mixte figure dans P et H pour ses durées respectives. Elle compte une seule fois dans les séances Vocabulaire.</p><div class="legend"><span><i class="dot" style="background:var(--blues)"></i>Blues</span><span><i class="dot" style="background:var(--jazz)"></i>Jazz</span><span><i class="dot" style="background:var(--bases)"></i>Bases</span><span><i class="dot" style="background:#9770be"></i>Classique (1 h/jour piano actif)</span><span><i class="dot" style="background:#a255a0"></i>Vocabulaire au piano</span><span><i class="dot" style="background:#a55736"></i>Écoute intérieure</span><span><i class="dot" style="background:#dba4cb"></i>Vocabulaire hors piano</span></div></div>
+      <div class="grid-2"><div class="panel padded"><div class="panel-header"><div><h3>Ton rythme semaine après semaine</h3><p class="sub">Deux barres par semaine : piano (P) et hors piano (H)*</p></div><select id="chart-measure" class="tiny-option" aria-label="Mesure des barres"><option value="minutes">Heures</option><option value="sessions">Séances</option></select></div><div id="weekly-chart"></div><p class="sub" style="margin-top:12px">* Une séance mixte figure dans P et H pour ses durées respectives. Elle compte une seule fois dans les séances Vocabulaire.</p><div class="legend"><span><i class="dot" style="background:var(--blues)"></i>Blues</span><span><i class="dot" style="background:var(--jazz)"></i>Jazz</span><span><i class="dot" style="background:var(--bases)"></i>Bases</span><span><i class="dot" style="background:#9770be"></i>Classique (durée quotidienne)</span><span><i class="dot" style="background:#a255a0"></i>Vocabulaire au piano</span><span><i class="dot" style="background:#a55736"></i>Écoute intérieure</span><span><i class="dot" style="background:#dba4cb"></i>Vocabulaire hors piano</span></div></div>
       <div class="panel padded"><div class="panel-header"><div><h3>Répartition du temps au piano</h3><p class="sub">Blues, Jazz, Bases, Vocabulaire piano et classique · sur la période choisie</p></div></div><div class="track-list" id="track-share"></div><div class="summary-strip" id="mini-summary"></div></div></div>
       <div class="grid-2 equal"><div class="panel padded"><div class="panel-header"><div><h3>Historique hebdomadaire</h3><p class="sub">Semaines civiles (les semaines aux bornes peuvent être partielles)</p></div></div><div class="table-wrap" id="weekly-table"></div></div><div class="panel padded"><div class="panel-header"><div><h3>Pratique par mois</h3><p class="sub">Piano, écoute intérieure et vocabulaire hors piano, comptés séparément</p></div></div><div class="table-wrap" id="monthly-table"></div></div></div>
     </section>
@@ -179,9 +179,16 @@
       <div class="head-row"><div><h2>Classique &amp; répertoire</h2><p class="sub">Tes deux premières années, les œuvres étudiées et les projets à venir.</p></div></div>
       <div class="kpis" id="classical-kpis"></div>
       <div class="panel padded">
-        <h3>Comment sont comptées les heures de classique ?</h3>
-        <p class="classical-intro">Du 1er septembre 2024 au 31 août 2026, l'estimation est de <strong>380 heures, dont 50 heures de cours</strong>. Depuis le début de ton parcours Blues, chaque date avec au moins une séance terminée en Blues, Jazz, Bases de l'improvisation ou Vocabulaire au piano représente aussi <strong>une heure de classique</strong>, quel que soit le nombre de séances réalisées ce jour-là.</p>
-        <p class="classical-intro">Les heures classiques déduites des journées travaillées jusqu'en août 2026 sont <strong>déjà incluses dans les 380 heures historiques</strong>. Elles figurent dans les graphiques par jour et semaine, mais ne sont pas ajoutées une seconde fois au cumul depuis septembre 2024. À partir de septembre 2026, elles s'ajoutent au cumul.</p>
+        <h3>Mon temps de piano classique</h3>
+        <p class="classical-intro">Les <strong>380 heures historiques</strong> de septembre 2024 à août 2026 et les estimations déjà calculées jusqu’au <strong>21 novembre 2026 inclus</strong> sont conservées. Dès le 22 novembre, aucune heure n’est ajoutée automatiquement.</p>
+        <p class="classical-intro">Renseigne le <strong>total de classique de la journée</strong>. Une modification remplace la durée de cette date ; elle ne s’ajoute pas à l’ancienne estimation. Tu peux saisir 0 minute pour corriger une journée sans classique. Le classique est compté même sans séance dans les autres applications.</p>
+        <form id="classical-form" class="actions" style="align-items:end;margin:18px 0;flex-wrap:wrap">
+          <label>Date<br><input id="classical-date" type="date" min="2026-09-01" required></label>
+          <label>Total de la journée (min)<br><input id="classical-minutes" type="number" min="0" max="1440" step="1" required placeholder="Ex. 45"></label>
+          <button class="btn" type="submit">Enregistrer le temps classique</button>
+        </form>
+        <p id="classical-edit-hint" class="classical-note" aria-live="polite"></p>
+        <div id="classical-practice-list" style="max-height:340px;overflow:auto;margin:16px 0"></div>
         <p id="classical-dates" class="classical-note"></p>
       </div>
       <div class="panel padded" style="margin-top:17px">
@@ -217,6 +224,7 @@
   <div id="toast" role="status" aria-live="polite"></div>
   <script src="classical-defaults.js"></script>
   <script src="./classical-data.js"></script>
+  <script src="./classical-practice.js?v=1.0.0"></script>
   <script>
   (() => {
     'use strict';
@@ -237,7 +245,7 @@
     const $ = id => document.getElementById(id);
     const TODAY = new Intl.DateTimeFormat('fr-CA',{timeZone:'Europe/Paris',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
     let tab='overview', measure='minutes', toastTimer=null;
-    let state={sources:{},period:'common',customStart:'',customEnd:'',autoSync:true,repertoire:DEFAULT_WORKS.map(w=>({...w}))};
+    let state={sources:{},period:'common',customStart:'',customEnd:'',autoSync:true,repertoire:DEFAULT_WORKS.map(w=>({...w})),classicalPractice:ClassicalPractice.clean(null)};
     let stats=null,activityFilter='all';
 
     function escapeHTML(str){return String(str??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
@@ -352,6 +360,23 @@
   return dates[0]||null;
 }
 
+    function classicalRows(){
+      const dates=PIANO_NAMES.flatMap(k=>state.sources[k]?records(k,state.sources[k].raw).rows.filter(isPianoRow).map(r=>r.date):[]);
+      return ClassicalPractice.rows(dates,state.classicalPractice);
+    }
+    function setClassicalDay(date,minutes){
+      if(!ClassicalPractice.validDate(date)||date<='2026-08-31'||date>TODAY||!Number.isFinite(minutes)||minutes<0||minutes>1440)throw new Error('Choisis une date entre septembre 2026 et aujourd’hui, et une durée de 0 à 1 440 minutes.');
+      state.classicalPractice=ClassicalPractice.clean(state.classicalPractice);
+      state.classicalPractice.days[date]={minutes,updatedAt:new Date().toISOString()};
+      persist();render();
+    }
+    function renderClassicalPractice(){
+      const input=$('classical-date');if(!input.value)input.value=TODAY;input.max=TODAY;
+      const row=classicalRows().find(r=>r.date===input.value);
+      $('classical-edit-hint').textContent=row?(row.estimated?'Estimation conservée : ':'Total renseigné : ')+hours(row.minutes)+' pour cette date. Une nouvelle saisie remplace ce total.':'Aucune durée de classique renseignée pour cette date.';
+      const rows=classicalRows().filter(r=>r.date>'2026-08-31').reverse().slice(0,90);
+      $('classical-practice-list').innerHTML=rows.length?'<table style="width:100%;text-align:left"><thead><tr><th>Date</th><th>Durée</th><th>Origine</th><th></th></tr></thead><tbody>'+rows.map(r=>'<tr><td>'+shortDate(r.date)+'</td><td>'+hours(r.minutes)+'</td><td>'+(r.estimated?'Estimation conservée':'Durée renseignée')+'</td><td><button class="btn secondary" type="button" data-classical-edit="'+r.date+'">Modifier</button></td></tr>').join('')+'</tbody></table>':'<p>Renseigne ta première durée de classique ci-dessus.</p>';
+    }
     function lifetimeStats(){
   const all=PIANO_NAMES.flatMap(k=>{
     try{return state.sources[k]?records(k,state.sources[k].raw).rows.filter(isPianoRow):[]}catch(e){return []}
@@ -359,17 +384,18 @@
   const observedMinutes=all.reduce((sum,row)=>sum+(row.minutes||0),0);
   const start=classicalStartDate();
   const days=[...new Set(all.map(row=>row.date).filter(date=>!start||date>=start))].sort();
-  const addedDays=days.filter(d=>d>HISTORIC_TO).length;
+  const classic=classicalRows(),added=classic.filter(r=>r.date>HISTORIC_TO);
+  const addedDays=added.filter(r=>r.minutes>0).length,addedMinutes=added.reduce((n,r)=>n+r.minutes,0);
   const inHistoryDays=days.filter(d=>d<=HISTORIC_TO).length;
-  const classicalMinutes=HISTORIC_HOURS*60+addedDays*60;
+  const classicalMinutes=HISTORIC_HOURS*60+addedMinutes;
   const totalMinutes=classicalMinutes+observedMinutes;
   const earMinutes=state.sources.ear?records('ear',state.sources.ear.raw).rows.reduce((sum,r)=>sum+(r.minutes||0),0):0;
   const vocabOffMinutes=state.sources.vocab?records('vocab',state.sources.vocab.raw).rows.reduce((sum,r)=>sum+r.offPianoMinutes,0):0;
-  return {observedMinutes,addedDays,inHistoryDays,classicalMinutes,totalMinutes,earMinutes,vocabOffMinutes,musicMinutes:totalMinutes+earMinutes+vocabOffMinutes,start,missing:COMPARISON_NAMES.filter(k=>!state.sources[k])};
+  return {observedMinutes,addedDays,addedMinutes,inHistoryDays,classicalMinutes,totalMinutes,earMinutes,vocabOffMinutes,musicMinutes:totalMinutes+earMinutes+vocabOffMinutes,start,missing:COMPARISON_NAMES.filter(k=>!state.sources[k])};
 }
     function persist(){try{localStorage.setItem(KEY,JSON.stringify(state));return true}catch(e){notify('Stockage indisponible dans ce navigateur : conserve les JSON originaux.');return false}}
     function load(){try{const saved=JSON.parse(localStorage.getItem(KEY)||'null');if(saved&&typeof saved==='object'){
-      state={sources:saved.sources&&typeof saved.sources==='object'?saved.sources:{},period:['common','30','90','all','custom'].includes(saved.period)?saved.period:'common',customStart:saved.customStart||'',customEnd:saved.customEnd||'',autoSync:saved.autoSync!==false,repertoire:Array.isArray(saved.repertoire)?saved.repertoire.map(cleanWork).filter(Boolean):DEFAULT_WORKS.map(w=>({...w}))};
+      state={classicalPractice:ClassicalPractice.clean(saved.classicalPractice),sources:saved.sources&&typeof saved.sources==='object'?saved.sources:{},period:['common','30','90','all','custom'].includes(saved.period)?saved.period:'common',customStart:saved.customStart||'',customEnd:saved.customEnd||'',autoSync:saved.autoSync!==false,repertoire:Array.isArray(saved.repertoire)?saved.repertoire.map(cleanWork).filter(Boolean):DEFAULT_WORKS.map(w=>({...w}))};
     }}catch(e){console.warn('Données du tableau de bord illisibles',e);}}
     function notify(message){const el=$('toast');el.textContent=message;el.classList.add('visible');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('visible'),3800);}
     function banner(message,tone){const el=$('notice');el.textContent=message;el.className='notice'+(tone?' '+tone:'');}
@@ -422,6 +448,7 @@
           const content=JSON.parse(await file.text());const kind=detect(content,file.name);
           if(kind==='bundle'){
             const settings=content.settings;if(settings&&typeof settings==='object'){if(['common','30','90','all','custom'].includes(settings.period))state.period=settings.period;for(const key of ['customStart','customEnd'])if(Number.isFinite(parseISO(settings[key])))state[key]=settings[key];if(typeof settings.autoSync==='boolean')state.autoSync=settings.autoSync;}
+            if(content.classical?.practice){state.classicalPractice=ClassicalPractice.clean(content.classical.practice);succeeded.push('Temps classique');}
             if(content.classical&&Array.isArray(content.classical.repertoire)){state.repertoire=content.classical.repertoire.map(cleanWork).filter(Boolean);succeeded.push('Répertoire classique');}
             for(const [k,v] of Object.entries(content.sources)){
               if(!NAMES.includes(k)||!v)continue;
@@ -442,7 +469,8 @@
     per[kind]=src?records(kind,src.raw):{rows:[],invalidDates:0,undated:0,unmeasured:0};
     all=all.concat(per[kind].rows);
   }
-  const allDates=all.map(row=>row.date).sort();
+  const classicAll=classicalRows();
+  const allDates=all.map(row=>row.date).concat(classicAll.filter(r=>r.minutes>0).map(r=>r.date)).sort();
   if(!allDates.length)return {empty:true,missing,per,tracks:{}};
   const first=allDates[0],last=allDates[allDates.length-1];
   const starts=COMPARISON_NAMES.map(k=>per[k].rows.map(row=>row.date).sort()[0]).filter(Boolean);
@@ -485,10 +513,10 @@
     const w=getWeek(date);w[track].minutes+=mins;w[track].sessions++;w.minutes+=mins;w.sessions++;w.days.add(date);
     const m=getMonth(date);m[track]+=mins;m.minutes+=mins;m.sessions++;m.days.add(date);
   }
-  const classicalFrom=classicalStartDate();
-  const classicalDates=[...dates].filter(date=>!classicalFrom||date>=classicalFrom);
-  for(const date of classicalDates){
-    const mins=60;
+  const classicRows=classicAll.filter(r=>r.minutes>0&&r.date>=from&&r.date<=to);
+  const classicalDates=classicRows.map(r=>r.date),classicMinutes=classicRows.reduce((n,r)=>n+r.minutes,0);
+  for(const {date,minutes:mins} of classicRows){
+    dates.add(date);
     tracks.classical.minutes+=mins;
     tracks.classical.days.add(date);
     dow[(new Date(parseISO(date)).getUTCDay()+6)%7]+=mins;
@@ -503,7 +531,7 @@
   }
   const weeksArr=[...weeks.values()].sort((a,b)=>a.date.localeCompare(b.date));
   const monthArr=[...months.values()].sort((a,b)=>a.date.localeCompare(b.date));
-  const minutes=recordedMinutes+classicalDates.length*60;
+  const minutes=recordedMinutes+classicMinutes;
   const periodDays=Math.round((parseISO(to)-parseISO(from))/DAY)+1;
   const sortedDays=[...dates].sort();
   let longest=0,streak=0,prior="";
@@ -515,11 +543,11 @@
   let bestDay="",bestDayMinutes=0;
   const dayTotals={};
   for(const row of pianoRows)dayTotals[row.date]=(dayTotals[row.date]||0)+(row.minutes??0);
-  for(const date of classicalDates)dayTotals[date]=(dayTotals[date]||0)+60;
+  for(const r of classicRows)dayTotals[r.date]=(dayTotals[r.date]||0)+r.minutes;
   for(const [day,value] of Object.entries(dayTotals)){
     if(value>bestDayMinutes){bestDayMinutes=value;bestDay=day;}
   }
-  return {empty:false,first,last,common,from,to,missing,per,rows,pianoRows,earRows,tracks,dates,minutes,earMinutes:tracks.ear.minutes,vocabOffMinutes:tracks.vocabOff.minutes,musicMinutes:minutes+tracks.ear.minutes+tracks.vocabOff.minutes,vocabSessions:vocabRows.length,recordedMinutes,classicMinutes:classicalDates.length*60,classicDates:classicalDates,classicDays:classicalDates.length,withDuration,sessions:pianoRows.length,activeDays:dates.size,periodDays,longest,weekAvgMinutes:minutes*7/periodDays,weekAvgSessions:pianoRows.length*7/periodDays,activeDaysPerWeek:dates.size*7/periodDays,avgSession:withDuration?measuredMinutes/withDuration:0,avgDay:dates.size?minutes/dates.size:0,weekly:weeksArr,monthly:monthArr,dow,bestDay,bestDayMinutes};
+  return {empty:false,first,last,common,from,to,missing,per,rows,pianoRows,earRows,tracks,dates,minutes,earMinutes:tracks.ear.minutes,vocabOffMinutes:tracks.vocabOff.minutes,musicMinutes:minutes+tracks.ear.minutes+tracks.vocabOff.minutes,vocabSessions:vocabRows.length,recordedMinutes,classicRows,classicMinutes,classicDates:classicalDates,classicDays:classicalDates.length,withDuration,sessions:pianoRows.length,activeDays:dates.size,periodDays,longest,weekAvgMinutes:minutes*7/periodDays,weekAvgSessions:pianoRows.length*7/periodDays,activeDaysPerWeek:dates.size*7/periodDays,avgSession:withDuration?measuredMinutes/withDuration:0,avgDay:dates.size?minutes/dates.size:0,weekly:weeksArr,monthly:monthArr,dow,bestDay,bestDayMinutes};
 }
         function kpi(label,value,hint,strong=false){return `<article class="kpi panel${strong?' strong':''}"><div class="label">${label}</div><div class="value">${escapeHTML(value)}</div><div class="hint">${hint}</div></article>`;}
     function renderChart(where,data,mode='minutes',daysOfWeek=false){
@@ -547,7 +575,7 @@
       const s=stats;
       $('track-share').innerHTML=DISPLAY_NAMES.map(k=>{
         const t=s.tracks[k],pct=s.minutes?t.minutes*100/s.minutes:0;
-        return `<div class="track-row"><div class="track-head"><strong><i class="dot" style="background:${TRACK_META[k].color}"></i>${TRACK_META[k].name}</strong><span>${hours(t.minutes)} · ${decimal(pct)} %</span></div><div class="progress"><div style="width:${pct}%;background:${TRACK_META[k].color}"></div></div><div class="track-meta">${k==='classical'?t.days.size+' jours × 1 h de classique estimé':t.sessions+' séance'+(t.sessions>1?'s':'')+' · '+(t.withDuration?decimal(t.minutes/t.withDuration)+' min':'—')+' par séance renseignée'}</div></div>`;
+        return `<div class="track-row"><div class="track-head"><strong><i class="dot" style="background:${TRACK_META[k].color}"></i>${TRACK_META[k].name}</strong><span>${hours(t.minutes)} · ${decimal(pct)} %</span></div><div class="progress"><div style="width:${pct}%;background:${TRACK_META[k].color}"></div></div><div class="track-meta">${k==='classical'?t.days.size+' jours · durées quotidiennes':t.sessions+' séance'+(t.sessions>1?'s':'')+' · '+(t.withDuration?decimal(t.minutes/t.withDuration)+' min':'—')+' par séance renseignée'}</div></div>`;
       }).join('');
       $('mini-summary').innerHTML=`<div><div class="n">${s.activeDays}</div><div class="t">jours de pratique</div></div><div><div class="n">${decimal(s.activeDaysPerWeek)}</div><div class="t">jours / semaine</div></div><div><div class="n">${hours(s.avgDay)}</div><div class="t">par jour pratiqué</div></div><div><div class="n">${s.sessions}</div><div class="t">séances de piano terminées</div></div><div><div class="n">${decimal(s.weekAvgSessions)}</div><div class="t">séances de piano / semaine</div></div><div><div class="n">${hours(s.avgSession)}</div><div class="t">par séance de piano, hors classique</div></div>`;
     }
@@ -601,14 +629,14 @@
     }
     function renderActivityHistory(){
       if(stats.empty){$('activity-history').innerHTML='<p class="source-empty">Aucune séance sur cette période.</p>';return;}
-      const classical=(stats.classicDates||[]).map(date=>({id:'classical:'+date,date,track:'classical',minutes:60,title:'Classique estimé · journée de piano'}));
+      const classical=stats.classicRows||[];
       const rows=stats.rows.concat(classical).filter(r=>activityFilter==='all'||(activityFilter==='ear'?r.track==='ear':activityFilter==='off-piano'?r.track==='ear'||r.offPianoMinutes>0:isPianoRow(r))).sort((a,b)=>b.date.localeCompare(a.date)||a.id.localeCompare(b.id));
       renderTable('activity-history',['Date','Activité','Séance','Durée'],rows.map(r=>`<tr><td>${shortDate(r.date)}</td><td><span class="activity-category ${r.track==='ear'?'ear':''}">${r.track==='ear'?'Écoute intérieure':r.track==='vocab'?r.minutes>0?(r.offPianoMinutes>0?'Piano + hors piano':'Piano'):'Hors piano':'Piano'}</span><small class="activity-track">${TRACK_META[r.track].name}</small></td><td>${escapeHTML(r.title)}</td><td>${r.track==='vocab'?hours(r.minutes)+' piano · '+hours(r.offPianoMinutes)+' hors piano':r.minutes===null?'Non renseignée':hours(r.minutes)}</td></tr>`),'Aucune activité de cette catégorie sur la période.');
     }
 
     function renderRhythm(){const s=stats;
       if(s.empty){$('rhythm-kpis').innerHTML='';$('dow-chart').innerHTML='';$('rhythm-details').innerHTML='';return}
-      $('rhythm-kpis').innerHTML=kpi('Temps par semaine',hours(s.weekAvgMinutes),'Piano : parcours + classique estimé',true)+kpi('Jours actifs par semaine',decimal(s.activeDaysPerWeek),'Sur 7 jours calendaires')+kpi('Temps par journée pratiquée',hours(s.avgDay),'Piano : parcours + classique, jours actifs')+kpi('Série maximale',s.longest+' jours','Jours de pratique consécutifs');
+      $('rhythm-kpis').innerHTML=kpi('Temps par semaine',hours(s.weekAvgMinutes),'Piano : parcours + classique',true)+kpi('Jours actifs par semaine',decimal(s.activeDaysPerWeek),'Sur 7 jours calendaires')+kpi('Temps par journée pratiquée',hours(s.avgDay),'Piano : parcours + classique, jours actifs')+kpi('Série maximale',s.longest+' jours','Jours de pratique consécutifs');
       const labels=['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];const values=labels.map((label,i)=>({label,value:s.dow[i]}));
       renderChart('dow-chart',values,'minutes',true);
       $('rhythm-details').innerHTML=`<div class="record-cols"><div class="record-box"><div class="big">${s.activeDays} / ${s.periodDays}</div><div class="small">Jours actifs / jours couverts</div></div><div class="record-box"><div class="big">${decimal(s.sessions/Math.max(1,s.activeDays))}</div><div class="small">Séances par journée active</div></div><div class="record-box"><div class="big">${Math.round(s.activeDays/s.periodDays*100)} %</div><div class="small">Jours avec pratique</div></div></div><div style="margin-top:22px;padding-top:17px;border-top:1px solid #edf0f5"><h3>Journée la plus longue</h3><p class="sub" style="font-size:13px;margin-top:8px">${s.bestDay?shortDate(s.bestDay)+' · '+hours(s.bestDayMinutes):'Aucune durée renseignée'}</p></div><div style="margin-top:16px"><h3>Interprétation</h3><p class="sub" style="font-size:13px;line-height:1.7;margin-top:8px">Les moyennes hebdomadaires divisent le volume total par le nombre de jours couverts puis multiplient par 7. Les semaines incomplètes sont donc correctement pondérées. Une journée avec plusieurs séances ne compte que pour un jour de pratique.</p></div>`;
@@ -634,9 +662,10 @@
   const life=lifetimeStats(),ready=!life.missing.length,total=hours(life.totalMinutes);
   const cards=[[total,"Piano cumulé depuis septembre 2024 · "+(ready?PIANO_NAMES.filter(k=>!!state.sources[k]).length+" parcours piano chargés":"bilan piano partiel")],[state.sources.ear?hours(life.earMinutes):"—","Écoute intérieure cumulée · hors piano"],[state.sources.vocab?hours(life.vocabOffMinutes):"—","Vocabulaire cumulé hors piano"],[hours(life.musicMinutes),"Temps musical total cumulé · piano + écoute + vocabulaire hors piano"+(state.sources.ear?"":" · écoute à importer")]];
   $("classical-history").innerHTML=cards.map(x=>'<div class="classical-metric"><div class="n">'+escapeHTML(x[0])+'</div><div class="t">'+escapeHTML(x[1])+'</div></div>').join("");
-  $("classical-overlap").textContent="Classique cumulé : "+hours(life.classicalMinutes)+" = 380 h historiques + "+life.addedDays+" h depuis septembre 2026. Les "+life.inHistoryDays+" journées repérées avant septembre sont déjà comprises dans les 380 h. Une journée compte une seule fois, même avec plusieurs parcours ; une journée uniquement hors piano n’ajoute pas de classique.";
-  $("classical-kpis").innerHTML=kpi("Classique historique","380 h","Sept. 2024 à août 2026 · dont 50 h de cours")+kpi("Classique depuis septembre 2026",life.addedDays+" h","1 h × "+life.addedDays+" journées de piano")+kpi("Total musique classique",hours(life.classicalMinutes),"380 h historiques + "+life.addedDays+" h ajoutées",true)+kpi("Total piano · tous parcours",total,"Classique + Blues + Jazz + Bases + Vocabulaire piano"+(ready?"":" · bilan partiel"));
-  $("classical-dates").textContent=life.start?"Première journée de piano repérée : "+shortDate(life.start)+". Les heures de classique ajoutées aux 380 h historiques commencent le 1er septembre 2026. Les graphiques portent sur la période choisie ; le total classique ci-dessus couvre tout l’historique depuis septembre 2024.":"Le total classique inclut les 380 h historiques. Les journées supplémentaires seront calculées dès réception de tes suivis.";
+  $("classical-overlap").textContent="Classique cumulé : "+hours(life.classicalMinutes)+" = 380 h historiques + "+hours(life.addedMinutes)+" depuis septembre 2026. Les anciennes estimations sont conservées jusqu’au 21 novembre 2026 ; tes saisies quotidiennes remplacent l’estimation de la date choisie.";
+  $("classical-kpis").innerHTML=kpi("Classique historique","380 h","Sept. 2024 à août 2026 · dont 50 h de cours")+kpi("Classique depuis septembre 2026",hours(life.addedMinutes),life.addedDays+" journées · estimations conservées et durées renseignées")+kpi("Total musique classique",hours(life.classicalMinutes),"Historique + journal quotidien",true)+kpi("Total piano · tous parcours",total,"Classique + Blues + Jazz + Bases + Vocabulaire piano"+(ready?"":" · bilan partiel"));
+  $("classical-dates").textContent="Les dates antérieures à septembre 2026 restent incluses dans les 380 h historiques. À partir du 22 novembre 2026, seules les durées classiques renseignées sont ajoutées. Le journal et le répertoire sont conservés dans les exports JSON du tableau de bord.";
+  renderClassicalPractice();
 }
         function renderRepertoire(){const works=state.repertoire||[];$("repertoire-count").textContent=works.length+" œuvres";$("repertoire-list").textContent=["studied","current","planned"].map(status=>works.filter(w=>w.status===status).map(w=>w.composer+" : "+w.title+" ("+w.reference+")").join("\n")).join("\n\n");const select=$("rep-existing"),selected=select.value;select.length=1;for(const w of works)select.add(new Option(w.composer+" — "+w.title,w.id));select.value=works.some(w=>w.id===selected)?selected:"";}
         function editWork(id){ const w=state.repertoire.find(work=>work.id===id); if(!w)return; $('rep-id').value=w.id; $('rep-title').value=w.title; $('rep-composer').value=w.composer; $('rep-reference').value=w.reference; $('rep-status').value=w.status; $('rep-notes').value=w.notes; $('repertoire-form-title').textContent='Modifier une œuvre'; $('rep-save').textContent='Enregistrer les modifications'; $('rep-cancel').classList.remove('hidden'); }
@@ -663,7 +692,7 @@
       window.scrollTo({top:0,behavior:'smooth'});
     }
     function download(name,contents,mime){const blob=new Blob([contents],{type:mime}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),15000);}
-    function bundleData(){return {kind:'piano-dashboard-bundle',version:4,createdAt:new Date().toISOString(),settings:{period:state.period,customStart:state.customStart,customEnd:state.customEnd,autoSync:state.autoSync},classical:{historicalHours:HISTORIC_HOURS,from:HISTORIC_FROM,to:HISTORIC_TO,minutesPerActiveDay:60,repertoire:state.repertoire},sources:Object.fromEntries(NAMES.filter(k=>state.sources[k]).map(k=>[k,{raw:state.sources[k].raw,filename:state.sources[k].filename}]))};}
+    function bundleData(){return {kind:'piano-dashboard-bundle',version:5,createdAt:new Date().toISOString(),settings:{period:state.period,customStart:state.customStart,customEnd:state.customEnd,autoSync:state.autoSync},classical:{historicalHours:HISTORIC_HOURS,from:HISTORIC_FROM,to:HISTORIC_TO,practice:ClassicalPractice.clean(state.classicalPractice),repertoire:state.repertoire},sources:Object.fromEntries(NAMES.filter(k=>state.sources[k]).map(k=>[k,{raw:state.sources[k].raw,filename:state.sources[k].filename}]))};}
     function exportBundle(){
       // Le répertoire peut être sauvegardé même en l'absence de sauvegardes de parcours.
       const bundle=bundleData();
@@ -671,13 +700,16 @@
     }
     function exportCSV(){
       if(stats.empty)return notify('Aucune séance de parcours à exporter. Utilise l’archive JSON pour conserver ton répertoire.');
-      const activeClassical=(stats.classicDates||[]).map(date=>({date,track:'classical',id:'classical:'+date,minutes:60}));
+      const activeClassical=stats.classicRows||[];
       const data=stats.rows.concat(activeClassical).sort((a,b)=>a.date.localeCompare(b.date));
-      const rows=[['Date','Parcours','Identifiant séance','Minutes','Heures','Nature','Catégorie','Minutes piano','Minutes hors piano'],...data.map(r=>[r.date,TRACK_META[r.track].name,r.id,r.minutes===null?'':(r.totalMinutes??r.minutes),r.minutes===null?'':((r.totalMinutes??r.minutes)/60).toFixed(2).replace('.',','),r.track==='classical'?'Estimé : 1 h par journée piano':r.track==='ear'?'Écoute intérieure · hors temps au piano':r.track==='vocab'?'Vocabulaire · durées déclarées séparément':'Piano · séance enregistrée',r.track==='ear'?'Écoute intérieure':r.track==='vocab'?'Vocabulaire':'Piano',r.track==='ear'?0:r.minutes,r.track==='ear'?r.minutes:(r.offPianoMinutes||0)])];
+      const rows=[['Date','Parcours','Identifiant séance','Minutes','Heures','Nature','Catégorie','Minutes piano','Minutes hors piano'],...data.map(r=>[r.date,TRACK_META[r.track].name,r.id,r.minutes===null?'':(r.totalMinutes??r.minutes),r.minutes===null?'':((r.totalMinutes??r.minutes)/60).toFixed(2).replace('.',','),r.track==='classical'?(r.estimated?'Estimation classique conservée':'Classique · durée renseignée'):r.track==='ear'?'Écoute intérieure · hors temps au piano':r.track==='vocab'?'Vocabulaire · durées déclarées séparément':'Piano · séance enregistrée',r.track==='ear'?'Écoute intérieure':r.track==='vocab'?'Vocabulaire':'Piano',r.track==='ear'?0:r.minutes,r.track==='ear'?r.minutes:(r.offPianoMinutes||0)])];
       const csv=String.fromCharCode(0xFEFF)+rows.map(row=>row.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(';')).join(String.fromCharCode(13,10));
-      download('statistiques-piano-'+TODAY+'.csv',csv,'text/csv;charset=utf-8');notify('Fichier CSV créé avec les heures classiques des journées actives.');
+      download('statistiques-piano-'+TODAY+'.csv',csv,'text/csv;charset=utf-8');notify('Fichier CSV créé avec les durées classiques quotidiennes.');
     }
     function wire(){
+      $('classical-date').addEventListener('change',()=>{const row=classicalRows().find(r=>r.date===$('classical-date').value);$('classical-minutes').value=row?String(row.minutes):'';renderClassicalPractice();});
+      $('classical-form').addEventListener('submit',e=>{e.preventDefault();try{if($('classical-minutes').value==='')throw new Error('Renseigne le total de la journée.');setClassicalDay($('classical-date').value,Number($('classical-minutes').value));notify('Temps classique enregistré pour cette journée.');}catch(err){notify(err.message)}});
+      $('classical-practice-list').addEventListener('click',e=>{const b=e.target.closest('[data-classical-edit]');if(!b)return;$('classical-date').value=b.dataset.classicalEdit;$('classical-minutes').value=classicalRows().find(r=>r.date===b.dataset.classicalEdit)?.minutes??'';renderClassicalPractice();$('classical-form').scrollIntoView({behavior:'smooth',block:'center'});$('classical-minutes').focus();});
       document.querySelectorAll('[data-tab]').forEach(el=>el.addEventListener('click',()=>selectTab(el.dataset.tab)));
       $('hero-import').addEventListener('click',()=>selectTab('data'));
       $('show-data').addEventListener('click',()=>selectTab('data'));
@@ -718,7 +750,7 @@
         state.sources[kind].cloudUser=accountId;
       }
       persist();render();
-    },getStatistics:()=>calculate(),getLoadedSources:()=>Object.keys(state.sources),getClassicalLifetime:()=>lifetimeStats(),getRepertoire:()=>state.repertoire.map(w=>({...w})),setRepertoire:works=>{if(!Array.isArray(works))return;state.repertoire=works.map(cleanWork).filter(Boolean);persist();renderRepertoire();},importFile:async(file)=>handleFiles([file])};
+    },getClassicalPractice:()=>ClassicalPractice.clean(state.classicalPractice),setClassicalDay,getStatistics:()=>calculate(),getLoadedSources:()=>Object.keys(state.sources),getClassicalLifetime:()=>lifetimeStats(),getRepertoire:()=>state.repertoire.map(w=>({...w})),setRepertoire:works=>{if(!Array.isArray(works))return;state.repertoire=works.map(cleanWork).filter(Boolean);persist();renderRepertoire();},importFile:async(file)=>handleFiles([file])};
   })();
   </script>
   <script src="./classical-repertoire.js"></script>

@@ -57,6 +57,7 @@ function dashboard(){
  ctx.window=ctx;ctx.addEventListener=()=>{};
  const html=fs.readFileSync(require('node:path').join(__dirname,'../tableau-de-bord-piano/index.html'),'utf8');
  const inline=[...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)].map(x=>x[1]).find(x=>x.includes('function calculate('));
+ vm.runInNewContext(fs.readFileSync(require('node:path').join(__dirname,'../tableau-de-bord-piano/classical-practice.js'),'utf8'),ctx);
  assert.ok(inline);vm.runInNewContext(inline,ctx);
  return ctx;
 }
