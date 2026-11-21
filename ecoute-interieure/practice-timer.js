@@ -23,7 +23,7 @@ const style=document.createElement('style');style.textContent=`
 .pt-widget{box-sizing:border-box;border:1px solid #8fabbf;border-radius:14px;background:${isVocab?'#faedf4':'#f4f8fc'};color:#142f43;padding:14px;font:16px/1.45 system-ui,sans-serif;grid-column:1/-1;margin:12px 0}
 .pt-widget button,.pt-widget select{font:inherit;min-height:42px;border:1px solid #91a5b5;border-radius:8px;padding:8px 12px;background:white;color:#142f43;cursor:pointer}
 .pt-widget button:disabled{opacity:.5;cursor:default}.pt-widget button:focus-visible{outline:3px solid #245b83;outline-offset:2px}
-.pt-widget [data-pt=start]{background:#164a6f;color:white}.pt-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.pt-clock{font-size:26px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:1px}.pt-note{font-size:14px;margin:8px 0 0}.pt-widget h3{font:700 17px system-ui;margin:0 0 8px}
+.pt-widget [data-pt=start]{background:${isVocab?'#805190':'#164a6f'};color:white}.pt-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.pt-clock{font-size:26px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:1px}.pt-note{font-size:14px;margin:8px 0 0}.pt-widget h3{font:700 17px system-ui;margin:0 0 8px}
 [data-practice-timer-slot]{grid-column:1/-1;padding:0;background:none;display:block;min-width:0}.pt-home{width:100%;margin:0 0 24px;position:relative;z-index:1}.pt-home .pt-clock{font-size:30px}.pt-widget label{display:inline-flex;align-items:center;gap:8px}.pt-widget [hidden]{display:none!important}
 @media print{.pt-widget{display:none}}`;
 
@@ -44,7 +44,7 @@ function useDuration(){const dest=target();if(!dest){message='Ouvre la fiche de 
  state=pause(state);state.reported=true;persist();message='Durée reportée : '+t.minutes+' min. Enregistre la séance pour actualiser les compteurs.';
 }
 function paint(){const t=elapsed(state),total=t.piano+t.off;for(const el of document.querySelectorAll('[data-pt-clock],[data-pt-summary]')){const value=format(total)+(state.started?' · en cours':'');if(el.textContent!==value)el.textContent=value}
- for(const box of document.querySelectorAll('.pt-widget')){const b=box.querySelector('[data-pt=start]');b.textContent=state.reported?'Nouveau chrono':total?'Reprendre':'Démarrer';b.disabled=!!state.started;box.querySelector('[data-pt=pause]').disabled=!state.started;box.querySelector('[data-pt=use]').disabled=!total;const mode=box.querySelector('[data-pt-mode]');if(mode)mode.value=state.mode;const p=box.querySelector('[data-pt-message]');const text=message||(!storageOK?'Chronomètre en mémoire uniquement : garde cette page ouverte.':isVocab?'Piano : '+format(t.piano)+' · hors piano : '+format(t.off):'Le chronomètre ne valide aucune séance automatiquement.');if(p.textContent!==text)p.textContent=text}
+ for(const box of document.querySelectorAll('.pt-widget')){const b=box.querySelector('[data-pt=start]');b.textContent=state.reported?'Nouveau chrono':total?'Reprendre':'Démarrer';b.disabled=!!state.started;box.querySelector('[data-pt=pause]').disabled=!state.started;box.querySelector('[data-pt=use]').disabled=!total;const mode=box.querySelector('[data-pt-mode]');if(mode)mode.value=state.mode;const p=box.querySelector('[data-pt-message]');const text=message||(!storageOK?'Chronomètre en mémoire uniquement : garde cette page ouverte.':isVocab?'Piano : '+format(t.piano)+' · Hors piano : '+format(t.off):'');p.hidden=!text;if(p.textContent!==text)p.textContent=text}
 }
 function attach(){scheduled=false;
  // Wait until React has hydrated; otherwise it removes nodes appended during startup.
