@@ -2,30 +2,30 @@
 <html lang="fr">
 <head>
 <script data-piano-theme-boot>(()=>{let m="light";try{if(localStorage.getItem("piano-appearance-blues")==="dark")m="dark"}catch{}document.documentElement.dataset.theme=m;document.documentElement.dataset.pianoTheme="blues"})()</script>
-<link rel="stylesheet" href="./theme-mode.css?v=1" data-piano-theme-style="true">
+<link rel="stylesheet" href="./theme-mode.css?v=2" data-piano-theme-style="true">
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#edf4fc">
+<meta name="theme-color" content="#10283c">
 <title>Mon parcours d’improvisation blues & jazz</title>
 <meta name="description" content="Parcours personnalisé de piano, suivi mois par mois, semaine par semaine et séance par séance.">
 <style>:root {
-  --navy-950: #10223c;
-  --navy-900: #172d4d;
-  --navy-800: #1f4378;
-  --blue-600: #2e64b5;
-  --blue-100: #e8edf5;
-  --blue-50: #f4f6fa;
+  --navy-950: #10283c;
+  --navy-900: #17324d;
+  --navy-800: #1f4d78;
+  --blue-600: #2e74b5;
+  --blue-100: #e8eef5;
+  --blue-50: #f4f7fa;
   --gold-500: #c8952d;
   --gold-100: #fff4dc;
   --green-700: #2f6b4f;
   --green-100: #eaf5ee;
-  --ink: #20242a;
-  --muted: #646e7e;
-  --line: #dce1e9;
+  --ink: #20252a;
+  --muted: #64717e;
+  --line: #dce3e9;
   --paper: #ffffff;
-  --canvas: #eef1f5;
-  --shadow: 0 18px 50px rgba(23,45,77, 0.08);
+  --canvas: #eef2f5;
+  --shadow: 0 18px 50px rgba(23, 50, 77, 0.08);
 }
 
 * {
@@ -59,7 +59,7 @@ button:focus-visible,
 input:focus-visible,
 textarea:focus-visible,
 select:focus-visible {
-  outline: 3px solid rgba(46,100,181, 0.25);
+  outline: 3px solid rgba(46, 116, 181, 0.25);
   outline-offset: 2px;
 }
 
@@ -113,7 +113,7 @@ select:focus-visible {
 
 .brand small {
   margin-top: 2px;
-  color: #aab5c6;
+  color: #aab9c6;
   font-size: 11px;
 }
 
@@ -128,7 +128,7 @@ select:focus-visible {
   border: 0;
   border-radius: 12px;
   background: transparent;
-  color: #c3cbd8;
+  color: #c3ced8;
   text-align: left;
   cursor: pointer;
   transition:
@@ -138,13 +138,13 @@ select:focus-visible {
 }
 
 .nav-item:hover {
-  background: rgba(255,255,255, 0.07);
+  background: rgba(255, 255, 255, 0.07);
   color: white;
   transform: translateX(2px);
 }
 
 .nav-item.is-active {
-  background: #234270;
+  background: #234d70;
   color: white;
   box-shadow: inset 3px 0 0 var(--gold-500);
 }
@@ -161,25 +161,25 @@ select:focus-visible {
 
 .nav-item small {
   margin-top: 2px;
-  color: #91a0b7;
+  color: #91a5b7;
   font-size: 10px;
 }
 
 .nav-item.is-active small {
-  color: #bfccdf;
+  color: #bfd0df;
 }
 
 .sidebar-note {
   margin-top: auto;
   padding: 18px;
-  border: 1px solid rgba(255,255,255, 0.11);
+  border: 1px solid rgba(255, 255, 255, 0.11);
   border-radius: 16px;
-  background: rgba(255,255,255, 0.055);
+  background: rgba(255, 255, 255, 0.055);
 }
 
 .sidebar-note p {
   margin: 8px 0 0;
-  color: #bec8d6;
+  color: #becbd6;
   font-size: 11px;
   line-height: 1.55;
 }
@@ -253,11 +253,11 @@ select:focus-visible {
 .button--primary {
   background: var(--blue-600);
   color: white;
-  box-shadow: 0 9px 22px rgba(46,100,181, 0.24);
+  box-shadow: 0 9px 22px rgba(46, 116, 181, 0.24);
 }
 
 .button--primary:hover {
-  background: #27579f;
+  background: #27679f;
 }
 
 .button--quiet {
@@ -267,7 +267,7 @@ select:focus-visible {
 }
 
 .button--ghost {
-  border-color: rgba(255,255,255, 0.34);
+  border-color: rgba(255, 255, 255, 0.34);
   background: transparent;
   color: white;
 }
@@ -288,7 +288,7 @@ select:focus-visible {
 .hero-card,
 .status-card,
 .content-card {
-  border: 1px solid rgba(23,45,77, 0.08);
+  border: 1px solid rgba(23, 50, 77, 0.08);
   border-radius: 20px;
   background: var(--paper);
   box-shadow: var(--shadow);
@@ -300,8 +300,8 @@ select:focus-visible {
   grid-template-columns: minmax(0, 1fr) 220px;
   overflow: hidden;
   background:
-    radial-gradient(circle at 85% 15%, rgba(200,149,45, 0.18), transparent 28%),
-    linear-gradient(140deg, var(--navy-950), #1d3e70);
+    radial-gradient(circle at 85% 15%, rgba(200, 149, 45, 0.18), transparent 28%),
+    linear-gradient(140deg, var(--navy-950), #1d4d70);
   color: white;
 }
 
@@ -326,7 +326,7 @@ select:focus-visible {
 
 .unit-kicker {
   margin: 20px 0 5px;
-  color: #aebbce;
+  color: #aebfce;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -346,7 +346,7 @@ select:focus-visible {
 .hero-objective {
   max-width: 660px;
   margin: 16px 0 0;
-  color: #d9dfe9;
+  color: #d9e2e9;
   font-size: 13px;
   line-height: 1.65;
 }
@@ -375,7 +375,7 @@ select:focus-visible {
   border-radius: 50%;
   background: conic-gradient(
     var(--gold-500) var(--progress-deg, 0deg),
-    rgba(255,255,255, 0.13) 0deg
+    rgba(255, 255, 255, 0.13) 0deg
   );
   position: relative;
 }
@@ -385,7 +385,7 @@ select:focus-visible {
   width: 116px;
   height: 116px;
   border-radius: 50%;
-  background: #173159;
+  background: #173d59;
   content: "";
 }
 
@@ -405,7 +405,7 @@ select:focus-visible {
 }
 
 .progress-ring span {
-  color: #b7c2d2;
+  color: #b7c6d2;
   font-size: 10px;
 }
 
@@ -417,7 +417,7 @@ select:focus-visible {
 
 .hero-progress small {
   max-width: 160px;
-  color: #aebbce;
+  color: #aebfce;
   font-size: 9px;
   line-height: 1.4;
 }
@@ -564,7 +564,7 @@ select:focus-visible {
 
 .detail-field p {
   margin: 5px 0 0;
-  color: #48515e;
+  color: #48545e;
   font-size: 11px;
   line-height: 1.55;
 }
@@ -575,7 +575,7 @@ select:focus-visible {
 
 .anchor-card p {
   margin: 15px 0 0;
-  color: #565e6a;
+  color: #56616a;
   font-size: 12px;
   line-height: 1.65;
 }
@@ -631,7 +631,7 @@ select:focus-visible {
 }
 
 .phase-tile.is-current {
-  border-color: #9eb5d7;
+  border-color: #9ebdd7;
   background: var(--blue-100);
 }
 
@@ -766,8 +766,8 @@ select:focus-visible {
     overflow-x: auto;
     border: 1px solid var(--line);
     border-radius: 13px;
-    background: rgba(255,255,255, 0.94);
-    box-shadow: 0 10px 28px rgba(23,45,77, 0.1);
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: 0 10px 28px rgba(23, 50, 77, 0.1);
     backdrop-filter: blur(12px);
   }
 
@@ -895,9 +895,9 @@ select:focus-visible {
 .sidebar-progress {
   margin-top: 24px;
   padding: 16px;
-  border: 1px solid rgba(255,255,255, 0.11);
+  border: 1px solid rgba(255, 255, 255, 0.11);
   border-radius: 14px;
-  background: rgba(255,255,255, 0.04);
+  background: rgba(255, 255, 255, 0.04);
 }
 
 .sidebar-progress > div {
@@ -908,7 +908,7 @@ select:focus-visible {
 }
 
 .sidebar-progress span {
-  color: #b7c1d1;
+  color: #b7c5d1;
   font-size: 9px;
   font-weight: 750;
 }
@@ -921,7 +921,7 @@ select:focus-visible {
 .sidebar-progress small {
   display: block;
   margin-top: 7px;
-  color: #8f9eb4;
+  color: #8fa3b4;
   font-size: 8px;
 }
 
@@ -931,7 +931,7 @@ select:focus-visible {
   margin-top: 8px;
   overflow: hidden;
   border-radius: 999px;
-  background: rgba(142,156,176, 0.22);
+  background: rgba(142, 161, 176, 0.22);
 }
 
 .linear-progress span {
@@ -971,12 +971,12 @@ select:focus-visible {
 }
 
 .status-badge--not_started {
-  background: #edf0f4;
-  color: #646e7e;
+  background: #edf1f4;
+  color: #64717e;
 }
 
 .status-badge--not_started::before {
-  background: #9aa3b1;
+  background: #9aa7b1;
 }
 
 .status-badge--in_progress {
@@ -1048,7 +1048,7 @@ select:focus-visible {
   height: 29px;
   display: grid;
   place-items: center;
-  border: 1px solid #b4c1d4;
+  border: 1px solid #b4c6d4;
   border-radius: 8px;
   background: white;
   color: var(--blue-600);
@@ -1144,7 +1144,7 @@ select:focus-visible {
   justify-content: space-between;
   gap: 30px;
   background:
-    linear-gradient(110deg, rgba(232,237,245, 0.76), rgba(255,255,255, 0.9)),
+    linear-gradient(110deg, rgba(232, 238, 245, 0.76), rgba(255, 255, 255, 0.9)),
     white;
 }
 
@@ -1198,7 +1198,7 @@ select:focus-visible {
   gap: 11px;
   border: 1px solid var(--line);
   border-radius: 15px;
-  background: rgba(255,255,255, 0.82);
+  background: rgba(255, 255, 255, 0.82);
 }
 
 .filter-bar--sessions {
@@ -1230,7 +1230,7 @@ input,
 textarea,
 select {
   width: 100%;
-  border: 1px solid #cad2de;
+  border: 1px solid #cad5de;
   border-radius: 9px;
   background: white;
   color: var(--ink);
@@ -1252,7 +1252,7 @@ textarea {
 
 input::placeholder,
 textarea::placeholder {
-  color: #9ba3af;
+  color: #9ba6af;
 }
 
 .result-count {
@@ -1275,11 +1275,11 @@ textarea::placeholder {
   border: 1px solid var(--line);
   border-radius: 15px;
   background: white;
-  box-shadow: 0 8px 28px rgba(23,45,77, 0.035);
+  box-shadow: 0 8px 28px rgba(23, 50, 77, 0.035);
 }
 
 .unit-card.is-open {
-  border-color: #a9bcd9;
+  border-color: #a9c4d9;
   box-shadow: var(--shadow);
 }
 
@@ -1359,7 +1359,7 @@ textarea::placeholder {
 
 .unit-detail {
   padding: 0 20px 22px;
-  border-top: 1px solid #cad4e4;
+  border-top: 1px solid #cad9e4;
   background: #fbfcfd;
 }
 
@@ -1463,7 +1463,7 @@ textarea::placeholder {
 }
 
 .month-tabs button.is-active span {
-  color: #9fbbe5;
+  color: #9fc6e5;
 }
 
 .month-tabs strong {
@@ -1476,7 +1476,7 @@ textarea::placeholder {
 }
 
 .month-tabs button.is-active small {
-  color: #b8c4d5;
+  color: #b8c8d5;
 }
 
 .calendar-weeks {
@@ -1637,7 +1637,7 @@ textarea::placeholder {
   border: 1px solid var(--line);
   border-radius: 14px;
   background: white;
-  box-shadow: 0 8px 25px rgba(23,45,77, 0.035);
+  box-shadow: 0 8px 25px rgba(23, 50, 77, 0.035);
 }
 
 .session-row.is-complete {
@@ -1726,7 +1726,7 @@ textarea::placeholder {
 
 .load-more {
   min-height: 48px;
-  border: 1px dashed #9fb1cd;
+  border: 1px dashed #9fb9cd;
   border-radius: 12px;
   background: var(--blue-50);
   color: var(--blue-600);
@@ -1750,7 +1750,7 @@ textarea::placeholder {
   grid-template-columns: minmax(0, 1.5fr) minmax(300px, 0.8fr);
   gap: 28px;
   background:
-    radial-gradient(circle at 92% 10%, rgba(200,149,45, 0.17), transparent 32%),
+    radial-gradient(circle at 92% 10%, rgba(200, 149, 45, 0.17), transparent 32%),
     white;
 }
 
@@ -2114,7 +2114,7 @@ ol.clean-list li::before {
   padding: 36px;
   border-radius: 20px;
   background:
-    radial-gradient(circle at 90% 20%, rgba(200,149,45, 0.2), transparent 30%),
+    radial-gradient(circle at 90% 20%, rgba(200, 149, 45, 0.2), transparent 30%),
     var(--navy-950);
   color: white;
 }
@@ -2131,7 +2131,7 @@ ol.clean-list li::before {
 .final-outcome p {
   max-width: 880px;
   margin: 15px 0 0;
-  color: #c6cfdc;
+  color: #c6d2dc;
   font-size: 11px;
   line-height: 1.7;
 }
@@ -2157,7 +2157,7 @@ ol.clean-list li::before {
   width: 100%;
   height: 100%;
   border: 0;
-  background: rgba(9,22,42, 0.58);
+  background: rgba(9, 27, 42, 0.58);
   backdrop-filter: blur(3px);
   cursor: pointer;
 }
@@ -2170,7 +2170,7 @@ ol.clean-list li::before {
   padding: 27px 30px 42px;
   overflow-y: auto;
   background: white;
-  box-shadow: -20px 0 60px rgba(10,25,47, 0.22);
+  box-shadow: -20px 0 60px rgba(10, 30, 47, 0.22);
   animation: drawer-in 180ms ease-out;
 }
 
@@ -2317,7 +2317,7 @@ ol.clean-list li::before {
   padding: 28px;
   border-radius: 18px;
   background: white;
-  box-shadow: 0 25px 70px rgba(10,25,47, 0.26);
+  box-shadow: 0 25px 70px rgba(10, 30, 47, 0.26);
 }
 
 .settings-modal > p {
@@ -2367,7 +2367,7 @@ ol.clean-list li::before {
   border-radius: 11px;
   background: var(--navy-950);
   color: white;
-  box-shadow: 0 16px 45px rgba(10,25,47, 0.24);
+  box-shadow: 0 16px 45px rgba(10, 30, 47, 0.24);
   font-size: 10px;
   font-weight: 750;
   animation: toast-in 150ms ease-out;
@@ -2618,51 +2618,7 @@ ol.clean-list li::before {
   <meta name="apple-mobile-web-app-title" content="Blues">
   <link rel="apple-touch-icon" sizes="180x180" href="./icons/club-jazz-180.png?v=1">
   <link rel="icon" type="image/png" sizes="32x32" href="./icons/club-jazz-32.png?v=1">
-<style id="club-jazz-pastel">
-/* Club jazz: pale surfaces with dark, contrasting labels. */
-:root{--app-pastel:#edf4fc;--app-canvas:#f7faff;--app-tint:#dce9f8;--app-ink:#173d6b;--app-accent:#275d96;--app-muted:#4b6079;--app-line:#ccdcec;}
-@media screen{
-html:not([data-theme="dark"]){--navy-950:var(--app-ink);--navy-900:var(--app-ink);--navy-800:var(--app-accent);--blue-600:var(--app-accent);--blue-100:var(--app-tint);--blue-50:var(--app-pastel);--navy:var(--app-ink);--navy2:var(--app-accent);--blue:var(--app-accent);--teal:var(--app-accent);--ink:var(--app-ink);--muted:var(--app-muted);--line:var(--app-line);--canvas:var(--app-canvas);--bg:var(--app-canvas);--panel:#fff;--panel2:var(--app-pastel)}
-html:not([data-theme="dark"]) .sidebar{background:var(--app-pastel);color:var(--app-ink);border-right:1px solid var(--app-line)}
-html:not([data-theme="dark"]) .sidebar .brand small,html:not([data-theme="dark"]) .sidebar .brand p,html:not([data-theme="dark"]) .sidebar .nav-item small,html:not([data-theme="dark"]) .sidebar .nav-copy small,html:not([data-theme="dark"]) .sidebar-note p,html:not([data-theme="dark"]) .sidebar-progress small,html:not([data-theme="dark"]) .sidebar-progress span,html:not([data-theme="dark"]) .sidebar-principle p,html:not([data-theme="dark"]) .sidebar-footer{color:var(--app-muted);opacity:1}
-html:not([data-theme="dark"]) .sidebar-progress strong,html:not([data-theme="dark"]) .sidebar-principle .eyebrow{color:var(--app-ink)}
-html:not([data-theme="dark"]) .sidebar-progress,html:not([data-theme="dark"]) .sidebar-note,html:not([data-theme="dark"]) .sidebar-principle{background:#ffffffa6;border-color:var(--app-line)}
-html:not([data-theme="dark"]) .sidebar .meter{background:var(--app-line)}
-html:not([data-theme="dark"]) .sidebar .meter span{background:var(--app-accent)}
-html:not([data-theme="dark"]) .nav-item,html:not([data-theme="dark"]) .nav-btn{color:var(--app-ink)}
-html:not([data-theme="dark"]) .nav-item:hover,html:not([data-theme="dark"]) .nav-item.is-active,html:not([data-theme="dark"]) .nav-btn:hover,html:not([data-theme="dark"]) .nav-btn.active{background:var(--app-tint);color:var(--app-ink);box-shadow:inset 3px 0 var(--app-accent)}
-html:not([data-theme="dark"]) .sidebar .nav-item.is-active small,html:not([data-theme="dark"]) .sidebar .nav-btn.active small{color:var(--app-ink)}
-html:not([data-theme="dark"]) .hero-card,html:not([data-theme="dark"]) .hero,html:not([data-theme="dark"]) .ear-hero{background:linear-gradient(125deg,var(--app-pastel),var(--app-canvas));color:var(--app-ink);border:1px solid var(--app-line);box-shadow:0 12px 30px color-mix(in srgb,var(--app-ink) 7%,transparent)}
-html:not([data-theme="dark"]) .hero-card h2,html:not([data-theme="dark"]) .hero h2,html:not([data-theme="dark"]) .hero h3,html:not([data-theme="dark"]) .ear-hero h3,html:not([data-theme="dark"]) .hero-progress p,html:not([data-theme="dark"]) .progress-ring strong{color:var(--app-ink)}
-html:not([data-theme="dark"]) .hero-objective,html:not([data-theme="dark"]) .hero p,html:not([data-theme="dark"]) .ear-hero p,html:not([data-theme="dark"]) .hero-progress small,html:not([data-theme="dark"]) .progress-ring span,html:not([data-theme="dark"]) .hero .eyebrow,html:not([data-theme="dark"]) .ear-hero .eyebrow{color:var(--app-muted)}
-html:not([data-theme="dark"]) .progress-ring{background:conic-gradient(var(--app-accent) var(--progress-deg,calc(var(--p,0)*1%)),var(--app-line) 0)}
-html:not([data-theme="dark"]) .progress-ring::after,html:not([data-theme="dark"]) .progress-ring::before{background:var(--app-canvas)}
-html:not([data-theme="dark"]) .button--primary,html:not([data-theme="dark"]) .btn-primary,html:not([data-theme="dark"]) .btn-navy,html:not([data-theme="dark"]) .hero .btn-primary{background:var(--app-accent);color:#fff}
-html:not([data-theme="dark"]) .button--primary:hover,html:not([data-theme="dark"]) .btn-primary:hover{background:var(--app-ink);color:#fff}
-html:not([data-theme="dark"]) .button--ghost,html:not([data-theme="dark"]) .hero .btn-secondary,html:not([data-theme="dark"]) .ear-hero .btn-secondary{background:#ffffffa6;border-color:var(--app-accent);color:var(--app-ink)}
-html:not([data-theme="dark"]) .focus-detail:not(.gold):not(.green),html:not([data-theme="dark"]) .focus-detail.support,html:not([data-theme="dark"]) .detail-box.support,html:not([data-theme="dark"]) .focus-badge{background:var(--app-pastel);border-color:var(--app-accent);color:var(--app-ink)}
-html:not([data-theme="dark"]) .profile-btn{background:var(--app-accent);color:#fff}
-html:not([data-theme="dark"]) .mobile-nav button.is-active{background:var(--app-tint);color:var(--app-ink)}
-}
-</style>
-<style>
-@media screen{
-html:not([data-theme="dark"]) .hero-card .unit-kicker{color:var(--app-muted)}
-html:not([data-theme="dark"]) .pt-widget{background:var(--app-pastel);color:var(--app-ink);border-color:var(--app-line)}
-html:not([data-theme="dark"]) .pt-widget button,html:not([data-theme="dark"]) .pt-widget select{color:var(--app-ink);border-color:var(--app-line)}
-html:not([data-theme="dark"]) .pt-widget [data-pt=start]{background:var(--app-accent);color:#fff}
-}
-</style><style>@media screen{
-html:not([data-theme="dark"]) .eyebrow,html:not([data-theme="dark"]) .text-link,html:not([data-theme="dark"]) .session-date,html:not([data-theme="dark"]) .phase-index,html:not([data-theme="dark"]) .phase-tile small{color:var(--app-accent)}
-html:not([data-theme="dark"]) .session-check:not(.done){color:var(--app-accent)}
-html:not([data-theme="dark"]) .hero-progress small,html:not([data-theme="dark"]) .anchor-rule span,html:not([data-theme="dark"]) .status-criterion span{color:var(--app-muted)}
-}
-</style><style>@media screen{
-html:not([data-theme="dark"]) .is-complete .session-check,html:not([data-theme="dark"]) .done .session-check,html:not([data-theme="dark"]) .session-check.done{color:#fff}
-html:not([data-theme="dark"]) [style*="--phase-color:#1e7a86"],html:not([data-theme="dark"]) [style*="--phase-color:#356b8c"],html:not([data-theme="dark"]) [style*="--phase-color:#2c8299"],html:not([data-theme="dark"]) [style*="--phase-color:#2c7db8"]{--phase-color:var(--app-accent)!important}
-html[data-theme="dark"] .btn-primary,html[data-theme="dark"] .button--primary,html[data-theme="dark"] .pt-widget [data-pt=start]{background:var(--app-accent);color:#fff}
-}
-</style><style>@media screen{html:not([data-theme="dark"]) .anchor-line span{color:var(--app-muted)}}</style></head>
+</head>
 <body>
 <div id="root"></div>
 <script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js" crossorigin></script>
@@ -5436,6 +5392,6 @@ __root.render(React.createElement(Home));
 
   <script defer src="./vendor/supabase-2.95.3.js"></script>
   <script defer src="./piano-sync.js?v=1.0.0" data-piano-app="blues"></script>
-<script defer src="./practice-timer.js?v=1.1.2" data-practice-app="blues"></script><script defer src="./theme-mode.js?v=1" data-piano-theme="blues"></script>
+<script defer src="./practice-timer.js?v=1.1.2" data-practice-app="blues"></script><script defer src="./theme-mode.js?v=2" data-piano-theme="blues"></script>
 </body>
 </html>

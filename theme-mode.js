@@ -6,7 +6,7 @@
   const app = script.dataset.pianoTheme;
   const key = 'piano-appearance-' + app;
   const root = document.documentElement;
-  const href = new URL('./theme-mode.css?v=1', script.src).href;
+  const href = new URL('./theme-mode.css?v=2', script.src).href;
   let mode = 'light';
   try { if (localStorage.getItem(key) === 'dark') mode = 'dark'; } catch (_) {}
   root.dataset.pianoTheme = app;

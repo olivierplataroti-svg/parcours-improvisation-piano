@@ -5,8 +5,8 @@
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#f7fbfc",
-  "theme_color": "#edf5f7",
+  "background_color": "#eef2f5",
+  "theme_color": "#10283c",
   "icons": [
     {
       "src": "./icon-192.png?v=club-jazz-1",
