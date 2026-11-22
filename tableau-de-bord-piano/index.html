@@ -1,6 +1,9 @@
 <!doctype html>
 <html lang="fr">
 <head>
+<script data-piano-theme-boot>(()=>{let m="light";try{if(localStorage.getItem("piano-appearance-dashboard")==="dark")m="dark"}catch{}document.documentElement.dataset.theme=m;document.documentElement.dataset.pianoTheme="dashboard"})()</script>
+<link rel="stylesheet" href="./theme-mode.css?v=1" data-piano-theme-style="true">
+
   <meta name="apple-mobile-web-app-title" content="Mon piano">
   <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png?v=club-jazz-1">
   <link rel="icon" type="image/png" sizes="32x32" href="./icons/club-jazz-32.png?v=1">
@@ -773,6 +776,7 @@ html:not([data-theme="dark"]) .pt-widget [data-pt=start]{background:var(--app-ac
 
   <script defer src="../vendor/supabase-2.95.3.js"></script>
   <script defer src="../piano-sync.js?v=1.1.0" data-piano-app="dashboard"></script>
+<script defer src="./theme-mode.js?v=1" data-piano-theme="dashboard"></script>
 </body>
 </html>
 

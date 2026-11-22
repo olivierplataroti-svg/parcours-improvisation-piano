@@ -1,0 +1,62 @@
+/* Appearance can be compared without changing practice data. */
+.piano-mode-toggle{font:600 14px/1.2 system-ui,sans-serif;min-height:42px;padding:9px 13px;border:1px solid var(--app-line,#d5dce5);border-radius:10px;background:var(--app-pastel,#fff);color:var(--app-ink,#17324d);cursor:pointer;white-space:nowrap;flex-shrink:0}
+.piano-mode-toggle:focus-visible{outline:3px solid var(--app-accent,#275d96);outline-offset:3px}
+html[data-piano-theme=harmony] h1 .rainbow-text{color:#7045b1;font-style:italic}
+@supports ((background-clip:text) or (-webkit-background-clip:text)){
+ html[data-piano-theme=harmony] h1 .rainbow-text{background:linear-gradient(100deg,#b82e3b 0%,#b34c16 17%,#8b6900 33%,#237347 49%,#147080 65%,#3155b5 81%,#8641a8 100%);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+}
+@media screen{
+ html[data-theme=dark][data-piano-theme=blues]{--mode-bg:#0e1725;--mode-surface:#172536;--mode-soft:#1e3148;--mode-line:#3b526d;--mode-ink:#eef4fb;--mode-muted:#bacbdd;--mode-accent:#a4c7ed;--mode-action:#275d96;--mode-button-ink:#10273f}
+ html[data-theme=dark][data-piano-theme=jazz]{--mode-bg:#21180f;--mode-surface:#2f2419;--mode-soft:#3b2c1d;--mode-line:#6b5036;--mode-ink:#fff2e0;--mode-muted:#e1c7a8;--mode-accent:#efc383;--mode-action:#87501a;--mode-button-ink:#39220e}
+ html[data-theme=dark][data-piano-theme=dashboard]{--mode-bg:#171614;--mode-surface:#24221f;--mode-soft:#302d28;--mode-line:#5b544a;--mode-ink:#f4f0e8;--mode-muted:#cec6ba;--mode-accent:#dfc89d;--mode-action:#565047;--mode-button-ink:#302c25}
+ html[data-theme=dark][data-piano-theme=harmony]{--mode-bg:#102324;--mode-surface:#193638;--mode-soft:#224448;--mode-line:#4a7174;--mode-ink:#edf8f8;--mode-muted:#c2dddd;--mode-accent:#98dbdc;--mode-action:#28666a;--mode-button-ink:#123334}
+ html[data-theme=dark][data-piano-theme]{color-scheme:dark;--app-pastel:var(--mode-surface);--app-canvas:var(--mode-bg);--app-tint:var(--mode-soft);--app-ink:var(--mode-ink);--app-muted:var(--mode-muted);--app-line:var(--mode-line);--app-accent:var(--mode-accent);--ink:var(--mode-ink);--muted:var(--mode-muted);--line:var(--mode-line);--border:var(--mode-line);--paper:var(--mode-surface);--card:var(--mode-surface);--canvas:var(--mode-bg);--bg:var(--mode-bg);--surface:var(--mode-surface);--navy-950:var(--mode-ink);--navy-900:var(--mode-action);--navy-800:var(--mode-accent);--blue-600:var(--mode-accent);--blue-100:var(--mode-soft);--blue-50:var(--mode-soft);--mint:var(--mode-soft);background:var(--mode-bg);color:var(--mode-ink)}
+ html[data-theme=dark][data-piano-theme] body{background:var(--mode-bg);color:var(--mode-ink)}
+ html[data-theme=dark][data-piano-theme] :is(.sidebar,.mobile-nav,.mast,.topbar){background:var(--mode-surface);color:var(--mode-ink);border-color:var(--mode-line)}
+ html[data-theme=dark][data-piano-theme] :is(.brand strong,.brand,.brand h1,.brand-mark,.nav-item,.nav-btn,.nav button,.nav,.topbar-title,.hero-card,.hero,.intro,.page-heading,h1,h2,h3,h4){color:var(--mode-ink)}
+ html[data-theme=dark][data-piano-theme] :is(.brand small,.brand p,.nav-item small,.nav-copy small,.sidebar-note p,.sidebar-progress span,.sidebar-progress small,.sidebar-principle p,.sidebar-footer,.sidebar-progress strong,.hero-objective,.unit-kicker,.hero-progress small,.hero-progress p,.progress-ring span,.hero p,.intro p,.hero-pill,.section-kicker,.eyebrow,.sub,.muted,.help,.section-lead,.kpi .hint,.kpi .label,.track-meta,.track-head span,.bar-label,.grid-line span,.table-foot,.summary-strip .t,.classical-note,.classical-intro,.classical-metrics .t){color:var(--mode-muted)}
+ html[data-theme=dark][data-piano-theme] .brand>span[style]{color:var(--mode-muted)!important}
+ html[data-theme=dark][data-piano-theme] :is(.nav-item:hover,.nav-item.is-active,.nav-btn.active,.nav-btn:hover,.mobile-nav button.is-active,.month-tabs button.is-active,.nav.active){background:var(--mode-soft);color:var(--mode-ink);border-color:var(--mode-accent)}
+ html[data-theme=dark][data-piano-theme] :is(.hero-card,.hero,.status-card,.content-card,.unit-card,.view-intro,.filter-bar,.panel,.card,.drawer,.settings-modal,.modal-panel,.session-row,.month-tabs,.month-tabs button,.monthly-review-summary,.reference-unit>button,.reference-hero,.final-outcome,.deferred-list article,.intro,.filter-panel,.voicing-card,.results-card,.mel-editor,.mel-harmonies,.study-panel,.project-card,.sources-card,.learn-card){background:var(--mode-surface);color:var(--mode-ink);border-color:var(--mode-line);box-shadow:none}
+ html[data-theme=dark][data-piano-theme] :is(.detail-field,.unit-detail,.unit-open,.unit-number,.unit-card.is-open .unit-open,.soft-callout,.anchor-card,.anchor-line,.sidebar-note,.sidebar-progress,.sidebar-principle,.tim-callout,.melodic-bridge-card,.bridge-inline-badge,.reference-unit.is-open>button,.rule-grid article>span,.hero-pill,.ear-summary,.vocab-summary,.classical-metrics>div,.dropzone,.source,.summary-strip,.note-token,.segmented,.voicing-comment,.study-chords>span,.learn-card .example,.mel-note,.mel-empty,.harm-controls,.result-item){background:var(--mode-soft);color:var(--mode-ink);border-color:var(--mode-line)}
+ html[data-theme=dark][data-piano-theme] :is(.detail-field--gold,.pill--gold,.pill.gold,.notice,.notation-note,.star.on){background:#42351d;color:#f0d59b;border-color:#816941}
+ html[data-theme=dark][data-piano-theme] :is(.detail-field--green,.notice.success,.session-row.is-complete){background:#1c3d30;color:#d9f4e5;border-color:#3d6b53}
+ html[data-theme=dark][data-piano-theme] :is(.notice.error,.button--danger){background:#48262a;color:#ffdde0;border-color:#8c4b54}
+ html[data-theme=dark][data-piano-theme] :is(input,select,textarea,.close-button,.button--quiet,.button--ghost,.btn.secondary,.btn.ghost,.secondary,.icon-btn,.note-grid button,.family-grid button,.session-check,.review-list button,.review-item,.checklist-item,.segmented button,.search-label input){background:var(--mode-soft);color:var(--mode-ink);border-color:var(--mode-line)}
+ html[data-theme=dark][data-piano-theme] :is(.button--primary,.btn:not(.secondary):not(.ghost):not(.warm),.dark,.play-btn,.profile-btn,.avatar){background:var(--mode-accent);color:var(--mode-button-ink);border-color:var(--mode-accent);box-shadow:none}
+ html[data-theme=dark][data-piano-theme] :is(.button--primary:hover,.review-list button.is-active,.note-grid button.selected){background:var(--mode-accent);color:var(--mode-button-ink)}
+ html[data-theme=dark][data-piano-theme] :is(.is-complete .session-check,.button--success){background:#2f6b4f;color:#fff;border-color:#3d8062}
+ html[data-theme=dark][data-piano-theme] :is(.family-grid button.selected,.result-item.selected,.mel-candidate.selected,.sequence-row.playing){background:var(--mode-soft);color:var(--mode-ink);border-color:var(--mode-accent);box-shadow:inset 3px 0 var(--mode-accent)}
+ html[data-theme=dark][data-piano-theme] :is(.pt-widget,.timer-panel){background:var(--mode-surface);color:var(--mode-ink);border-color:var(--mode-line)}
+ html[data-theme=dark][data-piano-theme] .pt-widget :is(button,select){background:var(--mode-soft);color:var(--mode-ink);border-color:var(--mode-line)}
+ html[data-theme=dark][data-piano-theme] .pt-widget [data-pt=start]{background:var(--mode-accent);color:var(--mode-button-ink)}
+ html[data-theme=dark][data-piano-theme] .progress-ring{color:var(--mode-ink);background:conic-gradient(var(--mode-accent) var(--progress-deg,0deg),var(--mode-line) 0)}
+ html[data-theme=dark][data-piano-theme] .progress-ring::after{background:var(--mode-surface)}
+ html[data-theme=dark][data-piano-theme] .progress-ring strong{color:var(--mode-ink)}
+ html[data-theme=dark][data-piano-theme] :is(.text-button,.text-link,.session-date,.phase-index,.mini-staff,.recipe-label,.voicing-source,.formula-preview){color:var(--mode-muted)}
+ html[data-theme=dark][data-piano-theme] th{background:var(--mode-soft);color:var(--mode-muted);border-color:var(--mode-line)}
+ html[data-theme=dark][data-piano-theme] :is(td,td b){color:var(--mode-ink);border-color:var(--mode-line)}
+ html[data-theme=dark][data-piano-theme] :is(.grid-line span,.empty-chart){background:var(--mode-surface);color:var(--mode-muted)}
+ html[data-theme=dark][data-piano-theme] :is(.mel-harmony,.mel-note b){background:var(--mode-soft);color:var(--mode-ink);border:1px solid var(--mode-line)}
+ html[data-theme=dark][data-piano-theme] .piano-mode-toggle{background:var(--mode-soft);color:var(--mode-ink);border-color:var(--mode-line)}
+ html[data-theme=dark][data-piano-theme=harmony] h1 .rainbow-text{background-image:linear-gradient(100deg,#ff8590 0%,#ffb477 17%,#f2d570 33%,#8fdb9c 49%,#77d9e3 65%,#a5b8ff 81%,#dfa2ef 100%)}
+}
+@media screen{
+ html[data-theme=dark][data-piano-theme] .phase-tile{background:var(--mode-soft);color:var(--mode-ink);border-color:var(--mode-line)}
+ html[data-theme=dark][data-piano-theme] :is(.phase-tile strong,.unit-card strong){color:var(--mode-ink)}
+ html[data-theme=dark][data-piano-theme] :is(.phase-tile span,.phase-tile small,.unit-card small){color:var(--mode-muted)}
+ html[data-theme=dark][data-piano-theme] .kpi .value{color:var(--mode-ink)!important}
+ html[data-theme=dark][data-piano-theme] #overview-kpis .kpi:nth-child(2) .value{color:#efb491!important}
+ html[data-theme=dark][data-piano-theme] #overview-kpis .kpi:nth-child(3) .value{color:#dda5e3!important}
+ html[data-theme=dark][data-piano-theme] .kpi::after{border-color:var(--mode-soft)}
+ html[data-theme=dark][data-piano-theme] .tag{background:var(--mode-soft);color:var(--mode-muted);border-color:var(--mode-line)}
+ html[data-theme=dark][data-piano-theme] .brand-mark{background:var(--mode-accent);color:var(--mode-button-ink)}
+ html[data-theme=dark][data-piano-theme] :is(.session-mini,.session-mini.is-complete,.module-mini,.session-row-main>.session-week-label){background:var(--mode-soft);color:var(--mode-ink);border-color:var(--mode-line)}
+ html[data-theme=dark][data-piano-theme] :is(.anchor-line strong,.kpi .value,.classical-metrics .n,.summary-strip .n,.detail-field p,.anchor-card p,.anchor-line span,.session-mini strong){color:var(--mode-ink)}
+ html[data-theme=dark][data-piano-theme] :is(.session-mini span,.session-mini small,.mini-edit,.audio-status,.track-share .n,.source-meta,.source-foot,.source-state){color:var(--mode-muted)}
+ html[data-theme=dark][data-piano-theme] :is(.ear-summary,.vocab-summary) :is(strong,h3,h4,.ear-eyebrow){color:var(--mode-ink)}
+ html[data-theme=dark][data-piano-theme] .octave-ctrl button{background:var(--mode-soft);color:var(--mode-ink)}
+ html[data-theme=dark][data-piano-theme] .danger{color:#ffadb1}
+}
+@media(forced-colors:active){html[data-piano-theme=harmony] h1 .rainbow-text{background:none;color:CanvasText;-webkit-text-fill-color:CanvasText}}
+@media print{.piano-mode-toggle{display:none!important}}
